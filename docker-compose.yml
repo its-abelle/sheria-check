@@ -1,0 +1,39 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: sheria
+      POSTGRES_PASSWORD: sheria_dev
+      POSTGRES_DB: sheria_check
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  server:
+    build: ./server
+    ports:
+      - "4000:4000"
+    environment:
+      DATABASE_URL: postgres://sheria:sheria_dev@db:5432/sheria_check
+      PORT: "4000"
+      ADMIN_PASSWORD: admin123
+      NODE_ENV: development
+    depends_on:
+      - db
+    volumes:
+      - ./server/src:/app/src
+
+  client:
+    build: ./client
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_API_URL: http://localhost:4000/api
+    depends_on:
+      - server
+    volumes:
+      - ./client/src:/app/src
+
+volumes:
+  pgdata:
