@@ -42,6 +42,15 @@ DEFAULT_OUTPUT = Path(__file__).parent / "seed_data_full.json"
 KENYA_LAW_HTML_URL = "https://new.kenyalaw.org/akn/ke/act/1953/39/eng@2024-04-26"
 KENYA_LAW_PDF_URL = "https://new.kenyalaw.org/akn/ke/act/1953/39/eng@2024-04-26/source"
 
+# Local fallback paths searched when online sources return 403
+LOCAL_PDF_CANDIDATES = [
+    Path.cwd() / "Traffic Act.pdf",
+    Path.cwd() / "traffic_act.pdf",
+    Path.cwd() / "Traffic_Act.pdf",
+    Path(__file__).parent.parent / "Traffic Act.pdf",
+    Path(__file__).parent.parent / "traffic_act.pdf",
+]
+
 CATEGORY_KEYWORDS: list[tuple[str, str]] = [
     ("speeding", "speeding-reckless"),
     ("speed limit", "speeding-reckless"),
@@ -551,11 +560,20 @@ def scrape(source: str = "auto", pdf_path: str | None = None, output_path: str |
         if html:
             offenses = parse_html(html)
         else:
-            logger.info("HTML unavailable, trying PDF")
+            logger.info("HTML unavailable, trying PDF download")
             local_pdf = pdf_path or "/tmp/traffic_act_scraped.pdf"
             downloaded = fetch_pdf_source(KENYA_LAW_PDF_URL, local_pdf)
             if downloaded:
                 offenses = parse_pdf(downloaded)
+
+        # If all online sources failed, try local PDF candidates
+        if not offenses:
+            for candidate in LOCAL_PDF_CANDIDATES:
+                if candidate.exists():
+                    logger.info(f"Online sources blocked, using local PDF: {candidate}")
+                    offenses = parse_pdf(str(candidate))
+                    if offenses:
+                        break
 
     elif source == "html":
         html = fetch_html_source(KENYA_LAW_HTML_URL)
