@@ -201,7 +201,7 @@ def parse_fine(text: str) -> tuple[int, int] | None:
     for match in re.finditer(r"(?:fine\s+(?:not\s+)?(?:exceeding\s+)?)?(\d{1,3}(?:,\d{3})*)\s*(?:shillings|/-)", text, re.IGNORECASE):
         amounts.append(int(match.group(1).replace(",", "")))
 
-    # Try word numbers
+    # Try word numbers with "shillings" suffix
     for match in re.finditer(
         r"(?:fine\s+(?:not\s+)?(?:exceeding\s+)?)?"
         r"((?:one|two|three|four|five|six|seven|eight|nine|ten|"
@@ -214,35 +214,103 @@ def parse_fine(text: str) -> tuple[int, int] | None:
         if parsed:
             amounts.append(parsed)
 
+    # Try word numbers WITHOUT "shillings" suffix but in fine context
+    # e.g. "fine not exceeding one hundred thousand or to imprisonment"
+    for match in re.finditer(
+        r"fine\s+(?:not\s+)?(?:exceeding\s+)?"
+        r"((?:one|two|three|four|five|six|seven|eight|nine|ten|"
+        r"eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|"
+        r"eighteen|nineteen|twenty|thirty|forty|fifty|sixty|seventy|"
+        r"eighty|ninety|hundred|thousand|million|and|\s+)+?)"
+        r"(?:\s+or\s+to\s+imprisonment|\s+and\s+in\s+addition|\s*[;.]|\s+and\s+the\s+court)",
+        text, re.IGNORECASE
+    ):
+        clean = match.group(1).strip()
+        parsed = parse_word_number(clean)
+        if parsed:
+            amounts.append(parsed)
+
     if not amounts:
         return None
 
     return (min(amounts), max(amounts))
 
 
+WORD_DIGIT_MAP = {
+    "one": 1, "two": 2, "three": 3, "four": 4, "five": 5,
+    "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10,
+    "eleven": 11, "twelve": 12, "thirteen": 13, "fourteen": 14,
+    "fifteen": 15, "sixteen": 16, "seventeen": 17, "eighteen": 18,
+    "nineteen": 19, "twenty": 20, "thirty": 30, "forty": 40,
+    "fifty": 50, "sixty": 60, "seventy": 70, "eighty": 80,
+    "ninety": 90, "hundred": 100,
+}
+
+
+def parse_duration_word(word: str) -> int | None:
+    """Parse a duration word like 'ten' → 10, or digit string like '10' → 10."""
+    word = word.strip().lower()
+    # Try as digit
+    try:
+        return int(word)
+    except ValueError:
+        pass
+    # Try as word number
+    return WORD_DIGIT_MAP.get(word)
+
+
 def parse_imprisonment(text: str) -> tuple[str | None, int]:
     """
-    Extract imprisonment term and total days.
+    Extract imprisonment term and total days from text.
+    Handles both digit and word numbers.
+    Examples: "imprisonment for a term not exceeding ten years"
+              "imprisonment for a term not exceeding 2 years"
+              "imprisonment for a term not exceeding six months"
+              "liable to imprisonment for a term not exceeding 3 years"
     Returns (human_readable_string, total_days).
     """
+    # Pattern: imprisonment ... (not exceeding) X years (Y months) | X months
     match = re.search(
         r"imprisonment\s+for\s+a\s+term\s+(?:not\s+)?(?:exceeding\s+)?"
-        r"(?:(\d+)\s+years?\s*(?:(\d+)\s+months?)?"
-        r"|(\d+)\s+months?)",
+        r"("
+        r"(?:\d+|[a-zA-Z]+)\s+years?\s*(?:(?:\d+|[a-zA-Z]+)\s+months?\s*)?"
+        r"|"
+        r"(?:\d+|[a-zA-Z]+)\s+months?"
+        r")",
         text, re.IGNORECASE
     )
     if not match:
         return (None, 0)
 
-    years = int(match.group(1)) if match.group(1) else 0
-    months = int(match.group(2) or match.group(3) or 0)
+    duration_str = match.group(1).strip()
+    years = 0
+    months = 0
+
+    # Try to extract years
+    year_match = re.search(r"(?:\d+|[a-zA-Z]+)\s+years?", duration_str, re.IGNORECASE)
+    if year_match:
+        num_part = re.match(r"(\d+|[a-zA-Z]+)", year_match.group(0))
+        if num_part:
+            y = parse_duration_word(num_part.group(1))
+            if y:
+                years = y
+
+    # Try to extract months within years pattern or standalone
+    month_match = re.search(r"(?:\d+|[a-zA-Z]+)\s+months?", duration_str, re.IGNORECASE)
+    if month_match:
+        num_part = re.match(r"(\d+|[a-zA-Z]+)", month_match.group(0))
+        if num_part:
+            m = parse_duration_word(num_part.group(1))
+            if m:
+                months = m
+
     total_days = years * 365 + months * 30
 
     parts = []
     if years:
-        parts.append(f"{years} year{'s' if years > 1 else ''}")
+        parts.append(f"{years} year{'s' if years != 1 else ''}")
     if months:
-        parts.append(f"{months} month{'s' if months > 1 else ''}")
+        parts.append(f"{months} month{'s' if months != 1 else ''}")
     return (" ".join(parts), total_days)
 
 

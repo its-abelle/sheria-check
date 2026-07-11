@@ -1,18 +1,63 @@
 [
   {
-    "id": "interference-with-computerized-motor-vehicle-regis",
-    "name": "Interference with computerized motor vehicle registration system",
-    "aliases": [],
-    "description": "A person commits an offence if the person knowingly— (a) falsifies any record or information stored in any computerized motor vehicle registration system; (b) damages or impairs any computerized motor vehicle registration system; or",
-    "category": "traffic-rules",
-    "severity": "felony",
-    "citation": "Traffic Act Cap 403, Section 5E",
-    "act": "Traffic Act Cap 403",
-    "section": "Section 5E",
-    "min_fine": 800000,
-    "max_fine": 800000,
-    "max_imprisonment": "3 years",
-    "course_of_action": "THIS IS A CRIMINAL OFFENSE. You may be arrested. Do not attempt to settle on the spot. You have the right to remain silent and to contact a lawyer immediately. The officer must issue a charge sheet. Appear in court on the date specified.",
+    "id": "no-speed-limiter-psv",
+    "name": "Operating PSV/commercial vehicle without speed limiter",
+    "aliases": [
+      "no speed governor",
+      "speed limiter not installed",
+      "missing speed limiter"
+    ],
+    "description": "Operating a public service vehicle or commercial vehicle that does not have a functional speed limiter installed.",
+    "category": "vehicle-condition",
+    "severity": "serious",
+    "citation": "Traffic (Speed Limiter) Regulations, 2022, Regulation 5",
+    "section": "Regulation 5",
+    "min_fine": 50000,
+    "max_fine": 100000,
+    "max_imprisonment": "6 months",
+    "course_of_action": "The officer may issue a charge sheet. The vehicle may not be allowed to continue until a speed limiter is installed. Do not pay on the spot.",
+    "act": "Traffic (Speed Limiter) Regulations, 2022 (Legal Notice)",
+    "law_version": "2024"
+  },
+  {
+    "id": "speeding-school-zone",
+    "name": "Speeding in a school zone",
+    "aliases": [
+      "school zone speeding",
+      "exceeding school speed limit",
+      "too fast near school"
+    ],
+    "description": "Driving a motor vehicle in a designated school zone at a speed exceeding the prescribed limit (typically 30 km/h during school hours).",
+    "category": "speeding-reckless",
+    "severity": "serious",
+    "citation": "Traffic (School Zones) Regulations, Regulation 5",
+    "section": "Regulation 5",
+    "min_fine": 20000,
+    "max_fine": 50000,
+    "max_imprisonment": "6 months",
+    "course_of_action": "This is a serious offense given the risk to children. The officer may issue a charge sheet. Do not pay on the spot. A court appearance may be required.",
+    "act": "Traffic (School Zones) Regulations",
+    "law_version": "2024"
+  },
+  {
+    "id": "psv-without-inspection",
+    "name": "Operating PSV without valid inspection certificate",
+    "aliases": [
+      "expired inspection",
+      "no inspection sticker",
+      "fake inspection",
+      "expired roadworthy"
+    ],
+    "description": "Operating a public service vehicle without a valid motor vehicle inspection certificate.",
+    "category": "vehicle-condition",
+    "severity": "serious",
+    "citation": "Traffic (Inspection) Rules & NTSA Act",
+    "section": "Rule 5",
+    "min_fine": 20000,
+    "max_fine": 50000,
+    "max_imprisonment": null,
+    "course_of_action": "The officer may issue a charge sheet and a defect notification. The vehicle may not be allowed to continue until a valid inspection is obtained.",
+    "act": "NTSA Act No. 33 of 2012",
     "law_version": "2024"
   },
   {
@@ -32,6 +77,83 @@
     "law_version": "2024"
   },
   {
+    "id": "interference-with-computerized-motor-vehicle-regis",
+    "name": "Interference with computerized motor vehicle registration system",
+    "aliases": [],
+    "description": "A person commits an offence if the person knowingly— (a) falsifies any record or information stored in any computerized motor vehicle registration system; (b) damages or impairs any computerized motor vehicle registration system; or",
+    "category": "traffic-rules",
+    "severity": "felony",
+    "citation": "Traffic Act Cap 403, Section 5E",
+    "act": "Traffic Act Cap 403",
+    "section": "Section 5E",
+    "min_fine": 800000,
+    "max_fine": 800000,
+    "max_imprisonment": "3 years",
+    "course_of_action": "THIS IS A CRIMINAL OFFENSE. You may be arrested. Do not attempt to settle on the spot. You have the right to remain silent and to contact a lawyer immediately. The officer must issue a charge sheet. Appear in court on the date specified.",
+    "law_version": "2024"
+  },
+  {
+    "id": "school-zone-loading",
+    "name": "Loading or dropping off outside designated area",
+    "aliases": [
+      "wrong drop off school",
+      "illegal school loading",
+      "stopping on school zone markings"
+    ],
+    "description": "Stopping, loading, or dropping off passengers in a school zone outside the designated loading area or in a prohibited manner.",
+    "category": "traffic-rules",
+    "severity": "minor",
+    "citation": "Traffic (School Zones) Regulations, Regulation 7",
+    "section": "Regulation 7",
+    "min_fine": 5000,
+    "max_fine": 20000,
+    "max_imprisonment": null,
+    "course_of_action": "The officer may issue a charge sheet. School zones have strict rules during specified hours for child safety.",
+    "act": "Traffic (School Zones) Regulations",
+    "law_version": "2024"
+  },
+  {
+    "id": "psv-without-speed-limiter",
+    "name": "Operating PSV without a speed limiter",
+    "aliases": [
+      "no speed governor",
+      "speed limiter tampered",
+      "speed governor removed"
+    ],
+    "description": "Operating a public service vehicle without a functional speed limiter/governor as required by law.",
+    "category": "vehicle-condition",
+    "severity": "serious",
+    "citation": "Traffic (Speed Limiter) Regulations, 2022 & NTSA Act",
+    "section": "Regulation 7",
+    "min_fine": 50000,
+    "max_fine": 100000,
+    "max_imprisonment": "6 months",
+    "course_of_action": "This is a serious safety offense. The vehicle may be impounded. Do not settle on the spot. The court may order the installation of a speed limiter at the owner's cost.",
+    "act": "NTSA Act No. 33 of 2012",
+    "law_version": "2024"
+  },
+  {
+    "id": "speed-limiter-tampering",
+    "name": "Tampering with a speed limiter device",
+    "aliases": [
+      "speed governor tampered",
+      "disabled speed limiter",
+      "speed limiter bypassed",
+      "speed governor removed"
+    ],
+    "description": "Tampering with, disconnecting, or disabling a speed limiter device installed in a motor vehicle.",
+    "category": "vehicle-condition",
+    "severity": "serious",
+    "citation": "Traffic (Speed Limiter) Regulations, 2022, Regulation 10",
+    "section": "Regulation 10",
+    "min_fine": 50000,
+    "max_fine": 100000,
+    "max_imprisonment": "6 months",
+    "course_of_action": "This is a serious safety offense. The vehicle may be impounded. Do not settle on the spot. The court may order re-installation at the owner's cost.",
+    "act": "Traffic (Speed Limiter) Regulations, 2022 (Legal Notice)",
+    "law_version": "2024"
+  },
+  {
     "id": "vehicles-to-carry-identification-plates",
     "name": "Vehicles to carry identification plates",
     "aliases": [],
@@ -45,6 +167,27 @@
     "max_fine": 300000,
     "max_imprisonment": "12 months",
     "course_of_action": "This is a serious traffic offense. The officer should issue a charge sheet (P.B. Form). Do not pay any amount on the spot. Consider seeking legal representation. Appear in court on the date specified in the charge sheet.",
+    "law_version": "2024"
+  },
+  {
+    "id": "operate-psv-without-license",
+    "name": "Operating a PSV without an NTSA license",
+    "aliases": [
+      "unlicensed matatu",
+      "unlicensed PSV",
+      "no PSV license",
+      "illegal PSV operation"
+    ],
+    "description": "Operating a public service vehicle without a valid NTSA license or operating permit.",
+    "category": "license-documents",
+    "severity": "serious",
+    "citation": "NTSA Act, Section 14",
+    "section": "Section 14",
+    "min_fine": 100000,
+    "max_fine": 500000,
+    "max_imprisonment": "2 years",
+    "course_of_action": "This is a serious regulatory offense. The vehicle may be impounded. Do not attempt to settle on the spot. The matter will be heard in court.",
+    "act": "NTSA Act No. 33 of 2012",
     "law_version": "2024"
   },
   {
@@ -64,6 +207,48 @@
     "law_version": "2024"
   },
   {
+    "id": "psv-route-violation",
+    "name": "Operating a PSV outside licensed route",
+    "aliases": [
+      "wrong route",
+      "off-route PSV",
+      "route violation",
+      "out of route"
+    ],
+    "description": "Operating a public service vehicle on a route not specified in the vehicle's operating license.",
+    "category": "traffic-rules",
+    "severity": "minor",
+    "citation": "PSV Regulations, Regulation 15",
+    "section": "Regulation 15",
+    "min_fine": 10000,
+    "max_fine": 30000,
+    "max_imprisonment": null,
+    "course_of_action": "The officer may issue a charge sheet. The operator may face additional sanctions from NTSA including license suspension.",
+    "act": "Traffic (Public Service Vehicle) Regulations",
+    "law_version": "2024"
+  },
+  {
+    "id": "psv-fare-overcharge",
+    "name": "Overcharging passengers on a PSV",
+    "aliases": [
+      "excess fare",
+      "fare overcharge",
+      "overcharging passengers",
+      "illegal fare increase"
+    ],
+    "description": "Charging passengers a fare higher than the gazetted or approved fare for that route.",
+    "category": "traffic-rules",
+    "severity": "minor",
+    "citation": "PSV Regulations, Regulation 28",
+    "section": "Regulation 28",
+    "min_fine": 10000,
+    "max_fine": 30000,
+    "max_imprisonment": "3 months",
+    "course_of_action": "The officer may issue a charge sheet. Passengers are entitled to a refund of the excess fare. Do not pay on the spot.",
+    "act": "Traffic (Public Service Vehicle) Regulations",
+    "law_version": "2024"
+  },
+  {
     "id": "drivers-to-be-licensed",
     "name": "Drivers to be licensed",
     "aliases": [],
@@ -80,6 +265,26 @@
     "law_version": "2024"
   },
   {
+    "id": "psv-conductor-without-badge",
+    "name": "Conductor operating without a valid badge",
+    "aliases": [
+      "no conductor badge",
+      "unlicensed conductor",
+      "conductor without license"
+    ],
+    "description": "Acting as a conductor of a public service vehicle without holding a valid conductor's badge or license.",
+    "category": "license-documents",
+    "severity": "minor",
+    "citation": "PSV Regulations, Regulation 32",
+    "section": "Regulation 32",
+    "min_fine": 5000,
+    "max_fine": 15000,
+    "max_imprisonment": null,
+    "course_of_action": "The officer may issue a charge sheet. Both the conductor and the vehicle owner may be liable. Do not pay on the spot.",
+    "act": "Traffic (Public Service Vehicle) Regulations",
+    "law_version": "2024"
+  },
+  {
     "id": "production-of-driving-licence-on-demand",
     "name": "Production of driving licence on demand",
     "aliases": [],
@@ -93,6 +298,46 @@
     "max_fine": 10000,
     "max_imprisonment": null,
     "course_of_action": "The officer may issue a charge sheet (P.B. Form) or a police notification of a traffic offence. Do not pay any amount on the spot. You may plead guilty by paying the fine as directed on the notification, or appear in court on the date specified if you wish to contest.",
+    "law_version": "2024"
+  },
+  {
+    "id": "unroadworthy-psv",
+    "name": "Operating an unroadworthy PSV",
+    "aliases": [
+      "unroadworthy matatu",
+      "defective PSV",
+      "unsafe PSV vehicle"
+    ],
+    "description": "Operating a public service vehicle that does not meet safety and roadworthiness standards.",
+    "category": "vehicle-condition",
+    "severity": "serious",
+    "citation": "NTSA Act, Section 38 & Traffic Act Section 55",
+    "section": "Section 38",
+    "min_fine": 50000,
+    "max_fine": 200000,
+    "max_imprisonment": "1 year",
+    "course_of_action": "The vehicle may be impounded and detained until it passes inspection. Do not attempt to settle on the spot. The court will determine the penalty.",
+    "act": "NTSA Act No. 33 of 2012",
+    "law_version": "2024"
+  },
+  {
+    "id": "psv-overloading",
+    "name": "PSV Overloading — exceeding licensed capacity",
+    "aliases": [
+      "overloading matatu",
+      "excess passengers PSV",
+      "overcrowding PSV"
+    ],
+    "description": "Operating a public service vehicle carrying more passengers than the licensed capacity.",
+    "category": "parking-loading",
+    "severity": "serious",
+    "citation": "NTSA Act, Section 38 & Traffic Act Section 56",
+    "section": "Section 38",
+    "min_fine": 20000,
+    "max_fine": 50000,
+    "max_imprisonment": "6 months",
+    "course_of_action": "The officer may issue a charge sheet and prohibit the vehicle from continuing. Do not pay on the spot. The operator may be liable for the excess passengers' safety.",
+    "act": "NTSA Act No. 33 of 2012",
     "law_version": "2024"
   },
   {
@@ -128,22 +373,6 @@
     "law_version": "2024"
   },
   {
-    "id": "driving-on-pavement-pedestrian-walkway-etc",
-    "name": "Driving on pavement, pedestrian walkway, etc.",
-    "aliases": [],
-    "description": "(1) No person shall, in order to avoid a buildup of traffic on a road, drive a motor vehicle on, or through, a pavement or a pedestrian walkway. (2) A person who contravenes subsection (1) commits an offence and shall be liable—",
-    "category": "traffic-rules",
-    "severity": "serious",
-    "citation": "Traffic Act Cap 403, Section 45A",
-    "act": "Traffic Act Cap 403",
-    "section": "Section 45A",
-    "min_fine": 30000,
-    "max_fine": 30000,
-    "max_imprisonment": "3 months",
-    "course_of_action": "This is a serious traffic offense. The officer should issue a charge sheet (P.B. Form). Do not pay any amount on the spot. Consider seeking legal representation. Appear in court on the date specified in the charge sheet.",
-    "law_version": "2024"
-  },
-  {
     "id": "prohibition-of-drinking-when-driving-or-in-charge-",
     "name": "Prohibition of drinking when driving or in charge of public service vehicle",
     "aliases": [],
@@ -157,6 +386,22 @@
     "max_fine": 100000,
     "max_imprisonment": "2 years",
     "course_of_action": "THIS IS A CRIMINAL OFFENSE. You may be arrested. Do not attempt to settle on the spot. You have the right to remain silent and to contact a lawyer immediately. The officer must issue a charge sheet. Appear in court on the date specified.",
+    "law_version": "2024"
+  },
+  {
+    "id": "driving-on-pavement-pedestrian-walkway-etc",
+    "name": "Driving on pavement, pedestrian walkway, etc.",
+    "aliases": [],
+    "description": "(1) No person shall, in order to avoid a buildup of traffic on a road, drive a motor vehicle on, or through, a pavement or a pedestrian walkway. (2) A person who contravenes subsection (1) commits an offence and shall be liable—",
+    "category": "traffic-rules",
+    "severity": "serious",
+    "citation": "Traffic Act Cap 403, Section 45A",
+    "act": "Traffic Act Cap 403",
+    "section": "Section 45A",
+    "min_fine": 30000,
+    "max_fine": 30000,
+    "max_imprisonment": "3 months",
+    "course_of_action": "This is a serious traffic offense. The officer should issue a charge sheet (P.B. Form). Do not pay any amount on the spot. Consider seeking legal representation. Appear in court on the date specified in the charge sheet.",
     "law_version": "2024"
   },
   {
@@ -192,6 +437,47 @@
     "law_version": "2024"
   },
   {
+    "id": "road-reserve-encroachment",
+    "name": "Encroaching on a road reserve",
+    "aliases": [
+      "building on road reserve",
+      "road reserve violation",
+      "obstructing road reserve"
+    ],
+    "description": "Constructing any building, structure, or fence within a road reserve without the relevant road authority's permission.",
+    "category": "traffic-rules",
+    "severity": "serious",
+    "citation": "Kenya Roads Act, Section 48",
+    "section": "Section 48",
+    "min_fine": 100000,
+    "max_fine": 500000,
+    "max_imprisonment": "2 years",
+    "course_of_action": "This is a serious offense. The road authority may demolish the structure at the owner's cost. Legal advice should be sought immediately.",
+    "act": "Kenya Roads Act No. 2 of 2007",
+    "law_version": "2024"
+  },
+  {
+    "id": "overweight-heavy-vehicle",
+    "name": "Operating an overweight heavy vehicle",
+    "aliases": [
+      "overweight truck",
+      "excess axle load",
+      "axle load violation",
+      "weighbridge offense"
+    ],
+    "description": "Operating a heavy commercial vehicle exceeding the prescribed axle load or gross vehicle weight limits.",
+    "category": "parking-loading",
+    "severity": "serious",
+    "citation": "Kenya Roads Act, Section 48 & Traffic Act Section 56",
+    "section": "Section 48",
+    "min_fine": 200000,
+    "max_fine": 500000,
+    "max_imprisonment": "1 year",
+    "course_of_action": "The vehicle may be detained at the weighbridge until the excess load is removed. A fine may be imposed per tonne of excess weight. Do not attempt to settle on the spot.",
+    "act": "Kenya Roads Act No. 2 of 2007",
+    "law_version": "2024"
+  },
+  {
     "id": "driving-without-due-care-and-attention",
     "name": "Driving without due care and attention",
     "aliases": [],
@@ -224,19 +510,24 @@
     "law_version": "2024"
   },
   {
-    "id": "offences-relating-to-parking-bays-and-areas-where-",
-    "name": "Offences relating to parking bays and areas where no charges are made",
-    "aliases": [],
-    "description": "(1) Any person who, being the driver of a vehicle, in any parking bay or parking area— (a) leaves the vehicle for a period in excess of the time prescribed by any traffic sign relating to (b) contravenes or fails to comply with any traffic sign relating to that bay or area as to the",
+    "id": "toll-evasion",
+    "name": "Evading toll charges on a toll road",
+    "aliases": [
+      "toll violation",
+      "no toll payment",
+      "toll dodging",
+      "expressway toll evasion"
+    ],
+    "description": "Using a toll road without paying the required toll charge, or tampering with toll collection equipment.",
     "category": "traffic-rules",
-    "severity": "serious",
-    "citation": "Traffic Act Cap 403, Section 52A",
-    "act": "Traffic Act Cap 403",
-    "section": "Section 52A",
-    "min_fine": 10000,
+    "severity": "minor",
+    "citation": "Kenya Roads Act & Toll Regulations",
+    "section": "Section 52",
+    "min_fine": 1000,
     "max_fine": 10000,
-    "max_imprisonment": "1 month",
-    "course_of_action": "This is a serious traffic offense. The officer should issue a charge sheet (P.B. Form). Do not pay any amount on the spot. Consider seeking legal representation. Appear in court on the date specified in the charge sheet.",
+    "max_imprisonment": null,
+    "course_of_action": "The toll operator may record the vehicle registration and pursue payment. Penalty amounts may be specified on the toll road signage. Do not pay any officer on the spot.",
+    "act": "Kenya Roads Act No. 2 of 2007",
     "law_version": "2024"
   },
   {
@@ -253,6 +544,22 @@
     "max_fine": 70000,
     "max_imprisonment": null,
     "course_of_action": "The officer may issue a charge sheet (P.B. Form) or a police notification of a traffic offence. Do not pay any amount on the spot. You may plead guilty by paying the fine as directed on the notification, or appear in court on the date specified if you wish to contest.",
+    "law_version": "2024"
+  },
+  {
+    "id": "offences-relating-to-parking-bays-and-areas-where-",
+    "name": "Offences relating to parking bays and areas where no charges are made",
+    "aliases": [],
+    "description": "(1) Any person who, being the driver of a vehicle, in any parking bay or parking area— (a) leaves the vehicle for a period in excess of the time prescribed by any traffic sign relating to (b) contravenes or fails to comply with any traffic sign relating to that bay or area as to the",
+    "category": "traffic-rules",
+    "severity": "serious",
+    "citation": "Traffic Act Cap 403, Section 52A",
+    "act": "Traffic Act Cap 403",
+    "section": "Section 52A",
+    "min_fine": 10000,
+    "max_fine": 10000,
+    "max_imprisonment": "1 month",
+    "course_of_action": "This is a serious traffic offense. The officer should issue a charge sheet (P.B. Form). Do not pay any amount on the spot. Consider seeking legal representation. Appear in court on the date specified in the charge sheet.",
     "law_version": "2024"
   },
   {
@@ -352,22 +659,6 @@
     "law_version": "2024"
   },
   {
-    "id": "offences-concerning-designated-parking-places",
-    "name": "Offences concerning designated parking places",
-    "aliases": [],
-    "description": "(a) a vehicle is left in a designated parking place, and any initial charge or excess charge which is thereby incurred is not duly paid; or (b) a vehicle is left in a designated parking place and any of the provisions of this Part or of any",
-    "category": "parking-loading",
-    "severity": "serious",
-    "citation": "Traffic Act Cap 403, Section 72G",
-    "act": "Traffic Act Cap 403",
-    "section": "Section 72G",
-    "min_fine": 2500,
-    "max_fine": 10000,
-    "max_imprisonment": "3 months",
-    "course_of_action": "This is a serious traffic offense. The officer should issue a charge sheet (P.B. Form). Do not pay any amount on the spot. Consider seeking legal representation. Appear in court on the date specified in the charge sheet.",
-    "law_version": "2024"
-  },
-  {
     "id": "supplemental-provisions-regarding-excess-charge",
     "name": "Supplemental provisions regarding excess charge",
     "aliases": [],
@@ -381,6 +672,22 @@
     "max_fine": 10000,
     "max_imprisonment": null,
     "course_of_action": "The officer may issue a charge sheet (P.B. Form) or a police notification of a traffic offence. Do not pay any amount on the spot. You may plead guilty by paying the fine as directed on the notification, or appear in court on the date specified if you wish to contest.",
+    "law_version": "2024"
+  },
+  {
+    "id": "offences-concerning-designated-parking-places",
+    "name": "Offences concerning designated parking places",
+    "aliases": [],
+    "description": "(a) a vehicle is left in a designated parking place, and any initial charge or excess charge which is thereby incurred is not duly paid; or (b) a vehicle is left in a designated parking place and any of the provisions of this Part or of any",
+    "category": "parking-loading",
+    "severity": "serious",
+    "citation": "Traffic Act Cap 403, Section 72G",
+    "act": "Traffic Act Cap 403",
+    "section": "Section 72G",
+    "min_fine": 2500,
+    "max_fine": 10000,
+    "max_imprisonment": "3 months",
+    "course_of_action": "This is a serious traffic offense. The officer should issue a charge sheet (P.B. Form). Do not pay any amount on the spot. Consider seeking legal representation. Appear in court on the date specified in the charge sheet.",
     "law_version": "2024"
   },
   {
@@ -528,6 +835,43 @@
     "law_version": "2024"
   },
   {
+    "id": "touting",
+    "name": "Touting",
+    "aliases": [
+      "manambas",
+      "touting",
+      "soliciting passengers",
+      "matatu tout"
+    ],
+    "description": "(1) No person shall, for the purpose of obtaining passengers for any public service vehicle, make any noise or sound any instrument, or do anything which causes or is likely to cause annoyance, inconvenience or danger to the public.",
+    "category": "traffic-rules",
+    "severity": "serious",
+    "citation": "Traffic Act Cap 403, Section 103",
+    "act": "Traffic Act Cap 403",
+    "section": "Section 103",
+    "min_fine": 30000,
+    "max_fine": 50000,
+    "max_imprisonment": "12 months",
+    "course_of_action": "This is a serious traffic offense. The officer should issue a charge sheet (P.B. Form). Do not pay any amount on the spot. Consider seeking legal representation. Appear in court on the date specified in the charge sheet.",
+    "law_version": "2024"
+  },
+  {
+    "id": "uniforms-and-special-badges",
+    "name": "Uniforms and special badges",
+    "aliases": [],
+    "description": "(1) Every driver and every conductor of a public service vehicle shall wear a special badge and uniform. (2) The uniform referred to in subsection (1) shall be prescribed by the Registrar of Motor Vehicles and shall, in the case of a driver, be navy blue in colour and in the case of a conductor, be maroon in",
+    "category": "traffic-rules",
+    "severity": "serious",
+    "citation": "Traffic Act Cap 403, Section 103A",
+    "act": "Traffic Act Cap 403",
+    "section": "Section 103A",
+    "min_fine": 10000,
+    "max_fine": 10000,
+    "max_imprisonment": "12 months",
+    "course_of_action": "This is a serious traffic offense. The officer should issue a charge sheet (P.B. Form). Do not pay any amount on the spot. Consider seeking legal representation. Appear in court on the date specified in the charge sheet.",
+    "law_version": "2024"
+  },
+  {
     "id": "helmets-and-reflector-jackets",
     "name": "Helmets and reflector jackets",
     "aliases": [],
@@ -539,22 +883,6 @@
     "section": "Section 103B",
     "min_fine": 10000,
     "max_fine": 10000,
-    "max_imprisonment": "12 months",
-    "course_of_action": "This is a serious traffic offense. The officer should issue a charge sheet (P.B. Form). Do not pay any amount on the spot. Consider seeking legal representation. Appear in court on the date specified in the charge sheet.",
-    "law_version": "2024"
-  },
-  {
-    "id": "touting",
-    "name": "Touting",
-    "aliases": [],
-    "description": "(1) No person shall, for the purpose of obtaining passengers for any public service vehicle, make any noise or sound any instrument, or do anything which causes or is likely to cause annoyance, inconvenience or danger to the public.",
-    "category": "traffic-rules",
-    "severity": "serious",
-    "citation": "Traffic Act Cap 403, Section 103",
-    "act": "Traffic Act Cap 403",
-    "section": "Section 103",
-    "min_fine": 30000,
-    "max_fine": 50000,
     "max_imprisonment": "12 months",
     "course_of_action": "This is a serious traffic offense. The officer should issue a charge sheet (P.B. Form). Do not pay any amount on the spot. Consider seeking legal representation. Appear in court on the date specified in the charge sheet.",
     "law_version": "2024"
@@ -576,19 +904,19 @@
     "law_version": "2024"
   },
   {
-    "id": "uniforms-and-special-badges",
-    "name": "Uniforms and special badges",
+    "id": "inspection-of-vehicles",
+    "name": "Inspection of vehicles",
     "aliases": [],
-    "description": "(1) Every driver and every conductor of a public service vehicle shall wear a special badge and uniform. (2) The uniform referred to in subsection (1) shall be prescribed by the Registrar of Motor Vehicles and shall, in the case of a driver, be navy blue in colour and in the case of a conductor, be maroon in",
+    "description": "(1) It shall be lawful for any police officer in uniform to stop any vehicle, and for any police officer, licensing officer or inspector— (a) to enter any vehicle;",
     "category": "traffic-rules",
-    "severity": "serious",
-    "citation": "Traffic Act Cap 403, Section 103A",
+    "severity": "minor",
+    "citation": "Traffic Act Cap 403, Section 105",
     "act": "Traffic Act Cap 403",
-    "section": "Section 103A",
-    "min_fine": 10000,
-    "max_fine": 10000,
-    "max_imprisonment": "12 months",
-    "course_of_action": "This is a serious traffic offense. The officer should issue a charge sheet (P.B. Form). Do not pay any amount on the spot. Consider seeking legal representation. Appear in court on the date specified in the charge sheet.",
+    "section": "Section 105",
+    "min_fine": 30000,
+    "max_fine": 50000,
+    "max_imprisonment": null,
+    "course_of_action": "The officer may issue a charge sheet (P.B. Form) or a police notification of a traffic offence. Do not pay any amount on the spot. You may plead guilty by paying the fine as directed on the notification, or appear in court on the date specified if you wish to contest.",
     "law_version": "2024"
   },
   {
@@ -605,22 +933,6 @@
     "max_fine": 30000,
     "max_imprisonment": "2 months",
     "course_of_action": "This is a serious traffic offense. The officer should issue a charge sheet (P.B. Form). Do not pay any amount on the spot. Consider seeking legal representation. Appear in court on the date specified in the charge sheet.",
-    "law_version": "2024"
-  },
-  {
-    "id": "inspection-of-vehicles",
-    "name": "Inspection of vehicles",
-    "aliases": [],
-    "description": "(1) It shall be lawful for any police officer in uniform to stop any vehicle, and for any police officer, licensing officer or inspector— (a) to enter any vehicle;",
-    "category": "traffic-rules",
-    "severity": "minor",
-    "citation": "Traffic Act Cap 403, Section 105",
-    "act": "Traffic Act Cap 403",
-    "section": "Section 105",
-    "min_fine": 30000,
-    "max_fine": 50000,
-    "max_imprisonment": null,
-    "course_of_action": "The officer may issue a charge sheet (P.B. Form) or a police notification of a traffic offence. Do not pay any amount on the spot. You may plead guilty by paying the fine as directed on the notification, or appear in court on the date specified if you wish to contest.",
     "law_version": "2024"
   },
   {

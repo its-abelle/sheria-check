@@ -1,8 +1,15 @@
 # Sheria Check — Roadmap
 
-## Phase 1: Core MVP  *(Current — Weeks 1–2)*
+## Status Key
+- ✓ = Done
+- ▶ = In progress
+- ○ = Not started
 
-**Goal:** A working PWA that lets motorists search and browse offenses with accurate legal data.
+---
+
+## Phase 1: Core MVP  *(Complete)*
+
+**Goal:** Working PWA for searching and browsing traffic offenses.
 
 ### Deliverables
 - [x] React + Vite + Tailwind PWA scaffold
@@ -13,106 +20,137 @@
 - [x] Anonymous incident report form
 - [x] Legal disclaimer banner + page
 - [x] Data freshness indicator
-- [x] 12 seed offenses covering all categories and severity levels
+- [x] 12 seed offenses + 44 scraped offenses from Traffic Act
 - [x] Docker Compose for local development
 - [x] Admin panel (basic dashboard + bulk upload API)
-- [x] Python scraper skeleton for Traffic Act Cap 403
-- [ ] Context files (ARCHITECTURE.md, ROADMAP.md, AGENTS.md, CONTRIBUTING.md)
-
-### Acceptance Criteria
-- Search returns relevant results within 500ms (local)
-- All 6 categories display seeded offenses
-- Offense detail shows exact legal citation and fine range
-- Report form submits to database and returns confirmation
-- PWA installs to home screen on Android Chrome
-- TypeScript compiles with zero errors in strict mode
+- [x] Python scraper for Traffic Act Cap 403 (auto, HTML, PDF, cache)
 
 ---
 
-## Phase 2: Full Data & Accuracy  *(Weeks 3–4)*
+## Phase 2: Full Data & Accuracy  *(Current — Priority)*
 
-**Goal:** Complete dataset of every penal offense in the Traffic Act, verified and accurate.
+**Goal:** Every road-related fine and penalty in Kenya, verified and in one place.
 
-### Deliverables
-- [ ] Run scraper against Kenya Law for full Cap 403 extraction
-- [ ] Manual verification pass: cross-check every offense against printed Traffic Act
-- [ ] Add all extracted offenses to database (target: 80–150 offenses)
-- [ ] Write aliases for every offense (common Kenyan street names)
-- [ ] Implement severity classification review (ensure correct)
-- [ ] Add `citations` field for cross-references to subsidiary legislation
-- [ ] Build course of action validation — ensure each one matches current legal procedure
-- [ ] Release v0.1.0 tag
+### Track A — Traffic Act Depth  (44 → 100+ offenses)
 
-### Risks
-- Scraper may miss offenses buried in subsections — manual oversight required
-- Some penalty amounts may be outdated or ambiguous — legal consultation may be needed
+The current scraper extracts 44 sections but misses key ones (42, 44, 46, etc.) due to PDF formatting quirks.
+
+- [ ] **Fix section detection** — handle sub-sections like `44(1)`, `44(2)` and section headers that span multiple lines
+- [ ] **Add subsection penalty parsing** — many sections have different fines for first vs subsequent conviction
+- [ ] **Manual aliases for every offense**
+  - Common Kenyan names: "drink driving" → DUI, "yellow line" → overtaking on yellow line
+  - Street slang: "kitu kidogo" offenses, "cowboy" driving
+  - Police terminology: "PB Form", "defect notification"
+- [ ] **Verify all fine amounts** against printed Traffic Act
+- [ ] **Add `citations` field** for cross-references to subsidiary legislation
+- [ ] **Add demerit points** from Section 117A (points system for repeat offenders)
+- [ ] **Release v0.1.0 tag**
+
+**Target:** All penal sections of Cap 403 extracted, verified, and aliased.
+
+### Track B — NTSA Regulations  (New)
+
+NTSA does not publish a penalty schedule online, but penalties are defined in:
+- **NTSA Act (No. 33 of 2012)** — NTSA enforcement powers, penalty for operating without PSV license
+- **Traffic (School Zones) Regulations** — school zone speeding, dropping off violations
+- **Traffic (Speed Limiter) Regulations, 2022** — speed limiter tampering, non-installation
+- **Traffic (Inspection) Rules** — vehicle inspection certificates, fake inspection stickers
+- **PSV (Public Service Vehicle) Regulations** — overloading, fare violations, conductor offenses, route violations
+
+- [ ] **Build unified subsidiary legislation scraper** — `scripts/scrape_subsidiary.py`
+  - Fetches from Kenya Law subsidiary legislation pages
+  - Parses Legal Notices, Rules, and Regulations
+  - Same output format as main scraper
+- [ ] **Scrape NTSA Act penalties** — operating without license, unroadworthy vehicles
+- [ ] **Scrape PSV Regulations** — 14-seater matatu offenses, overloading, touts
+- [ ] **Scrape Speed Limiter Regulations** — tampering, non-compliance
+- [ ] **Scrape Inspection Rules** — fake stickers, expired inspection
+- [ ] **Scrape School Zones Regulations** — school zone speeding, signage violations
+- [ ] **Merge all into unified dataset** — `scripts/merge_data.py`
+
+**Target:** 50+ additional offenses from subsidiary legislation.
+
+### Track C — Kenya Roads Act / Road Authority Penalties  (New)
+
+KURA, KENHA, and KeRRA penalties are defined in:
+- **Kenya Roads Act (No. 2 of 2007)** — establishes the three authorities
+- **KENHA Toll Regulations** — expressway toll violations, overweight vehicles
+- **Weighbridge Regulations** — axle load limits, overweight penalties
+- **Road Reserve Offenses** — encroachment, damage to roads
+
+- [ ] **Scrape Kenya Roads Act** — road authority offenses, penalties
+- [ ] **Scrape Weighbridge penalties** — axle load excess, heavy vehicle overweight
+- [ ] **Scrape Toll violation penalties** — Nairobi Expressway, non-payment
+- [ ] **Scrape Road Reserve offenses** — encroachment, drainage damage
+
+**Target:** 25+ additional offenses from road authority legislation.
+
+### Track D — County & By-Laws  (Future)
+
+- [ ] **Nairobi City County Traffic By-Laws** — county parking fines, pavement parking
+- [ ] **Mombasa County Traffic By-Laws** — port-related traffic offenses
+- [ ] **Kisumu County By-Laws** — county-specific road offenses
+- [ ] **County parking fee schedules** — verified against county websites
 
 ---
 
-## Phase 3: Production Hardening  *(Weeks 5–6)*
+## Phase 3: Production Hardening  *(Complete)*
 
 **Goal:** Platform is stable, fast, and safe for real users.
 
-### Deliverables
-- **Backend**
-  - [ ] Rate limiting (express-rate-limit)
-  - [ ] Response compression (compression)
-  - [ ] Structured logging (pino)
-  - [ ] Cursor-based pagination on search
-  - [ ] Redis caching for search + category queries
-  - [ ] Helmet.js security headers
-  - [ ] API versioning (/api/v1/)
-  - [ ] Graceful shutdown (SIGTERM handler)
-  - [ ] Health check endpoint with DB + cache ping
-- **Frontend**
-  - [ ] WCAG 2.1 AA compliance audit (keyboard nav, ARIA, focus management)
-  - [ ] Skeleton loading states replace spinners
-  - [ ] Web Share API integration (WhatsApp, Twitter)
-  - [ ] Illustrated empty/error states
-  - [ ] Offline fallback page for disconnected state
-  - [ ] Page transition loading bar
-  - [ ] Skip-to-content link, focus trap in modals
-  - [ ] Empathetic copy review — all error messages rewritten for clarity
-- **Infrastructure**
-  - [ ] GitHub Actions CI (lint, typecheck, build)
-  - [ ] Docker health checks
-  - [ ] Production .env.example
-  - [ ] Sentry error monitoring setup
-  - [ ] DigitalOcean App Platform deployment guide
+### Delivered
+- [x] Rate limiting (express-rate-limit)
+- [x] Response compression (compression)
+- [x] Structured logging (pino)
+- [x] Cursor-based pagination on search
+- [x] Helmet.js security headers
+- [x] Graceful shutdown (SIGTERM handler)
+- [x] Health check endpoint with DB ping
+- [x] API versioning (/api/v1/)
+- [x] WCAG 2.1 AA compliant keyboard navigation
+- [x] Skeleton loading states
+- [x] Web Share API integration (WhatsApp, Twitter)
+- [x] Illustrated empty/error states
+- [x] Offline notice banner
+- [x] Page transition loading bar
+- [x] Skip-to-content link, focus traps
+- [x] Empathetic copy throughout
+- [x] GitHub Actions CI
+- [x] Docker health checks
+- [x] .env.example files
+- [x] Data scraping scripts with retry logic + verification
 
-### Acceptance Criteria
-- Lighthouse score > 90 on mobile
-- All flows keyboard-navigable
-- Offline search works from service worker cache
-- Rate limiting returns 429 for abusive traffic
-- CI passes on every PR
+### Pending
+- [ ] Redis caching for search + category queries
+- [ ] Sentry error monitoring setup
+- [ ] DigitalOcean App Platform deployment guide
+- [ ] Lighthouse audit and score optimization
 
 ---
 
 ## Phase 4: Reach & Scale  *(Weeks 7–10)*
 
-**Goal:** Make Sheria Check accessible to every Kenyan motorist regardless of phone, language, or literacy level.
+**Goal:** Every Kenyan motorist can use Sheria Check regardless of phone, language, or literacy.
 
 ### Deliverables
 - **Swahili translation**
   - [ ] All offense names, descriptions, and course of action translated
   - [ ] i18n framework (react-i18next)
-  - [ ] Toggle between English and Swahili
+  - [ ] Language toggle
 - **USSD channel**
-  - [ ] USSD gateway integration (e.g., Africa's Talking)
+  - [ ] USSD gateway integration (Africa's Talking)
   - [ ] *384*xxx# lookup flow: code → offense → fine via SMS
-  - [ ] No data required — works on any phone
+  - [ ] Works on any phone, no data required
 - **Performance scaling**
   - [ ] CDN for static assets (DigitalOcean Spaces + CDN)
   - [ ] Read replicas for PostgreSQL (if needed)
-  - [ ] Redis cluster for search cache (if needed)
-- **Content expansion**
-  - [ ] Add traffic court location finder
-  - [ ] Add "nearest legal aid" contact list
-  - [ ] Add IPOA contacts and reporting instructions
+  - [ ] Redis cluster for search cache
 - **Community features**
-  - [ ] Public anonymous incident heatmap (aggregated, no individual data)
+  - [ ] Public anonymous incident heatmap (aggregated)
   - [ ] "Rate this road" — corruption hotspot crowdsourcing
+  - [ ] Traffic court location finder
+  - [ ] "Nearest legal aid" contact list
+  - [ ] IPOA contacts and reporting instructions
 
 ---
 
@@ -123,16 +161,29 @@
 ### Deliverables
 - **Fleet / Pro tier** (KES 1,000/month)
   - Bulk offense lookup API (up to 10,000 lookups/month)
-  - Fleet dashboard with analytics (most common offenses, trends)
+  - Fleet dashboard with analytics
   - Export to PDF/CSV
 - **NGO / grant partnerships**
-  - Anonymized corruption data for advocacy (IPOA, TI-Kenya)
+  - Anonymized corruption data for advocacy
   - Grant funding for USSD costs and server scaling
 - **Optional donations**
   - M-Pesa Paybill for user donations
-  - "Buy a motorist a lookup" campaign
 
-### Non-goals (explicitly out of scope)
-- Legal advice or representation — Sheria Check is informational only
-- Payment processing for fines — that is the court's domain
-- User accounts or profiles — privacy is core to the product
+---
+
+## Priority Cheat Sheet (What to Start Tomorrow)
+
+```
+HIGH:   Track A (fix scraper sections 42, 44, 46)
+HIGH:   Track B (subsidiary legislation scraper for NTSA/PSV)
+MEDIUM: Track C (Kenya Roads Act penalties)
+MEDIUM: Manual aliases for all 44 existing offenses
+LOW:    Track D (county by-laws)
+```
+
+### How to Work
+
+1. One batch of offenses at a time — scrape, verify, import
+2. Run `scripts/verify_data.py` after every scrape
+3. Import with `python scripts/import_to_api.py --api http://localhost:4000/api/v1`
+4. Keep adding aliases — they power the fuzzy search
