@@ -8,13 +8,16 @@ const reportSchema = z.object({
   officer_badge: z.string().max(100).optional(),
   location: z.string().max(300).optional(),
   amount_demanded: z.number().int().positive().optional(),
-  description: z.string().min(1).max(2000),
+  description: z.string().min(1, "Description is required").max(2000),
 });
 
 export async function createReport(req: Request, res: Response) {
   const parsed = reportSchema.safeParse(req.body);
   if (!parsed.success) {
-    return res.status(400).json({ error: "Invalid report data", details: parsed.error.flatten() });
+    return res.status(400).json({
+      error: "Invalid report data",
+      details: parsed.error.flatten().fieldErrors,
+    });
   }
 
   const data = parsed.data;

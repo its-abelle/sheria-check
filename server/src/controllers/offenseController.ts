@@ -3,8 +3,14 @@ import { query } from "../db/index.js";
 
 export async function searchOffenses(req: Request, res: Response) {
   const q = (req.query.q as string || "").trim();
+  const cursor = Math.max(0, parseInt(req.query.cursor as string || "0", 10));
+  const limit = Math.min(50, Math.max(1, parseInt(req.query.limit as string || "20", 10)));
+
   if (!q) {
-    return res.json([]);
+    return res.json({
+      data: [],
+      pagination: { cursor: 0, limit, has_more: false, total: 0 },
+    });
   }
 
   const { rows } = await query(
@@ -20,10 +26,33 @@ export async function searchOffenses(req: Request, res: Response) {
             ELSE 2
        END,
        min_fine ASC
-     LIMIT 30`,
+     OFFSET $2
+     LIMIT $3`,
+    [q, cursor, limit + 1]
+  );
+
+  const hasMore = rows.length > limit;
+  if (hasMore) rows.pop();
+
+  const { rows: countRows } = await query(
+    `SELECT COUNT(*)::int AS total FROM offenses
+     WHERE to_tsvector('english', name || ' ' || description || ' ' || array_to_string(aliases, ' '))
+           @@ plainto_tsquery('english', $1)
+     OR name ILIKE '%' || $1 || '%'
+     OR description ILIKE '%' || $1 || '%'
+     OR $1 = ANY(aliases)`,
     [q]
   );
-  res.json(rows);
+
+  res.json({
+    data: rows,
+    pagination: {
+      cursor: cursor + rows.length,
+      limit,
+      has_more: hasMore,
+      total: countRows[0]?.total || 0,
+    },
+  });
 }
 
 export async function getOffenseById(req: Request, res: Response) {
@@ -33,21 +62,21 @@ export async function getOffenseById(req: Request, res: Response) {
   if (rows.length === 0) {
     return res.status(404).json({ error: "Offense not found" });
   }
-  res.json(rows[0]);
+  res.json({ data: rows[0] });
 }
 
 export async function getOffensesByCategory(req: Request, res: Response) {
   const category = req.query.category as string;
   if (!category) {
     const { rows } = await query("SELECT * FROM offenses ORDER BY category, name");
-    return res.json(rows);
+    return res.json({ data: rows });
   }
 
   const { rows } = await query(
     "SELECT * FROM offenses WHERE category = $1 ORDER BY name",
     [category]
   );
-  res.json(rows);
+  res.json({ data: rows });
 }
 
 export async function getCategories(_req: Request, res: Response) {
@@ -92,7 +121,7 @@ export async function getCategories(_req: Request, res: Response) {
     },
   };
 
-  const categories = rows.map((r) => ({
+  const categories = rows.map((r: any) => ({
     id: r.id,
     ...categoryNames[r.id as string] || {
       name: r.id,
@@ -102,5 +131,5 @@ export async function getCategories(_req: Request, res: Response) {
     count: r.count,
   }));
 
-  res.json(categories);
+  res.json({ data: categories });
 }

@@ -6,11 +6,12 @@ import { DisclaimerBanner } from "../components/DisclaimerBanner";
 import { useSearch } from "../hooks/useSearch";
 import { useCategories } from "../hooks/useOffenses";
 import { useApiStatus } from "../hooks/useOffenses";
-import { LoadingSpinner } from "../components/LoadingSpinner";
+import { SearchSkeleton, CategorySkeleton } from "../components/LoadingSkeleton";
 import { OffenseCard } from "../components/OffenseCard";
+import { EmptyState } from "../components/EmptyState";
 
 export function Home() {
-  const { query, setQuery, results, loading, error } = useSearch();
+  const { query, setQuery, results, loading, error, hasMore, total, loadMore } = useSearch();
   const { categories, loading: catLoading } = useCategories();
   const status = useApiStatus();
   const [showResults, setShowResults] = useState(false);
@@ -32,7 +33,7 @@ export function Home() {
       <section className="bg-gradient-to-b from-primary-500 to-primary-700 px-4 py-16 text-white">
         <div className="mx-auto max-w-3xl text-center">
           <div className="mb-4 flex justify-center">
-            <Scale className="h-12 w-12" />
+            <Scale className="h-12 w-12" aria-hidden="true" />
           </div>
           <h1 className="text-3xl font-bold sm:text-4xl">Know Your Fine. Stand Your Ground.</h1>
           <p className="mt-3 text-primary-100">
@@ -46,23 +47,38 @@ export function Home() {
 
       {/* Search Results */}
       {showResults && (
-        <section className="border-b bg-white px-4 py-6">
+        <section className="border-b bg-white px-4 py-6" aria-label="Search results">
           <div className="mx-auto max-w-3xl">
-            {loading && <LoadingSpinner text="Searching offenses..." />}
-            {error && <p className="text-sm text-red-500">{error}</p>}
+            {loading && results.length === 0 && <SearchSkeleton />}
+            {error && (
+              <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-600" role="alert">
+                {error}
+              </div>
+            )}
             {!loading && !error && results.length === 0 && query.trim() && (
-              <p className="text-center text-sm text-gray-400">
-                No offenses found for "{query}". Try a different search term.
-              </p>
+              <EmptyState variant="no-results" query={query} />
             )}
             {!loading && !error && results.length > 0 && (
-              <div className="space-y-3">
-                <p className="text-sm text-gray-500">
-                  {results.length} offense{results.length !== 1 ? "s" : ""} found
+              <div>
+                <p className="text-sm text-gray-500" aria-live="polite">
+                  {total} offense{total !== 1 ? "s" : ""} found
                 </p>
-                {results.map((offense) => (
-                  <OffenseCard key={offense.id} offense={offense} />
-                ))}
+                <div className="mt-3 space-y-3">
+                  {results.map((offense) => (
+                    <OffenseCard key={offense.id} offense={offense} />
+                  ))}
+                </div>
+                {hasMore && (
+                  <div className="mt-4 text-center">
+                    <button
+                      onClick={loadMore}
+                      disabled={loading}
+                      className="rounded-lg border border-gray-200 px-6 py-2 text-sm text-gray-600 hover:bg-gray-50 disabled:opacity-50"
+                    >
+                      {loading ? "Loading..." : `Load more (${results.length} of ${total})`}
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -70,17 +86,22 @@ export function Home() {
       )}
 
       {/* Categories */}
-      <section className="px-4 py-10">
+      <section className="px-4 py-10" aria-label="Browse by category">
         <div className="mx-auto max-w-3xl">
           <h2 className="text-xl font-semibold text-gray-900">Browse by Category</h2>
           <p className="mt-1 text-sm text-gray-500">
-            Select a category to see all related offenses
+            Not sure what to search? Pick a category to see all related offenses
           </p>
 
           {catLoading ? (
-            <LoadingSpinner />
+            <CategorySkeleton />
           ) : (
             <div className="mt-6 grid gap-3 sm:grid-cols-2">
+              {categories.length === 0 && (
+                <p className="col-span-2 text-sm text-gray-400">
+                  No categories available yet. Data is being compiled.
+                </p>
+              )}
               {categories.map((cat) => (
                 <CategoryCard key={cat.id} category={cat} />
               ))}
@@ -91,7 +112,7 @@ export function Home() {
 
       {/* Data freshness */}
       {status && (
-        <section className="border-t bg-gray-50 px-4 py-4">
+        <section className="border-t bg-gray-50 px-4 py-4" aria-label="Data information">
           <div className="mx-auto max-w-3xl text-center text-xs text-gray-400">
             <p>
               Data version: {status.data_version} &middot; Last updated:{" "}

@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Layout } from "./components/Layout";
+import { PageTransitionBar } from "./components/PageTransitionBar";
 import { Home } from "./pages/Home";
 import { CategoryBrowse } from "./pages/CategoryBrowse";
 import { OffenseDetail } from "./pages/OffenseDetail";
@@ -9,6 +10,7 @@ import { NotFound } from "./pages/NotFound";
 export default function App() {
   return (
     <BrowserRouter>
+      <PageTransitionBar />
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />

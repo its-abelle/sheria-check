@@ -31,5 +31,7 @@ export default defineConfig({
         changeOrigin: true,
       },
     },
+    // Expose host for device testing on local network
+    allowedHosts: true,
   },
 });

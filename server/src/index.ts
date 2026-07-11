@@ -1,20 +1,30 @@
 import app from "./app.js";
 import { initDb } from "./db/index.js";
+import { logger } from "./utils/logger.js";
 
 const PORT = parseInt(process.env.PORT || "4000", 10);
-
-async function start() {
+const server = app.listen(PORT, async () => {
   try {
     await initDb();
-    console.log("Database initialized");
-
-    app.listen(PORT, () => {
-      console.log(`Sheria Check API running on port ${PORT}`);
-    });
+    logger.info({ port: PORT }, "Sheria Check API started");
   } catch (err) {
-    console.error("Failed to start server:", err);
+    logger.fatal({ err }, "Failed to initialize database");
     process.exit(1);
   }
+});
+
+function gracefulShutdown(signal: string) {
+  logger.info({ signal }, "Received shutdown signal");
+  server.close(() => {
+    logger.info("HTTP server closed");
+    process.exit(0);
+  });
+
+  setTimeout(() => {
+    logger.error("Forced shutdown after timeout");
+    process.exit(1);
+  }, 10000).unref();
 }
 
-start();
+process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
+process.on("SIGINT", () => gracefulShutdown("SIGINT"));

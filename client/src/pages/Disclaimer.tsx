@@ -4,13 +4,13 @@ export function Disclaimer() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
       <div className="flex items-center gap-3 mb-6">
-        <AlertTriangle className="h-6 w-6 text-caution-500" />
+        <AlertTriangle className="h-6 w-6 text-caution-500" aria-hidden="true" />
         <h1 className="text-2xl font-bold text-gray-900">Legal Disclaimer</h1>
       </div>
 
       <div className="space-y-4 text-sm text-gray-600 leading-relaxed">
         <p>
-          <strong>Sheria Check</strong> is an informational tool that provides references to
+          <strong>Sheria Check</strong> is an informational tool. It provides references to
           publicly available legal texts, including the Traffic Act (Cap 403) and its amendments
           as published by the National Council for Law Reporting (Kenya Law).
         </p>
@@ -31,18 +31,18 @@ export function Disclaimer() {
         <p>
           While we strive to keep the data accurate and up-to-date, we make no representations
           or warranties of any kind, express or implied, about the completeness, accuracy,
-          reliability, suitability, or availability of the information provided.
+          reliability, suitability, or availability of the information provided. Fines and
+          penalties listed are the legal ranges prescribed by law — actual penalties are
+          determined by the court.
         </p>
 
         <div className="rounded-lg border border-caution-200 bg-caution-50 p-4 text-caution-700">
-          <p className="font-semibold">Remember:</p>
-          <ul className="mt-2 list-inside list-disc space-y-1">
+          <p className="font-semibold">Key Reminders:</p>
+          <ul className="mt-2 list-inside list-disc space-y-1 text-sm">
             <li>Never pay a fine on the spot — the officer should issue a charge sheet</li>
-            <li>
-              If you believe your rights have been violated, contact the Independent Policing
-              Oversight Authority (IPOA)
-            </li>
+            <li>If you believe your rights have been violated, contact the Independent Policing Oversight Authority (IPOA)</li>
             <li>This tool does not replace the advice of a qualified lawyer</li>
+            <li>Data may become outdated — always verify with a legal professional</li>
           </ul>
         </div>
       </div>
