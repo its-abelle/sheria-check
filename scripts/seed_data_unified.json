@@ -15,7 +15,7 @@
     "min_fine": 50000,
     "max_fine": 100000,
     "max_imprisonment": "6 months",
-    "course_of_action": "The officer may issue a charge sheet. The vehicle may not be allowed to continue until a speed limiter is installed. Do not pay on the spot.",
+    "course_of_action": "The vehicle may be detained until a speed limiter is installed. Do not pay on the spot.",
     "act": "Traffic (Speed Limiter) Regulations, 2022 (Legal Notice)",
     "law_version": "2024"
   },
@@ -35,7 +35,7 @@
     "min_fine": 20000,
     "max_fine": 50000,
     "max_imprisonment": "6 months",
-    "course_of_action": "This is a serious offense given the risk to children. The officer may issue a charge sheet. Do not pay on the spot. A court appearance may be required.",
+    "course_of_action": "This is a serious safety offense. Do not pay on the spot. A court appearance may be required.",
     "act": "Traffic (School Zones) Regulations",
     "law_version": "2024"
   },
@@ -56,7 +56,7 @@
     "min_fine": 20000,
     "max_fine": 50000,
     "max_imprisonment": null,
-    "course_of_action": "The officer may issue a charge sheet and a defect notification. The vehicle may not be allowed to continue until a valid inspection is obtained.",
+    "course_of_action": "You may be issued a defect notice. Fix the issue and get inspected before continuing.",
     "act": "NTSA Act No. 33 of 2012",
     "law_version": "2024"
   },
@@ -64,7 +64,7 @@
     "id": "unauthorized-access-to-computerized-motor-vehicle-",
     "name": "Unauthorized access to computerized motor vehicle registration system",
     "aliases": [],
-    "description": "(1) A person commits an offence if the person— (a) knowingly and without lawful authority, by any means gains access to or attempts to gain access to any computerized motor vehicle registration system; or",
+    "description": "(1) A person commits an offence if the person\u2014 (a) knowingly and without lawful authority, by any means gains access to or attempts to gain access to any computerized motor vehicle registration system; or",
     "category": "traffic-rules",
     "severity": "felony",
     "citation": "Traffic Act Cap 403, Section 5D",
@@ -73,14 +73,14 @@
     "min_fine": 400000,
     "max_fine": 1000000,
     "max_imprisonment": "2 years",
-    "course_of_action": "THIS IS A CRIMINAL OFFENSE. You may be arrested. Do not attempt to settle on the spot. You have the right to remain silent and to contact a lawyer immediately. The officer must issue a charge sheet. Appear in court on the date specified.",
+    "course_of_action": "You may be arrested. Do not speak without a lawyer present. Request to contact your lawyer immediately.",
     "law_version": "2024"
   },
   {
     "id": "interference-with-computerized-motor-vehicle-regis",
     "name": "Interference with computerized motor vehicle registration system",
     "aliases": [],
-    "description": "A person commits an offence if the person knowingly— (a) falsifies any record or information stored in any computerized motor vehicle registration system; (b) damages or impairs any computerized motor vehicle registration system; or",
+    "description": "A person commits an offence if the person knowingly\u2014 (a) falsifies any record or information stored in any computerized motor vehicle registration system; (b) damages or impairs any computerized motor vehicle registration system; or",
     "category": "traffic-rules",
     "severity": "felony",
     "citation": "Traffic Act Cap 403, Section 5E",
@@ -89,7 +89,7 @@
     "min_fine": 800000,
     "max_fine": 800000,
     "max_imprisonment": "3 years",
-    "course_of_action": "THIS IS A CRIMINAL OFFENSE. You may be arrested. Do not attempt to settle on the spot. You have the right to remain silent and to contact a lawyer immediately. The officer must issue a charge sheet. Appear in court on the date specified.",
+    "course_of_action": "You may be arrested. Do not speak without a lawyer present. Request to contact your lawyer immediately.",
     "law_version": "2024"
   },
   {
@@ -108,7 +108,7 @@
     "min_fine": 5000,
     "max_fine": 20000,
     "max_imprisonment": null,
-    "course_of_action": "The officer may issue a charge sheet. School zones have strict rules during specified hours for child safety.",
+    "course_of_action": "School zones have strict rules during specified hours. Do not pay on the spot.",
     "act": "Traffic (School Zones) Regulations",
     "law_version": "2024"
   },
@@ -128,7 +128,7 @@
     "min_fine": 50000,
     "max_fine": 100000,
     "max_imprisonment": "6 months",
-    "course_of_action": "This is a serious safety offense. The vehicle may be impounded. Do not settle on the spot. The court may order the installation of a speed limiter at the owner's cost.",
+    "course_of_action": "The vehicle may be detained until a speed limiter is installed. Do not settle on the spot.",
     "act": "NTSA Act No. 33 of 2012",
     "law_version": "2024"
   },
@@ -149,7 +149,7 @@
     "min_fine": 50000,
     "max_fine": 100000,
     "max_imprisonment": "6 months",
-    "course_of_action": "This is a serious safety offense. The vehicle may be impounded. Do not settle on the spot. The court may order re-installation at the owner's cost.",
+    "course_of_action": "The vehicle may be impounded. The court may order re-installation at your cost.",
     "act": "Traffic (Speed Limiter) Regulations, 2022 (Legal Notice)",
     "law_version": "2024"
   },
@@ -157,7 +157,7 @@
     "id": "vehicles-to-carry-identification-plates",
     "name": "Vehicles to carry identification plates",
     "aliases": [],
-    "description": "(1) No motor vehicle or trailer registered under this Act or driven under the authority of a general dealer’s licence shall be used on a road unless there is fixed thereto in the prescribed manner the prescribed number of identification plates of the prescribed design and colour on which is inscribed",
+    "description": "(1) No motor vehicle or trailer registered under this Act or driven under the authority of a general dealer\u2019s licence shall be used on a road unless there is fixed thereto in the prescribed manner the prescribed number of identification plates of the prescribed design and colour on which is inscribed",
     "category": "license-documents",
     "severity": "serious",
     "citation": "Traffic Act Cap 403, Section 12",
@@ -166,7 +166,7 @@
     "min_fine": 300000,
     "max_fine": 300000,
     "max_imprisonment": "12 months",
-    "course_of_action": "This is a serious traffic offense. The officer should issue a charge sheet (P.B. Form). Do not pay any amount on the spot. Consider seeking legal representation. Appear in court on the date specified in the charge sheet.",
+    "course_of_action": "Do not pay on the spot. The officer must issue a charge sheet. Appear in court on the date specified.",
     "law_version": "2024"
   },
   {
@@ -186,7 +186,7 @@
     "min_fine": 100000,
     "max_fine": 500000,
     "max_imprisonment": "2 years",
-    "course_of_action": "This is a serious regulatory offense. The vehicle may be impounded. Do not attempt to settle on the spot. The matter will be heard in court.",
+    "course_of_action": "The vehicle may be impounded. This is a regulatory offense. Do not settle on the spot.",
     "act": "NTSA Act No. 33 of 2012",
     "law_version": "2024"
   },
@@ -203,7 +203,7 @@
     "min_fine": 10000,
     "max_fine": 20000,
     "max_imprisonment": "3 months",
-    "course_of_action": "This is a serious traffic offense. The officer should issue a charge sheet (P.B. Form). Do not pay any amount on the spot. Consider seeking legal representation. Appear in court on the date specified in the charge sheet.",
+    "course_of_action": "Do not pay on the spot. The officer must issue a charge sheet. Appear in court on the date specified.",
     "law_version": "2024"
   },
   {
@@ -223,7 +223,7 @@
     "min_fine": 10000,
     "max_fine": 30000,
     "max_imprisonment": null,
-    "course_of_action": "The officer may issue a charge sheet. The operator may face additional sanctions from NTSA including license suspension.",
+    "course_of_action": "The operator may face additional NTSA sanctions including license suspension.",
     "act": "Traffic (Public Service Vehicle) Regulations",
     "law_version": "2024"
   },
@@ -244,7 +244,7 @@
     "min_fine": 10000,
     "max_fine": 30000,
     "max_imprisonment": "3 months",
-    "course_of_action": "The officer may issue a charge sheet. Passengers are entitled to a refund of the excess fare. Do not pay on the spot.",
+    "course_of_action": "Passengers are entitled to a refund of the excess fare. Do not pay on the spot.",
     "act": "Traffic (Public Service Vehicle) Regulations",
     "law_version": "2024"
   },
@@ -261,7 +261,7 @@
     "min_fine": 20000,
     "max_fine": 30000,
     "max_imprisonment": "3 months",
-    "course_of_action": "This is a serious traffic offense. The officer should issue a charge sheet (P.B. Form). Do not pay any amount on the spot. Consider seeking legal representation. Appear in court on the date specified in the charge sheet.",
+    "course_of_action": "Do not pay on the spot. The officer must issue a charge sheet. Appear in court on the date specified.",
     "law_version": "2024"
   },
   {
@@ -280,7 +280,7 @@
     "min_fine": 5000,
     "max_fine": 15000,
     "max_imprisonment": null,
-    "course_of_action": "The officer may issue a charge sheet. Both the conductor and the vehicle owner may be liable. Do not pay on the spot.",
+    "course_of_action": "Both the conductor and the vehicle owner may be liable. Do not pay on the spot.",
     "act": "Traffic (Public Service Vehicle) Regulations",
     "law_version": "2024"
   },
@@ -297,7 +297,7 @@
     "min_fine": 10000,
     "max_fine": 10000,
     "max_imprisonment": null,
-    "course_of_action": "The officer may issue a charge sheet (P.B. Form) or a police notification of a traffic offence. Do not pay any amount on the spot. You may plead guilty by paying the fine as directed on the notification, or appear in court on the date specified if you wish to contest.",
+    "course_of_action": "Do not pay on the spot. Request a charge sheet if stopped by an officer.",
     "law_version": "2024"
   },
   {
@@ -316,13 +316,13 @@
     "min_fine": 50000,
     "max_fine": 200000,
     "max_imprisonment": "1 year",
-    "course_of_action": "The vehicle may be impounded and detained until it passes inspection. Do not attempt to settle on the spot. The court will determine the penalty.",
+    "course_of_action": "The vehicle may be impounded until it passes inspection. Do not settle on the spot.",
     "act": "NTSA Act No. 33 of 2012",
     "law_version": "2024"
   },
   {
     "id": "psv-overloading",
-    "name": "PSV Overloading — exceeding licensed capacity",
+    "name": "PSV Overloading \u2014 exceeding licensed capacity",
     "aliases": [
       "overloading matatu",
       "excess passengers PSV",
@@ -336,7 +336,7 @@
     "min_fine": 20000,
     "max_fine": 50000,
     "max_imprisonment": "6 months",
-    "course_of_action": "The officer may issue a charge sheet and prohibit the vehicle from continuing. Do not pay on the spot. The operator may be liable for the excess passengers' safety.",
+    "course_of_action": "Excess passengers must disembark. The operator may be liable. Do not pay on the spot.",
     "act": "NTSA Act No. 33 of 2012",
     "law_version": "2024"
   },
@@ -353,7 +353,7 @@
     "min_fine": 20000,
     "max_fine": 100000,
     "max_imprisonment": null,
-    "course_of_action": "This is a serious traffic offense. The officer should issue a charge sheet (P.B. Form). Do not pay any amount on the spot. Consider seeking legal representation. Appear in court on the date specified in the charge sheet.",
+    "course_of_action": "Do not pay on the spot. The officer must issue a charge sheet. Appear in court on the date specified.",
     "law_version": "2024"
   },
   {
@@ -369,7 +369,7 @@
     "min_fine": 100000,
     "max_fine": 100000,
     "max_imprisonment": "2 years",
-    "course_of_action": "THIS IS A CRIMINAL OFFENSE. You may be arrested. Do not attempt to settle on the spot. You have the right to remain silent and to contact a lawyer immediately. The officer must issue a charge sheet. Appear in court on the date specified.",
+    "course_of_action": "You will be taken for a breathalyzer test. Do not refuse. Request a lawyer immediately.",
     "law_version": "2024"
   },
   {
@@ -385,14 +385,14 @@
     "min_fine": 100000,
     "max_fine": 100000,
     "max_imprisonment": "2 years",
-    "course_of_action": "THIS IS A CRIMINAL OFFENSE. You may be arrested. Do not attempt to settle on the spot. You have the right to remain silent and to contact a lawyer immediately. The officer must issue a charge sheet. Appear in court on the date specified.",
+    "course_of_action": "You may be arrested. Do not speak without a lawyer present. Request to contact your lawyer immediately.",
     "law_version": "2024"
   },
   {
     "id": "driving-on-pavement-pedestrian-walkway-etc",
     "name": "Driving on pavement, pedestrian walkway, etc.",
     "aliases": [],
-    "description": "(1) No person shall, in order to avoid a buildup of traffic on a road, drive a motor vehicle on, or through, a pavement or a pedestrian walkway. (2) A person who contravenes subsection (1) commits an offence and shall be liable—",
+    "description": "(1) No person shall, in order to avoid a buildup of traffic on a road, drive a motor vehicle on, or through, a pavement or a pedestrian walkway. (2) A person who contravenes subsection (1) commits an offence and shall be liable\u2014",
     "category": "traffic-rules",
     "severity": "serious",
     "citation": "Traffic Act Cap 403, Section 45A",
@@ -401,7 +401,7 @@
     "min_fine": 30000,
     "max_fine": 30000,
     "max_imprisonment": "3 months",
-    "course_of_action": "This is a serious traffic offense. The officer should issue a charge sheet (P.B. Form). Do not pay any amount on the spot. Consider seeking legal representation. Appear in court on the date specified in the charge sheet.",
+    "course_of_action": "Do not pay on the spot. The officer must issue a charge sheet. Appear in court on the date specified.",
     "law_version": "2024"
   },
   {
@@ -417,7 +417,7 @@
     "min_fine": 0,
     "max_fine": 0,
     "max_imprisonment": "10 years",
-    "course_of_action": "THIS IS A CRIMINAL OFFENSE. You may be arrested. Do not attempt to settle on the spot. You have the right to remain silent and to contact a lawyer immediately. The officer must issue a charge sheet. Appear in court on the date specified.",
+    "course_of_action": "You may be arrested immediately. Do not speak without a lawyer present. This carries imprisonment.",
     "law_version": "2024"
   },
   {
@@ -433,7 +433,7 @@
     "min_fine": 100000,
     "max_fine": 300000,
     "max_imprisonment": "2 years",
-    "course_of_action": "THIS IS A CRIMINAL OFFENSE. You may be arrested. Do not attempt to settle on the spot. You have the right to remain silent and to contact a lawyer immediately. The officer must issue a charge sheet. Appear in court on the date specified.",
+    "course_of_action": "You may be arrested. Do not speak without a lawyer. The court may disqualify you from driving.",
     "law_version": "2024"
   },
   {
@@ -452,7 +452,7 @@
     "min_fine": 100000,
     "max_fine": 500000,
     "max_imprisonment": "2 years",
-    "course_of_action": "This is a serious offense. The road authority may demolish the structure at the owner's cost. Legal advice should be sought immediately.",
+    "course_of_action": "The road authority may demolish the encroachment at your cost. Seek legal advice immediately.",
     "act": "Kenya Roads Act No. 2 of 2007",
     "law_version": "2024"
   },
@@ -473,7 +473,7 @@
     "min_fine": 200000,
     "max_fine": 500000,
     "max_imprisonment": "1 year",
-    "course_of_action": "The vehicle may be detained at the weighbridge until the excess load is removed. A fine may be imposed per tonne of excess weight. Do not attempt to settle on the spot.",
+    "course_of_action": "Your vehicle may be detained at the weighbridge until excess load is removed. A fine per tonne applies.",
     "act": "Kenya Roads Act No. 2 of 2007",
     "law_version": "2024"
   },
@@ -481,7 +481,7 @@
     "id": "driving-without-due-care-and-attention",
     "name": "Driving without due care and attention",
     "aliases": [],
-    "description": "(1) Any person who drives a motor vehicle on a road without due care and attention or without reasonable consideration for other persons using the road shall be guilty of an offence and liable— (a) for a first offence, to a term of imprisonment not exceeding one year or a fine not exceeding",
+    "description": "(1) Any person who drives a motor vehicle on a road without due care and attention or without reasonable consideration for other persons using the road shall be guilty of an offence and liable\u2014 (a) for a first offence, to a term of imprisonment not exceeding one year or a fine not exceeding",
     "category": "license-documents",
     "severity": "serious",
     "citation": "Traffic Act Cap 403, Section 49",
@@ -490,7 +490,7 @@
     "min_fine": 100000,
     "max_fine": 200000,
     "max_imprisonment": null,
-    "course_of_action": "This is a serious traffic offense. The officer should issue a charge sheet (P.B. Form). Do not pay any amount on the spot. Consider seeking legal representation. Appear in court on the date specified in the charge sheet.",
+    "course_of_action": "Do not pay on the spot. The officer must issue a charge sheet. Appear in court on the date specified.",
     "law_version": "2024"
   },
   {
@@ -506,7 +506,7 @@
     "min_fine": 20000,
     "max_fine": 20000,
     "max_imprisonment": "3 years",
-    "course_of_action": "THIS IS A CRIMINAL OFFENSE. You may be arrested. Do not attempt to settle on the spot. You have the right to remain silent and to contact a lawyer immediately. The officer must issue a charge sheet. Appear in court on the date specified.",
+    "course_of_action": "You may be arrested. Do not speak without a lawyer present. Request to contact your lawyer immediately.",
     "law_version": "2024"
   },
   {
@@ -526,7 +526,7 @@
     "min_fine": 1000,
     "max_fine": 10000,
     "max_imprisonment": null,
-    "course_of_action": "The toll operator may record the vehicle registration and pursue payment. Penalty amounts may be specified on the toll road signage. Do not pay any officer on the spot.",
+    "course_of_action": "Pay the toll or the penalty at the toll station. Do not pay any officer on the spot.",
     "act": "Kenya Roads Act No. 2 of 2007",
     "law_version": "2024"
   },
@@ -534,7 +534,7 @@
     "id": "signals-and-signs-to-be-obeyed",
     "name": "Signals and signs to be obeyed",
     "aliases": [],
-    "description": "(1) The driver of a vehicle shall at all times— (a) obey any directions given, whether verbally or by signal, by a police officer in uniform, in the execution of his duty; and",
+    "description": "(1) The driver of a vehicle shall at all times\u2014 (a) obey any directions given, whether verbally or by signal, by a police officer in uniform, in the execution of his duty; and",
     "category": "license-documents",
     "severity": "minor",
     "citation": "Traffic Act Cap 403, Section 52",
@@ -543,14 +543,14 @@
     "min_fine": 50000,
     "max_fine": 70000,
     "max_imprisonment": null,
-    "course_of_action": "The officer may issue a charge sheet (P.B. Form) or a police notification of a traffic offence. Do not pay any amount on the spot. You may plead guilty by paying the fine as directed on the notification, or appear in court on the date specified if you wish to contest.",
+    "course_of_action": "Do not pay on the spot. Request a charge sheet if stopped by an officer.",
     "law_version": "2024"
   },
   {
     "id": "offences-relating-to-parking-bays-and-areas-where-",
     "name": "Offences relating to parking bays and areas where no charges are made",
     "aliases": [],
-    "description": "(1) Any person who, being the driver of a vehicle, in any parking bay or parking area— (a) leaves the vehicle for a period in excess of the time prescribed by any traffic sign relating to (b) contravenes or fails to comply with any traffic sign relating to that bay or area as to the",
+    "description": "(1) Any person who, being the driver of a vehicle, in any parking bay or parking area\u2014 (a) leaves the vehicle for a period in excess of the time prescribed by any traffic sign relating to (b) contravenes or fails to comply with any traffic sign relating to that bay or area as to the",
     "category": "traffic-rules",
     "severity": "serious",
     "citation": "Traffic Act Cap 403, Section 52A",
@@ -559,7 +559,7 @@
     "min_fine": 10000,
     "max_fine": 10000,
     "max_imprisonment": "1 month",
-    "course_of_action": "This is a serious traffic offense. The officer should issue a charge sheet (P.B. Form). Do not pay any amount on the spot. Consider seeking legal representation. Appear in court on the date specified in the charge sheet.",
+    "course_of_action": "Do not pay on the spot. The officer must issue a charge sheet. Appear in court on the date specified.",
     "law_version": "2024"
   },
   {
@@ -575,7 +575,7 @@
     "min_fine": 5000,
     "max_fine": 50000,
     "max_imprisonment": "1 year",
-    "course_of_action": "THIS IS A CRIMINAL OFFENSE. You may be arrested. Do not attempt to settle on the spot. You have the right to remain silent and to contact a lawyer immediately. The officer must issue a charge sheet. Appear in court on the date specified.",
+    "course_of_action": "You may be arrested. Do not speak without a lawyer present. Request to contact your lawyer immediately.",
     "law_version": "2024"
   },
   {
@@ -591,7 +591,7 @@
     "min_fine": 400000,
     "max_fine": 400000,
     "max_imprisonment": "2 years",
-    "course_of_action": "THIS IS A CRIMINAL OFFENSE. You may be arrested. Do not attempt to settle on the spot. You have the right to remain silent and to contact a lawyer immediately. The officer must issue a charge sheet. Appear in court on the date specified.",
+    "course_of_action": "You may be arrested. Do not speak without a lawyer present. Request to contact your lawyer immediately.",
     "law_version": "2024"
   },
   {
@@ -607,7 +607,7 @@
     "min_fine": 10000,
     "max_fine": 10000,
     "max_imprisonment": null,
-    "course_of_action": "The officer may issue a charge sheet (P.B. Form) or a police notification of a traffic offence. Do not pay any amount on the spot. You may plead guilty by paying the fine as directed on the notification, or appear in court on the date specified if you wish to contest.",
+    "course_of_action": "Do not pay on the spot. Request a charge sheet if stopped by an officer.",
     "law_version": "2024"
   },
   {
@@ -623,7 +623,7 @@
     "min_fine": 10000,
     "max_fine": 10000,
     "max_imprisonment": "1 month",
-    "course_of_action": "This is a serious traffic offense. The officer should issue a charge sheet (P.B. Form). Do not pay any amount on the spot. Consider seeking legal representation. Appear in court on the date specified in the charge sheet.",
+    "course_of_action": "Do not pay on the spot. The officer must issue a charge sheet. Appear in court on the date specified.",
     "law_version": "2024"
   },
   {
@@ -639,7 +639,7 @@
     "min_fine": 50000,
     "max_fine": 50000,
     "max_imprisonment": "2 years",
-    "course_of_action": "THIS IS A CRIMINAL OFFENSE. You may be arrested. Do not attempt to settle on the spot. You have the right to remain silent and to contact a lawyer immediately. The officer must issue a charge sheet. Appear in court on the date specified.",
+    "course_of_action": "You may be arrested. Do not speak without a lawyer present. Request to contact your lawyer immediately.",
     "law_version": "2024"
   },
   {
@@ -655,7 +655,7 @@
     "min_fine": 50000,
     "max_fine": 70000,
     "max_imprisonment": "12 months",
-    "course_of_action": "This is a serious traffic offense. The officer should issue a charge sheet (P.B. Form). Do not pay any amount on the spot. Consider seeking legal representation. Appear in court on the date specified in the charge sheet.",
+    "course_of_action": "Do not pay on the spot. The officer must issue a charge sheet. Appear in court on the date specified.",
     "law_version": "2024"
   },
   {
@@ -671,7 +671,7 @@
     "min_fine": 10000,
     "max_fine": 10000,
     "max_imprisonment": null,
-    "course_of_action": "The officer may issue a charge sheet (P.B. Form) or a police notification of a traffic offence. Do not pay any amount on the spot. You may plead guilty by paying the fine as directed on the notification, or appear in court on the date specified if you wish to contest.",
+    "course_of_action": "Do not pay on the spot. Request a charge sheet if stopped by an officer.",
     "law_version": "2024"
   },
   {
@@ -687,7 +687,7 @@
     "min_fine": 2500,
     "max_fine": 10000,
     "max_imprisonment": "3 months",
-    "course_of_action": "This is a serious traffic offense. The officer should issue a charge sheet (P.B. Form). Do not pay any amount on the spot. Consider seeking legal representation. Appear in court on the date specified in the charge sheet.",
+    "course_of_action": "Do not pay on the spot. The officer must issue a charge sheet. Appear in court on the date specified.",
     "law_version": "2024"
   },
   {
@@ -703,7 +703,7 @@
     "min_fine": 5000,
     "max_fine": 5000,
     "max_imprisonment": "1 month",
-    "course_of_action": "This is a serious traffic offense. The officer should issue a charge sheet (P.B. Form). Do not pay any amount on the spot. Consider seeking legal representation. Appear in court on the date specified in the charge sheet.",
+    "course_of_action": "Do not pay on the spot. The officer must issue a charge sheet. Appear in court on the date specified.",
     "law_version": "2024"
   },
   {
@@ -719,7 +719,7 @@
     "min_fine": 10000,
     "max_fine": 10000,
     "max_imprisonment": "9 months",
-    "course_of_action": "This is a serious traffic offense. The officer should issue a charge sheet (P.B. Form). Do not pay any amount on the spot. Consider seeking legal representation. Appear in court on the date specified in the charge sheet.",
+    "course_of_action": "Do not pay on the spot. The officer must issue a charge sheet. Appear in court on the date specified.",
     "law_version": "2024"
   },
   {
@@ -735,7 +735,7 @@
     "min_fine": 10000,
     "max_fine": 10000,
     "max_imprisonment": "6 months",
-    "course_of_action": "This is a serious traffic offense. The officer should issue a charge sheet (P.B. Form). Do not pay any amount on the spot. Consider seeking legal representation. Appear in court on the date specified in the charge sheet.",
+    "course_of_action": "Do not pay on the spot. The officer must issue a charge sheet. Appear in court on the date specified.",
     "law_version": "2024"
   },
   {
@@ -751,7 +751,7 @@
     "min_fine": 100000,
     "max_fine": 100000,
     "max_imprisonment": null,
-    "course_of_action": "This is a serious traffic offense. The officer should issue a charge sheet (P.B. Form). Do not pay any amount on the spot. Consider seeking legal representation. Appear in court on the date specified in the charge sheet.",
+    "course_of_action": "Do not pay on the spot. The officer must issue a charge sheet. Appear in court on the date specified.",
     "law_version": "2024"
   },
   {
@@ -767,7 +767,7 @@
     "min_fine": 10000,
     "max_fine": 10000,
     "max_imprisonment": null,
-    "course_of_action": "The officer may issue a charge sheet (P.B. Form) or a police notification of a traffic offence. Do not pay any amount on the spot. You may plead guilty by paying the fine as directed on the notification, or appear in court on the date specified if you wish to contest.",
+    "course_of_action": "Do not pay on the spot. Request a charge sheet if stopped by an officer.",
     "law_version": "2024"
   },
   {
@@ -783,14 +783,14 @@
     "min_fine": 2000,
     "max_fine": 2000,
     "max_imprisonment": null,
-    "course_of_action": "The officer may issue a charge sheet (P.B. Form) or a police notification of a traffic offence. Do not pay any amount on the spot. You may plead guilty by paying the fine as directed on the notification, or appear in court on the date specified if you wish to contest.",
+    "course_of_action": "Do not pay on the spot. Request a charge sheet if stopped by an officer.",
     "law_version": "2024"
   },
   {
     "id": "encroachment-on-and-damage-to-roads",
     "name": "Encroachment on and damage to roads",
     "aliases": [],
-    "description": "(1) Every person who, without the written permission of the highway authority— (a) encroaches on a road or on any land reserved therefor at the side or sides thereof by making or erecting any building, fence, ditch, advertisement sign or other obstacle, or by digging",
+    "description": "(1) Every person who, without the written permission of the highway authority\u2014 (a) encroaches on a road or on any land reserved therefor at the side or sides thereof by making or erecting any building, fence, ditch, advertisement sign or other obstacle, or by digging",
     "category": "traffic-rules",
     "severity": "serious",
     "citation": "Traffic Act Cap 403, Section 91",
@@ -799,7 +799,7 @@
     "min_fine": 100000,
     "max_fine": 100000,
     "max_imprisonment": "12 months",
-    "course_of_action": "This is a serious traffic offense. The officer should issue a charge sheet (P.B. Form). Do not pay any amount on the spot. Consider seeking legal representation. Appear in court on the date specified in the charge sheet.",
+    "course_of_action": "The road authority may seek demolition and recover costs. Seek legal advice.",
     "law_version": "2024"
   },
   {
@@ -815,7 +815,7 @@
     "min_fine": 200,
     "max_fine": 20000,
     "max_imprisonment": "1 month",
-    "course_of_action": "This is a serious traffic offense. The officer should issue a charge sheet (P.B. Form). Do not pay any amount on the spot. Consider seeking legal representation. Appear in court on the date specified in the charge sheet.",
+    "course_of_action": "Do not pay on the spot. The officer must issue a charge sheet. Appear in court on the date specified.",
     "law_version": "2024"
   },
   {
@@ -831,7 +831,7 @@
     "min_fine": 10000,
     "max_fine": 10000,
     "max_imprisonment": null,
-    "course_of_action": "The officer may issue a charge sheet (P.B. Form) or a police notification of a traffic offence. Do not pay any amount on the spot. You may plead guilty by paying the fine as directed on the notification, or appear in court on the date specified if you wish to contest.",
+    "course_of_action": "Do not pay on the spot. Request a charge sheet if stopped by an officer.",
     "law_version": "2024"
   },
   {
@@ -852,7 +852,7 @@
     "min_fine": 30000,
     "max_fine": 50000,
     "max_imprisonment": "12 months",
-    "course_of_action": "This is a serious traffic offense. The officer should issue a charge sheet (P.B. Form). Do not pay any amount on the spot. Consider seeking legal representation. Appear in court on the date specified in the charge sheet.",
+    "course_of_action": "Do not pay on the spot. The officer must issue a charge sheet. Appear in court on the date specified.",
     "law_version": "2024"
   },
   {
@@ -868,7 +868,7 @@
     "min_fine": 10000,
     "max_fine": 10000,
     "max_imprisonment": "12 months",
-    "course_of_action": "This is a serious traffic offense. The officer should issue a charge sheet (P.B. Form). Do not pay any amount on the spot. Consider seeking legal representation. Appear in court on the date specified in the charge sheet.",
+    "course_of_action": "Do not pay on the spot. The officer must issue a charge sheet. Appear in court on the date specified.",
     "law_version": "2024"
   },
   {
@@ -884,7 +884,7 @@
     "min_fine": 10000,
     "max_fine": 10000,
     "max_imprisonment": "12 months",
-    "course_of_action": "This is a serious traffic offense. The officer should issue a charge sheet (P.B. Form). Do not pay any amount on the spot. Consider seeking legal representation. Appear in court on the date specified in the charge sheet.",
+    "course_of_action": "Do not pay on the spot. The officer must issue a charge sheet. Appear in court on the date specified.",
     "law_version": "2024"
   },
   {
@@ -900,14 +900,14 @@
     "min_fine": 100000,
     "max_fine": 100000,
     "max_imprisonment": "3 years",
-    "course_of_action": "THIS IS A CRIMINAL OFFENSE. You may be arrested. Do not attempt to settle on the spot. You have the right to remain silent and to contact a lawyer immediately. The officer must issue a charge sheet. Appear in court on the date specified.",
+    "course_of_action": "You may be arrested. Do not speak without a lawyer present. Request to contact your lawyer immediately.",
     "law_version": "2024"
   },
   {
     "id": "inspection-of-vehicles",
     "name": "Inspection of vehicles",
     "aliases": [],
-    "description": "(1) It shall be lawful for any police officer in uniform to stop any vehicle, and for any police officer, licensing officer or inspector— (a) to enter any vehicle;",
+    "description": "(1) It shall be lawful for any police officer in uniform to stop any vehicle, and for any police officer, licensing officer or inspector\u2014 (a) to enter any vehicle;",
     "category": "traffic-rules",
     "severity": "minor",
     "citation": "Traffic Act Cap 403, Section 105",
@@ -916,7 +916,7 @@
     "min_fine": 30000,
     "max_fine": 50000,
     "max_imprisonment": null,
-    "course_of_action": "The officer may issue a charge sheet (P.B. Form) or a police notification of a traffic offence. Do not pay any amount on the spot. You may plead guilty by paying the fine as directed on the notification, or appear in court on the date specified if you wish to contest.",
+    "course_of_action": "Do not pay on the spot. Request a charge sheet if stopped by an officer.",
     "law_version": "2024"
   },
   {
@@ -932,7 +932,7 @@
     "min_fine": 30000,
     "max_fine": 30000,
     "max_imprisonment": "2 months",
-    "course_of_action": "This is a serious traffic offense. The officer should issue a charge sheet (P.B. Form). Do not pay any amount on the spot. Consider seeking legal representation. Appear in court on the date specified in the charge sheet.",
+    "course_of_action": "Do not pay on the spot. The officer must issue a charge sheet. Appear in court on the date specified.",
     "law_version": "2024"
   },
   {
@@ -948,7 +948,7 @@
     "min_fine": 20000,
     "max_fine": 75000,
     "max_imprisonment": "12 months",
-    "course_of_action": "This is a serious traffic offense. The officer should issue a charge sheet (P.B. Form). Do not pay any amount on the spot. Consider seeking legal representation. Appear in court on the date specified in the charge sheet.",
+    "course_of_action": "Do not pay on the spot. The officer must issue a charge sheet. Appear in court on the date specified.",
     "law_version": "2024"
   },
   {
@@ -964,7 +964,7 @@
     "min_fine": 10000,
     "max_fine": 10000,
     "max_imprisonment": null,
-    "course_of_action": "The officer may issue a charge sheet (P.B. Form) or a police notification of a traffic offence. Do not pay any amount on the spot. You may plead guilty by paying the fine as directed on the notification, or appear in court on the date specified if you wish to contest.",
+    "course_of_action": "Do not pay on the spot. Request a charge sheet if stopped by an officer.",
     "law_version": "2024"
   },
   {
@@ -980,7 +980,7 @@
     "min_fine": 10000,
     "max_fine": 10000,
     "max_imprisonment": "12 months",
-    "course_of_action": "This is a serious traffic offense. The officer should issue a charge sheet (P.B. Form). Do not pay any amount on the spot. Consider seeking legal representation. Appear in court on the date specified in the charge sheet.",
+    "course_of_action": "Do not pay on the spot. The officer must issue a charge sheet. Appear in court on the date specified.",
     "law_version": "2024"
   },
   {
@@ -996,14 +996,14 @@
     "min_fine": 100000,
     "max_fine": 100000,
     "max_imprisonment": "2 years",
-    "course_of_action": "THIS IS A CRIMINAL OFFENSE. You may be arrested. Do not attempt to settle on the spot. You have the right to remain silent and to contact a lawyer immediately. The officer must issue a charge sheet. Appear in court on the date specified.",
+    "course_of_action": "You may be arrested. Do not speak without a lawyer present. Request to contact your lawyer immediately.",
     "law_version": "2024"
   },
   {
     "id": "minor-traffic-offences",
     "name": "Minor traffic offences",
     "aliases": [],
-    "description": "(1) The Cabinet Secretary may prescribe— (a) a schedule of minor traffic offences (in this section referred to as \"the scheduled minor offences\") which may be dealt with and prosecuted in accordance with the provisions of this",
+    "description": "(1) The Cabinet Secretary may prescribe\u2014 (a) a schedule of minor traffic offences (in this section referred to as \"the scheduled minor offences\") which may be dealt with and prosecuted in accordance with the provisions of this",
     "category": "traffic-rules",
     "severity": "serious",
     "citation": "Traffic Act Cap 403, Section 117",
@@ -1012,7 +1012,7 @@
     "min_fine": 100000,
     "max_fine": 100000,
     "max_imprisonment": null,
-    "course_of_action": "This is a serious traffic offense. The officer should issue a charge sheet (P.B. Form). Do not pay any amount on the spot. Consider seeking legal representation. Appear in court on the date specified in the charge sheet.",
+    "course_of_action": "Do not pay on the spot. The officer must issue a charge sheet. Appear in court on the date specified.",
     "law_version": "2024"
   },
   {
@@ -1028,14 +1028,14 @@
     "min_fine": 100000,
     "max_fine": 200000,
     "max_imprisonment": "12 months",
-    "course_of_action": "This is a serious traffic offense. The officer should issue a charge sheet (P.B. Form). Do not pay any amount on the spot. Consider seeking legal representation. Appear in court on the date specified in the charge sheet.",
+    "course_of_action": "Do not pay on the spot. The officer must issue a charge sheet. Appear in court on the date specified.",
     "law_version": "2024"
   },
   {
     "id": "rules",
     "name": "Rules",
     "aliases": [],
-    "description": "(1) The Cabinet Secretary may make rules prescribing— (a) anything required by this Act to be prescribed; (b) the forms to be used for any purposes of this Act;",
+    "description": "(1) The Cabinet Secretary may make rules prescribing\u2014 (a) anything required by this Act to be prescribed; (b) the forms to be used for any purposes of this Act;",
     "category": "license-documents",
     "severity": "felony",
     "citation": "Traffic Act Cap 403, Section 119",
@@ -1044,7 +1044,7 @@
     "min_fine": 200000,
     "max_fine": 400000,
     "max_imprisonment": "2 years",
-    "course_of_action": "THIS IS A CRIMINAL OFFENSE. You may be arrested. Do not attempt to settle on the spot. You have the right to remain silent and to contact a lawyer immediately. The officer must issue a charge sheet. Appear in court on the date specified.",
+    "course_of_action": "You may be arrested. Do not speak without a lawyer present. Request to contact your lawyer immediately.",
     "law_version": "2024"
   }
 ]

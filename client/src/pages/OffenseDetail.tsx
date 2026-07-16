@@ -1,5 +1,5 @@
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, Scale, Flag, BookOpen, Share2, Check } from "lucide-react";
+import { ArrowLeft, Shield, Flag, BookOpen, Share2, Check } from "lucide-react";
 import { useOffenseDetail } from "../hooks/useOffenses";
 import { useShare } from "../hooks/useShare";
 import { DetailSkeleton } from "../components/LoadingSkeleton";
@@ -131,7 +131,7 @@ export function OffenseDetail() {
         {/* Course of Action */}
         <div className="mb-6">
           <h2 className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
-            <Scale className="h-4 w-4" aria-hidden="true" /> What To Do
+            <Shield className="h-4 w-4" aria-hidden="true" /> If you are stopped
           </h2>
           <div className={cn(
             "rounded-lg border p-4 text-sm leading-relaxed",
