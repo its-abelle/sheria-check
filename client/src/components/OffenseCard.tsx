@@ -52,7 +52,7 @@ export function OffenseCard({ offense }: OffenseCardProps) {
         <ArrowRight className="mt-2 h-5 w-5 shrink-0 text-gray-300" />
       </div>
 
-      <div className="mt-3 flex items-center gap-4 text-sm">
+      <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
         <span className="font-medium text-primary-500">
           {formatKES(offense.min_fine)} – {formatKES(offense.max_fine)}
         </span>

@@ -22,11 +22,11 @@ export function Layout() {
             <Scale className="h-5 w-5" aria-hidden="true" />
             <span className="text-lg">Sheria Check</span>
           </Link>
-          <nav className="ml-auto flex items-center gap-4 text-sm text-gray-500" aria-label="Main navigation">
-            <Link to="/" className="hover:text-primary-500 transition-colors">
+          <nav className="ml-auto flex items-center gap-1 sm:gap-4 text-sm text-gray-500" aria-label="Main navigation">
+            <Link to="/" className="rounded-lg px-3 py-2 hover:text-primary-500 hover:bg-primary-50 transition-colors">
               Home
             </Link>
-            <Link to="/disclaimer" className="hover:text-primary-500 transition-colors">
+            <Link to="/disclaimer" className="rounded-lg px-3 py-2 hover:text-primary-500 hover:bg-primary-50 transition-colors">
               Disclaimer
             </Link>
           </nav>

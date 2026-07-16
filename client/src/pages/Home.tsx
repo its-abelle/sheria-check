@@ -30,13 +30,13 @@ export function Home() {
       <DisclaimerBanner />
 
       {/* Hero */}
-      <section className="bg-gradient-to-b from-primary-500 to-primary-700 px-4 py-16 text-white">
+      <section className="bg-gradient-to-b from-primary-500 to-primary-700 px-4 py-10 sm:py-16 text-white">
         <div className="mx-auto max-w-3xl text-center">
           <div className="mb-6 flex justify-center">
-            <BalanceScale className="h-24 w-24" />
+            <BalanceScale className="h-16 w-16 sm:h-24 sm:w-24" />
           </div>
-          <h1 className="text-3xl font-bold sm:text-4xl">Know Your Fine. Stand Your Ground.</h1>
-          <p className="mt-3 text-primary-100">
+          <h1 className="text-2xl font-bold sm:text-4xl">Know Your Fine. Stand Your Ground.</h1>
+          <p className="mt-3 text-sm sm:text-base text-primary-100">
             Look up traffic offense fines under Kenyan law. Don't let anyone overcharge you.
           </p>
           <div className="mt-8">
@@ -73,7 +73,7 @@ export function Home() {
                     <button
                       onClick={loadMore}
                       disabled={loading}
-                      className="rounded-lg border border-gray-200 px-6 py-2 text-sm text-gray-600 hover:bg-gray-50 disabled:opacity-50"
+                      className="w-full sm:w-auto rounded-lg border border-gray-200 px-6 py-2.5 text-sm text-gray-600 hover:bg-gray-50 disabled:opacity-50"
                     >
                       {loading ? "Loading..." : `Load more (${results.length} of ${total})`}
                     </button>

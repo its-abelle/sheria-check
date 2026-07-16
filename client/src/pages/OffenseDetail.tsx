@@ -146,16 +146,16 @@ export function OffenseDetail() {
         </div>
 
         {/* Actions */}
-        <div className="flex flex-wrap gap-3 border-t pt-4">
+        <div className="flex flex-col sm:flex-row gap-3 border-t pt-4">
           <button
             onClick={() => window.print()}
-            className="inline-flex items-center gap-2 rounded-lg border border-gray-200 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50"
+            className="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-200 px-4 py-2.5 text-sm text-gray-600 hover:bg-gray-50 sm:py-2"
           >
             Print Summary
           </button>
           <button
             onClick={handleShare}
-            className="inline-flex items-center gap-2 rounded-lg border border-gray-200 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50"
+            className="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-200 px-4 py-2.5 text-sm text-gray-600 hover:bg-gray-50 sm:py-2"
             aria-label={copied ? "Copied to clipboard" : "Share this offense"}
           >
             {copied ? (
@@ -166,7 +166,7 @@ export function OffenseDetail() {
           </button>
           <button
             onClick={() => setReportOpen(true)}
-            className="inline-flex items-center gap-2 rounded-lg border border-red-200 px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+            className="inline-flex items-center justify-center gap-2 rounded-lg border border-red-200 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 sm:py-2"
           >
             <Flag className="h-4 w-4" aria-hidden="true" /> Report Incident
           </button>

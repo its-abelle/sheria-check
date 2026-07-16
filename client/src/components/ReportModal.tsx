@@ -163,11 +163,11 @@ export function ReportModal({ open, onClose, offenseId }: ReportModalProps) {
               </div>
             )}
 
-            <div className="mt-6 flex justify-center gap-3">
+            <div className="mt-6 flex flex-col sm:flex-row justify-center gap-3">
               <button
                 onClick={() => setConfirming(false)}
                 disabled={sending}
-                className="rounded-lg border border-gray-200 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 disabled:opacity-50 transition-colors"
+                className="w-full sm:w-auto rounded-lg border border-gray-200 px-4 py-2.5 text-sm text-gray-600 hover:bg-gray-50 disabled:opacity-50 transition-colors"
               >
                 Cancel
               </button>
@@ -175,7 +175,7 @@ export function ReportModal({ open, onClose, offenseId }: ReportModalProps) {
                 onClick={handleSubmit}
                 disabled={sending}
                 className={cn(
-                  "flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors",
+                  "w-full sm:w-auto flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium text-white transition-colors",
                   "bg-primary-500 hover:bg-primary-600 disabled:opacity-50"
                 )}
               >
@@ -195,7 +195,7 @@ export function ReportModal({ open, onClose, offenseId }: ReportModalProps) {
           </div>
         ) : (
           <form onSubmit={handleFormSubmit} className="space-y-3 px-4 py-4">
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label htmlFor="officer-name" className="block text-xs font-medium text-gray-500">
                   Officer Name <span className="text-gray-300">(optional)</span>
@@ -237,7 +237,7 @@ export function ReportModal({ open, onClose, offenseId }: ReportModalProps) {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label htmlFor="amount-demanded" className="block text-xs font-medium text-gray-500">
                   Amount Demanded (KES)
@@ -253,7 +253,7 @@ export function ReportModal({ open, onClose, offenseId }: ReportModalProps) {
                   className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
                 />
               </div>
-              <div>
+              <div className="hidden sm:block">
                 <p className="block text-xs font-medium text-gray-500">Legal Amount</p>
                 <p className="mt-1.5 text-sm text-gray-400">Check the offense page</p>
               </div>
