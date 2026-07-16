@@ -8,7 +8,7 @@ on:
 
 jobs:
   client:
-    name: Client — TypeScript + Build
+    name: Client — TypeScript + Build + Test
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -25,13 +25,29 @@ jobs:
       - run: npm ci
       - run: npx tsc --noEmit
       - run: npm run build
+      - run: npm test
 
   server:
-    name: Server — TypeScript + Build
+    name: Server — TypeScript + Build + Test
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: server
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: sheria
+          POSTGRES_PASSWORD: sheria_test
+          POSTGRES_DB: sheria_check_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
 
     steps:
       - uses: actions/checkout@v4
@@ -43,3 +59,7 @@ jobs:
 
       - run: npm ci
       - run: npx tsc --noEmit
+      - run: npm test
+        env:
+          DATABASE_URL: postgres://sheria:sheria_test@localhost:5432/sheria_check_test
+          ADMIN_PASSWORD: test_admin
