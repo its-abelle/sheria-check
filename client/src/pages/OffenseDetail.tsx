@@ -134,21 +134,15 @@ export function OffenseDetail() {
             <Scale className="h-4 w-4" aria-hidden="true" /> What To Do
           </h2>
           <div className={cn(
-            "rounded-lg border p-4 text-sm",
-            offense.severity === "felony"
-              ? "border-red-200 bg-red-50 text-red-800"
-              : "border-primary-200 bg-primary-50 text-primary-800"
+            "rounded-lg border p-4 text-sm leading-relaxed",
+            offense.severity === "minor"
+              ? "border-primary-200 bg-primary-50 text-primary-800"
+              : offense.severity === "serious"
+              ? "border-caution-200 bg-caution-50 text-caution-800"
+              : "border-red-200 bg-red-50 text-red-800 font-medium"
           )}>
             {offense.course_of_action}
           </div>
-          <p className={cn(
-            "mt-2 text-xs",
-            offense.severity === "felony" ? "text-red-500" : "text-caution-600"
-          )}>
-            {offense.severity === "felony"
-              ? "IMPORTANT: Do not attempt to settle this on the spot. You have the right to remain silent and contact a lawyer."
-              : "Remember: Do not pay any amount on the spot. The officer should issue a charge sheet."}
-          </p>
         </div>
 
         {/* Actions */}
