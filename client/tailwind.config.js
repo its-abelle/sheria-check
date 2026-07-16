@@ -40,10 +40,15 @@ export default {
           "0%, 100%": { filter: "drop-shadow(0 0 6px rgba(251, 191, 36, 0.3))" },
           "50%": { filter: "drop-shadow(0 0 16px rgba(251, 191, 36, 0.6))" },
         },
+        "slide-up": {
+          "0%": { opacity: "0", transform: "translateY(8px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
       },
       animation: {
         "scales-balance": "scale-tilt 1.6s ease-out forwards",
         "scales-glow": "scale-glow 3s ease-in-out infinite 1.6s",
+        "slide-up": "slide-up 0.3s ease-out",
       },
     },
   },

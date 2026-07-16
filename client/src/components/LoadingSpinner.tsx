@@ -1,10 +1,16 @@
 import { Loader2 } from "lucide-react";
+import { cn } from "../utils/cn";
 
-export function LoadingSpinner({ text = "Loading..." }: { text?: string }) {
+interface LoadingSpinnerProps {
+  text?: string;
+  className?: string;
+}
+
+export function LoadingSpinner({ text = "Loading...", className }: LoadingSpinnerProps) {
   return (
-    <div className="flex items-center justify-center gap-2 py-12 text-gray-400">
+    <div className={cn("flex items-center justify-center gap-2 py-12 text-gray-400", className)}>
       <Loader2 className="h-5 w-5 animate-spin" />
-      <span className="text-sm">{text}</span>
+      {text && <span className="text-sm">{text}</span>}
     </div>
   );
 }

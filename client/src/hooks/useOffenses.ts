@@ -1,11 +1,20 @@
 import { useState, useEffect } from "react";
 import {
-  getOffensesByCategory,
-  getOffenseById,
-  getCategories,
+  getOffensesByCategory as apiGetByCategory,
+  getOffenseById as apiGetById,
+  getCategories as apiGetCategories,
   getStatus,
 } from "../services/api";
+import {
+  cacheOffenses,
+  getOffenseById as localGetById,
+  getOffensesByCategory as localGetByCategory,
+} from "../utils/offlineDb";
 import type { Offense, OffenseCategory, ApiStatus } from "../types";
+
+function isOffline(): boolean {
+  return !navigator.onLine;
+}
 
 export function useOffensesByCategory(category: string) {
   const [offenses, setOffenses] = useState<Offense[]>([]);
@@ -17,12 +26,43 @@ export function useOffensesByCategory(category: string) {
     let cancelled = false;
     setLoading(true);
 
-    getOffensesByCategory(category)
+    if (isOffline()) {
+      localGetByCategory(category)
+        .then((data) => {
+          if (!cancelled) {
+            setOffenses(data);
+            setLoading(false);
+          }
+        })
+        .catch(() => {
+          if (!cancelled) {
+            setError("You are offline. Connect to the internet to load offenses.");
+            setLoading(false);
+          }
+        });
+      return () => { cancelled = true; };
+    }
+
+    apiGetByCategory(category)
       .then((data) => {
-        if (!cancelled) setOffenses(data);
+        if (!cancelled) {
+          setOffenses(data);
+          cacheOffenses(data).catch(() => {});
+        }
       })
       .catch((e) => {
-        if (!cancelled) setError(e.message || "Failed to load offenses");
+        if (!cancelled) {
+          localGetByCategory(category)
+            .then((cached) => {
+              if (!cancelled) {
+                setOffenses(cached);
+                setError(cached.length > 0 ? null : e.message || "Failed to load offenses");
+              }
+            })
+            .catch(() => {
+              if (!cancelled) setError(e.message || "Failed to load offenses");
+            });
+        }
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -44,12 +84,44 @@ export function useOffenseDetail(id: string) {
     let cancelled = false;
     setLoading(true);
 
-    getOffenseById(id)
+    if (isOffline()) {
+      localGetById(id)
+        .then((data) => {
+          if (!cancelled) {
+            setOffense(data);
+            if (!data) setError("Offense not available offline.");
+            setLoading(false);
+          }
+        })
+        .catch(() => {
+          if (!cancelled) {
+            setError("You are offline.");
+            setLoading(false);
+          }
+        });
+      return () => { cancelled = true; };
+    }
+
+    apiGetById(id)
       .then((data) => {
-        if (!cancelled) setOffense(data);
+        if (!cancelled) {
+          setOffense(data);
+          cacheOffenses([data]).catch(() => {});
+        }
       })
       .catch((e) => {
-        if (!cancelled) setError(e.message || "Failed to load offense details");
+        if (!cancelled) {
+          localGetById(id)
+            .then((cached) => {
+              if (!cancelled) {
+                setOffense(cached);
+                setError(cached ? null : e.message || "Failed to load offense details");
+              }
+            })
+            .catch(() => {
+              if (!cancelled) setError(e.message || "Failed to load offense details");
+            });
+        }
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -67,7 +139,7 @@ export function useCategories() {
 
   useEffect(() => {
     let cancelled = false;
-    getCategories()
+    apiGetCategories()
       .then((data) => {
         if (!cancelled) setCategories(data);
       })

@@ -1,6 +1,11 @@
 import { useState, useCallback, useRef } from "react";
 import { searchOffenses } from "../services/api";
+import { searchOffensesLocal, cacheOffenses } from "../utils/offlineDb";
 import type { Offense } from "../types";
+
+function isOffline(): boolean {
+  return !navigator.onLine;
+}
 
 export function useSearch() {
   const [query, setQuery] = useState("");
@@ -32,15 +37,36 @@ export function useSearch() {
 
     timerRef.current = setTimeout(async () => {
       try {
-        const res = await searchOffenses(q, 0, 20);
-        if (lastQueryRef.current !== q) return;
-        setResults(res.data);
-        setHasMore(res.pagination.has_more);
-        setTotal(res.pagination.total);
-        cursorRef.current = res.pagination.cursor;
+        if (isOffline()) {
+          const local = await searchOffensesLocal(q);
+          if (lastQueryRef.current !== q) return;
+          setResults(local);
+          setHasMore(false);
+          setTotal(local.length);
+          if (local.length === 0) {
+            setError("You are offline. Only previously viewed offenses are searchable.");
+          }
+        } else {
+          const res = await searchOffenses(q, 0, 20);
+          if (lastQueryRef.current !== q) return;
+          setResults(res.data);
+          setHasMore(res.pagination.has_more);
+          setTotal(res.pagination.total);
+          cursorRef.current = res.pagination.cursor;
+          cacheOffenses(res.data).catch(() => {});
+        }
       } catch (e) {
         if (lastQueryRef.current !== q) return;
-        setError(e instanceof Error ? e.message : "Search failed. Check your connection.");
+        const local = await searchOffensesLocal(q);
+        if (lastQueryRef.current !== q) return;
+        if (local.length > 0) {
+          setResults(local);
+          setHasMore(false);
+          setTotal(local.length);
+          setError("Showing cached results. Connect to the internet for latest data.");
+        } else {
+          setError(e instanceof Error ? e.message : "Search failed. Check your connection.");
+        }
       } finally {
         if (lastQueryRef.current === q) setLoading(false);
       }
@@ -48,7 +74,7 @@ export function useSearch() {
   }, []);
 
   const loadMore = useCallback(async () => {
-    if (loading || !hasMore || !query.trim()) return;
+    if (loading || !hasMore || !query.trim() || isOffline()) return;
 
     setLoading(true);
     try {
@@ -56,6 +82,7 @@ export function useSearch() {
       setResults((prev) => [...prev, ...res.data]);
       setHasMore(res.pagination.has_more);
       cursorRef.current = res.pagination.cursor;
+      cacheOffenses(res.data).catch(() => {});
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to load more results.");
     } finally {

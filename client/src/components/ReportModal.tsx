@@ -1,7 +1,10 @@
 import { useState, useRef, useEffect } from "react";
-import { X, Send, CheckCircle } from "lucide-react";
+import { X, Send, CheckCircle, Shield } from "lucide-react";
 import { submitReport } from "../services/api";
+import { LoadingSpinner } from "./LoadingSpinner";
+import { useToast } from "./Toast";
 import type { ReportPayload } from "../types";
+import { cn } from "../utils/cn";
 
 interface ReportModalProps {
   open: boolean;
@@ -19,10 +22,12 @@ export function ReportModal({ open, onClose, offenseId }: ReportModalProps) {
     description: "",
   });
   const [submitted, setSubmitted] = useState(false);
+  const [confirming, setConfirming] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
   const firstInputRef = useRef<HTMLInputElement>(null);
+  const { toast } = useToast();
 
   useEffect(() => {
     if (open) {
@@ -39,7 +44,6 @@ export function ReportModal({ open, onClose, offenseId }: ReportModalProps) {
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape") handleClose();
 
-      // Basic focus trap
       if (e.key === "Tab" && dialogRef.current) {
         const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
           'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
@@ -62,15 +66,19 @@ export function ReportModal({ open, onClose, offenseId }: ReportModalProps) {
 
   if (!open) return null;
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  async function handleSubmit() {
     setError(null);
     setSending(true);
     try {
       await submitReport(form);
       setSubmitted(true);
+      setConfirming(false);
+      toast("Report submitted anonymously. Thank you.", "success");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to submit report. Please try again.");
+      const message = err instanceof Error ? err.message : "Failed to submit report. Please try again.";
+      setError(message);
+      setConfirming(false);
+      toast(message, "error");
     } finally {
       setSending(false);
     }
@@ -78,6 +86,7 @@ export function ReportModal({ open, onClose, offenseId }: ReportModalProps) {
 
   function handleClose() {
     setSubmitted(false);
+    setConfirming(false);
     setError(null);
     setForm({
       offense_id: offenseId,
@@ -88,6 +97,13 @@ export function ReportModal({ open, onClose, offenseId }: ReportModalProps) {
       description: "",
     });
     onClose();
+  }
+
+  function handleFormSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!form.description.trim()) return;
+    setError(null);
+    setConfirming(true);
   }
 
   return (
@@ -101,7 +117,7 @@ export function ReportModal({ open, onClose, offenseId }: ReportModalProps) {
       <div ref={dialogRef} className="w-full max-w-md rounded-xl bg-white shadow-xl">
         <div className="flex items-center justify-between border-b px-4 py-3">
           <h2 id="report-title" className="font-semibold text-gray-900">
-            {submitted ? "Report Submitted" : "Report an Incident"}
+            {submitted ? "Report Submitted" : confirming ? "Confirm Submission" : "Report an Incident"}
           </h2>
           <button
             onClick={handleClose}
@@ -126,8 +142,59 @@ export function ReportModal({ open, onClose, offenseId }: ReportModalProps) {
               Close
             </button>
           </div>
+        ) : confirming ? (
+          <div className="px-4 py-6 text-center">
+            <div className="mb-4 flex justify-center">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary-50">
+                <Shield className="h-8 w-8 text-primary-400" aria-hidden="true" />
+              </div>
+            </div>
+            <h3 className="text-base font-semibold text-gray-900">Submit this report?</h3>
+            <p className="mt-2 text-sm text-gray-500">
+              Your report is completely anonymous. No personal data is collected or stored.
+            </p>
+            <p className="mt-1 text-sm text-gray-400">
+              This data helps expose corruption hotspots and holds officers accountable.
+            </p>
+
+            {error && (
+              <div className="mt-4 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-600" role="alert">
+                {error}
+              </div>
+            )}
+
+            <div className="mt-6 flex justify-center gap-3">
+              <button
+                onClick={() => setConfirming(false)}
+                disabled={sending}
+                className="rounded-lg border border-gray-200 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 disabled:opacity-50 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSubmit}
+                disabled={sending}
+                className={cn(
+                  "flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors",
+                  "bg-primary-500 hover:bg-primary-600 disabled:opacity-50"
+                )}
+              >
+                {sending ? (
+                  <>
+                    <LoadingSpinner className="h-4 w-4" />
+                    Submitting...
+                  </>
+                ) : (
+                  <>
+                    <Send className="h-4 w-4" aria-hidden="true" />
+                    Confirm & Submit
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-3 px-4 py-4">
+          <form onSubmit={handleFormSubmit} className="space-y-3 px-4 py-4">
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label htmlFor="officer-name" className="block text-xs font-medium text-gray-500">
@@ -215,12 +282,10 @@ export function ReportModal({ open, onClose, offenseId }: ReportModalProps) {
 
             <button
               type="submit"
-              disabled={sending}
               className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-primary-600 disabled:opacity-50 transition-colors"
             >
-              {sending ? "Submitting..." : (
-                <><Send className="h-4 w-4" aria-hidden="true" /> Submit Report</>
-              )}
+              <Send className="h-4 w-4" aria-hidden="true" />
+              Submit Report
             </button>
           </form>
         )}
