@@ -5,10 +5,13 @@ import { fileURLToPath } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
+function getAdminUrl(): string {
+  const url = new URL(process.env.DATABASE_URL || "postgres://sheria:sheria_prod@localhost:5432/sheria_check_test");
+  return `postgres://${url.username}:${url.password}@${url.hostname}:${url.port}/postgres`;
+}
+
 async function setupTestDb() {
-  const adminPool = new pg.Pool({
-    connectionString: "postgres://sheria:sheria_prod@localhost:5432/postgres",
-  });
+  const adminPool = new pg.Pool({ connectionString: getAdminUrl() });
 
   try {
     await adminPool.query(`
