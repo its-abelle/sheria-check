@@ -39,7 +39,6 @@ export async function initDb() {
 
     CREATE INDEX IF NOT EXISTS idx_offenses_category ON offenses(category);
     CREATE INDEX IF NOT EXISTS idx_offenses_severity ON offenses(severity);
-    CREATE INDEX IF NOT EXISTS idx_offenses_trgm ON offenses USING GIN (to_tsvector('english', name || ' ' || description || ' ' || array_to_string(aliases, ' ')));
 
     CREATE TABLE IF NOT EXISTS reports (
       id            SERIAL PRIMARY KEY,
