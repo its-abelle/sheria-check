@@ -10,14 +10,15 @@ import adminRoutes from "./routes/admin.js";
 import adminPage from "./admin/index.js";
 import { generalLimiter } from "./middleware/rateLimiter.js";
 import { errorHandler } from "./middleware/errorHandler.js";
+import { requestId } from "./middleware/requestId.js";
 import { logger } from "./utils/logger.js";
 
 const app = express();
 
 const corsOrigin = process.env.CORS_ORIGIN || "*";
-const isProduction = process.env.NODE_ENV === "production";
 
 app.use(helmet());
+app.use(requestId);
 app.use(compression());
 app.use(pinoHttp({ logger }));
 app.use(cors({ origin: corsOrigin.split(","), credentials: true }));

@@ -12,7 +12,7 @@ export default defineConfig({
         name: "Sheria Check",
         short_name: "SheriaCheck",
         description: "Check traffic offense fines and penalties in Kenya",
-        theme_color: "#1e3a5f",
+        theme_color: "#6B3A2A",
         background_color: "#ffffff",
         display: "standalone",
         start_url: "/",

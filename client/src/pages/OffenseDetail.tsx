@@ -137,7 +137,7 @@ export function OffenseDetail() {
             "rounded-lg border p-4 text-sm",
             offense.severity === "felony"
               ? "border-red-200 bg-red-50 text-red-800"
-              : "border-blue-200 bg-blue-50 text-blue-800"
+              : "border-primary-200 bg-primary-50 text-primary-800"
           )}>
             {offense.course_of_action}
           </div>

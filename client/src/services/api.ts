@@ -50,7 +50,8 @@ export async function getCategories(): Promise<OffenseCategory[]> {
 }
 
 export async function getStatus(): Promise<ApiStatus> {
-  return fetchJSON<ApiStatus>("/status");
+  const res = await fetchJSON<any>("/status");
+  return extractData<ApiStatus>(res);
 }
 
 export async function submitReport(payload: ReportPayload): Promise<{ ok: boolean }> {

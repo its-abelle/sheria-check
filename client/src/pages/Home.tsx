@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Scale } from "lucide-react";
 import { SearchBar } from "../components/SearchBar";
 import { CategoryCard } from "../components/CategoryCard";
 import { DisclaimerBanner } from "../components/DisclaimerBanner";
+import { BalanceScale } from "../components/BalanceScale";
 import { useSearch } from "../hooks/useSearch";
 import { useCategories } from "../hooks/useOffenses";
 import { useApiStatus } from "../hooks/useOffenses";
@@ -32,8 +32,8 @@ export function Home() {
       {/* Hero */}
       <section className="bg-gradient-to-b from-primary-500 to-primary-700 px-4 py-16 text-white">
         <div className="mx-auto max-w-3xl text-center">
-          <div className="mb-4 flex justify-center">
-            <Scale className="h-12 w-12" aria-hidden="true" />
+          <div className="mb-6 flex justify-center">
+            <BalanceScale className="h-24 w-24" />
           </div>
           <h1 className="text-3xl font-bold sm:text-4xl">Know Your Fine. Stand Your Ground.</h1>
           <p className="mt-3 text-primary-100">
