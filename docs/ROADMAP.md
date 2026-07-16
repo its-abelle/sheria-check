@@ -14,9 +14,9 @@ Status key: **✓** Done &nbsp;&nbsp; **◐** Partial &nbsp;&nbsp; **○** Not s
 | ✓ | `GET /api/v1/offenses/:id` — offense detail |
 | ✓ | `POST /api/v1/reports` — anonymous incident report (Zod validated) |
 | ✓ | `GET /api/v1/status` — data freshness (version, coverage, last-updated, count) |
-| ◐ | **Wire per-route rate limiters** — `searchLimiter` and `reportLimiter` exist but are unused; only the generic `generalLimiter` is applied globally |
+| ✓ | **Wire per-route rate limiters** — `searchLimiter` (100/min) on search, `reportLimiter` (10/min) on reports |
 | ○ | **Input sanitization middleware** — strip HTML, trim strings, normalize whitespace before controllers |
-| ○ | **Response envelope consistency** — some endpoints return `{ data }`, others return raw object; standardize |
+| ◐ | **Response envelope consistency** — `/status` standardized to `{ data }`; health check intentionally flat |
 | ○ | **Sub-category filtering** — e.g., `?category=license-documents&severity=serious` |
 | ○ | **Full-text search with Swahili** — add Swahili stop-words dictionary, Swahili tsvector config |
 
@@ -38,9 +38,8 @@ Status key: **✓** Done &nbsp;&nbsp; **◐** Partial &nbsp;&nbsp; **○** Not s
 | ✓ | Schema auto-creation on startup (`initDb()`) |
 | ✓ | `npm run migrate` — standalone migration script |
 | ✓ | `npm run seed` — seed script with upsert (INSERT ON CONFLICT DO UPDATE) |
-| ✓ | GIN index on full-text search vector |
 | ✓ | Indexes on `category` and `severity` |
-| ◐ | **Seed script uses hardcoded sample data** (12 offenses) instead of the scraped unified JSON (61 offenses); should read from `scripts/seed_data_unified.json` |
+| ✓ | **Seed script reads unified JSON** — pulls 61 offenses from `scripts/seed_data_unified.json` |
 | ○ | **Database backup strategy** — pg_dump cron, restore procedure documented |
 | ○ | **Migration versioning** — track applied migrations in a `_migrations` table instead of idempotent re-run |
 | ○ | **Connection retry on startup** — if DB is slow to start (Docker Compose race), retry with backoff |
@@ -66,7 +65,7 @@ Status key: **✓** Done &nbsp;&nbsp; **◐** Partial &nbsp;&nbsp; **○** Not s
 | ✓ | Health check endpoint (`GET /api/v1/health`) with DB ping |
 | ✓ | Graceful shutdown (SIGTERM / SIGINT handler with 10s forced exit) |
 | ○ | **Sentry error monitoring** — not set up; unhandled errors only go to console |
-| ○ | **Request ID tracing** — no correlation ID on requests for tracing through logs |
+| ✓ | **Request ID tracing** — `x-request-id` header on all responses, available in `req.requestId` |
 | ○ | **Performance metrics** — no response time histograms, no DB query latency tracking |
 | ○ | **Uptime monitoring** — no external health-check ping (e.g., UptimeRobot, BetterStack) |
 
@@ -106,9 +105,12 @@ Status key: **✓** Done &nbsp;&nbsp; **◐** Partial &nbsp;&nbsp; **○** Not s
 | ✓ | `OfflineNotice` — banner when network is lost |
 | ✓ | `SkipToContent` — keyboard accessibility skip link |
 | ✓ | `PageTransitionBar` — loading bar on route change |
-| ○ | **Toast / notification system** — no success/error toasts (report submission, API errors are silent) |
-| ○ | **Confirm dialog** — no confirmation before report submission |
-| ○ | **Error boundary** — no React error boundary; uncaught errors crash the whole tree |
+| ✓ | `BalanceScale` — animated scales of justice (tilts → balances → golden glow, "fighting corruption") |
+| ✓ | `ErrorBoundary` — class component wrapping routes, brown-themed crash fallback |
+| ✓ | `Toast` — notification system with slide-up animation, success/error/info variants |
+| ✓ | **Toast / notification system** — report submission and API errors show toast |
+| ✓ | **Confirm dialog** — shield icon + anonymous reassurance before report submission |
+| ✓ | **Error boundary** — catches render crashes, shows friendly fallback with Go Home / Try Again |
 
 ### 2.3 Hooks & Services
 
@@ -116,7 +118,8 @@ Status key: **✓** Done &nbsp;&nbsp; **◐** Partial &nbsp;&nbsp; **○** Not s
 | ✓ | `useOffenses` — fetch by category, fetch by ID |
 | ✓ | `useShare` — Web Share API (WhatsApp, Twitter, native) |
 | ✓ | `api.ts` — typed API client with error handling |
-| ○ | **Retry / offline queue** — failed API calls are not retried; no offline-first strategy |
+| ✓ | `offlineDb.ts` — IndexedDB wrapper for local offense cache |
+| ◐ | **Offline fallback** — hooks fall back to IndexedDB when offline/API fails; no background retry queue |
 | ○ | **useStatus** — no hook for data freshness (stale data indicator is not connected to API) |
 | ○ | **useDebounce** — debounce logic is inlined in `useSearch`; extract to reusable hook |
 
@@ -126,23 +129,24 @@ Status key: **✓** Done &nbsp;&nbsp; **◐** Partial &nbsp;&nbsp; **○** Not s
 | ✓ | Web manifest (name, icons, theme color, standalone display) |
 | ✓ | PWA icons (192px, 512px) |
 | ✓ | Offline notice banner when `navigator.onLine` is false |
-| ◐ | **Offline caching strategy** — default workbox precache only; no runtime caching for API responses |
+| ✓ | **Offline caching** — IndexedDB cache of offenses populated on search and category browse |
+| ✓ | **Offline search** — search works offline via IndexedDB, API failures fall back to cache |
 | ○ | **Install prompt** — no custom "Add to Home Screen" prompt |
-| ○ | **Offline search** — no offline-capable search (needs local IndexedDB cache of offenses) |
 | ○ | **Background sync** — reports submitted offline are not queued for later sync |
 
 ### 2.5 Styling & UX
 
 | ✓ | Tailwind CSS utility classes only (no custom CSS files) |
 | ✓ | `cn()` conditional class utility (clsx wrapper) |
-| ✓ | Custom color palette (`primary-*`, `caution-*`) |
+| ✓ | Custom color palette — solid brown (`#6B3A2A`) primary with warm earth tones |
+| ✓ | **Law animation** — BalanceScale component (scales tilt → balance → golden glow, "fighting corruption") |
 | ✓ | Responsive design (sm, md, lg breakpoints) |
 | ✓ | WCAG 2.1 AA — keyboard navigation, focus traps, skip-to-content |
 | ✓ | Empathetic copy throughout |
 | ◐ | **Empty states have fixed illustrations** — no category-specific empty art |
 | ○ | **Dark mode** — not implemented |
 | ○ | **Reduced motion** — no `prefers-reduced-motion` support |
-| ○ | **Loading state for ReportModal submit** — spinner exists but not wired to the submit button |
+| ✓ | **Loading state for ReportModal submit** — spinner wired into confirm button while sending |
 
 ### 2.6 Testing (client)
 
@@ -290,23 +294,23 @@ Status key: **✓** Done &nbsp;&nbsp; **◐** Partial &nbsp;&nbsp; **○** Not s
 
 1. **Zero tests** — no unit, integration, or API tests exist anywhere (backend or frontend)
 2. **No production deployment** — not live, no deploy guide, Dockerfiles are dev-only
-3. **Seed script uses hardcoded data** — reads 12 sample offenses instead of 61 unified scraped offenses
 
 ### High (should ship with)
 
-4. **Per-route rate limiters not wired** — `searchLimiter` and `reportLimiter` defined but unused
-5. **No error boundary on frontend** — one uncaught React error crashes the whole app
-6. **No toast/notification system** — report submissions and API errors are silent to the user
-7. **No Lighthouse audit** — PWA score, performance, a11y, and SEO scores unknown
-8. **No Redis caching** — search results and categories recomputed on every request
+3. **No Lighthouse audit** — PWA score, performance, a11y, and SEO scores unknown
+4. **No Redis caching** — search results and categories recomputed on every request
+5. **No Sentry error monitoring** — unhandled errors only go to console
+6. **No CSRF protection** — reports endpoint has no anti-forgery protection
+7. **No CSP tightening** — Helmet CSP defaults are permissive
 
 ### Medium (v1.1)
 
-9. **Admin dashboard is read-only** — no edit/delete/list UI beyond API calls
-10. **Data coverage at 61 offenses** — target is 100+ from Traffic Act alone, plus subsidiary legislation
-11. **No offline search** — PWA works offline for cached pages but search requires network
-12. **No CI test/lint/data-validation steps**
-13. **No dark mode, no reduced-motion support**
+8. **Admin dashboard is read-only** — no edit/delete/list UI beyond API calls
+9. **Data coverage at 61 offenses** — target 100+ from Traffic Act, plus subsidiary legislation
+10. **No CI test/lint/data-validation steps**
+11. **No dark mode, no reduced-motion support**
+12. **No CDN for static assets**
+13. **No install prompt** for PWA
 
 ### Low (post-v1 or never)
 
