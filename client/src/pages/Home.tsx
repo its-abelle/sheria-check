@@ -36,7 +36,7 @@ export function Home() {
             <BalanceScale className="h-16 w-16 sm:h-24 sm:w-24" />
           </div>
           <h1 className="text-2xl font-bold sm:text-4xl">Know Your Fine. Stand Your Ground.</h1>
-          <p className="mt-3 text-sm sm:text-base text-primary-100">
+          <p className="mt-3 text-sm sm:text-base text-white/80">
             Look up traffic offense fines under Kenyan law. Don't let anyone overcharge you.
           </p>
           <div className="mt-8">

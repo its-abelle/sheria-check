@@ -1,6 +1,6 @@
 export function BalanceScale({ className }: { className?: string }) {
   return (
-    <div className={className} aria-label="Scales of justice balancing">
+    <div className={className}>
       <svg
         viewBox="0 0 120 100"
         fill="none"

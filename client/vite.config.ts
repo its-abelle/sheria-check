@@ -23,6 +23,15 @@ export default defineConfig({
       },
     }),
   ],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          icons: ["lucide-react"],
+        },
+      },
+    },
+  },
   server: {
     port: 5173,
     proxy: {
