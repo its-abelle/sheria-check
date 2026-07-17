@@ -20,7 +20,7 @@ export function OfflineNotice() {
 
   return (
     <div
-      className="sticky top-14 z-30 flex items-center justify-center gap-2 bg-caution-500 px-4 py-2 text-sm font-medium text-white"
+      className="sticky top-16 z-30 flex items-center justify-center gap-2 bg-caution-500 px-4 py-2 text-sm font-medium text-white"
       role="alert"
     >
       <WifiOff className="h-4 w-4" aria-hidden="true" />

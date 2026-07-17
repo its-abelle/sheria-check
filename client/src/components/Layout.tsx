@@ -17,16 +17,16 @@ export function Layout() {
           !isHome && "shadow-sm"
         )}
       >
-        <div className="mx-auto flex h-14 max-w-3xl items-center gap-3 px-4">
-          <Link to="/" className="flex items-center gap-2 font-semibold text-primary-500">
+        <div className="mx-auto flex h-16 max-w-3xl items-center gap-3 px-6">
+          <Link to="/" className="flex items-center gap-3 font-semibold text-primary-500">
             <Scale className="h-5 w-5" aria-hidden="true" />
             <span className="text-lg">Sheria Check</span>
           </Link>
           <nav className="ml-auto flex items-center gap-1 sm:gap-4 text-sm text-gray-500" aria-label="Main navigation">
-            <Link to="/" className="rounded-lg px-3 py-2 hover:text-primary-500 hover:bg-primary-50 transition-colors">
+            <Link to="/" className="rounded-lg px-4 py-2 hover:text-primary-500 hover:bg-primary-50 transition-colors">
               Home
             </Link>
-            <Link to="/disclaimer" className="rounded-lg px-3 py-2 hover:text-primary-500 hover:bg-primary-50 transition-colors">
+            <Link to="/disclaimer" className="rounded-lg px-4 py-2 hover:text-primary-500 hover:bg-primary-50 transition-colors">
               Disclaimer
             </Link>
           </nav>
