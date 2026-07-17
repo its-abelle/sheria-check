@@ -17,7 +17,7 @@ export function Layout() {
           !isHome && "shadow-sm"
         )}
       >
-        <div className="mx-auto flex h-16 max-w-3xl items-center gap-3 px-6">
+        <div className="mx-auto flex h-16 max-w-3xl items-center gap-3 px-10">
           <Link to="/" className="flex items-center gap-3 font-semibold text-primary-500">
             <Scale className="h-5 w-5" aria-hidden="true" />
             <span className="text-lg">Sheria Check</span>
