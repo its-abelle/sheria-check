@@ -123,7 +123,7 @@ export function OffenseDetail() {
               <span className="text-gray-500">Citation:</span> {offense.citation}
             </p>
           </div>
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-gray-500">
             Show this to the officer. The legal fine for this offense is between {formatKES(offense.min_fine)} and {formatKES(offense.max_fine)}.
           </p>
         </div>

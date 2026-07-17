@@ -153,7 +153,7 @@ export function ReportModal({ open, onClose, offenseId }: ReportModalProps) {
             <p className="mt-2 text-sm text-gray-500">
               Your report is completely anonymous. No personal data is collected or stored.
             </p>
-            <p className="mt-1 text-sm text-gray-400">
+            <p className="mt-1 text-sm text-gray-500">
               This data helps expose corruption hotspots and holds officers accountable.
             </p>
 
@@ -198,7 +198,7 @@ export function ReportModal({ open, onClose, offenseId }: ReportModalProps) {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label htmlFor="officer-name" className="block text-xs font-medium text-gray-500">
-                  Officer Name <span className="text-gray-300">(optional)</span>
+                  Officer Name <span className="text-gray-500">(optional)</span>
                 </label>
                 <input
                   ref={firstInputRef}
@@ -211,7 +211,7 @@ export function ReportModal({ open, onClose, offenseId }: ReportModalProps) {
               </div>
               <div>
                 <label htmlFor="officer-badge" className="block text-xs font-medium text-gray-500">
-                  Badge Number <span className="text-gray-300">(optional)</span>
+                  Badge Number <span className="text-gray-500">(optional)</span>
                 </label>
                 <input
                   id="officer-badge"
@@ -225,7 +225,7 @@ export function ReportModal({ open, onClose, offenseId }: ReportModalProps) {
 
             <div>
               <label htmlFor="location" className="block text-xs font-medium text-gray-500">
-                Location <span className="text-gray-300">(optional)</span>
+                Location <span className="text-gray-500">(optional)</span>
               </label>
               <input
                 id="location"
@@ -255,7 +255,7 @@ export function ReportModal({ open, onClose, offenseId }: ReportModalProps) {
               </div>
               <div className="hidden sm:block">
                 <p className="block text-xs font-medium text-gray-500">Legal Amount</p>
-                <p className="mt-1.5 text-sm text-gray-400">Check the offense page</p>
+                <p className="mt-1.5 text-sm text-gray-500">Check the offense page</p>
               </div>
             </div>
 

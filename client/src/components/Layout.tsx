@@ -39,7 +39,7 @@ export function Layout() {
         <Outlet />
       </main>
 
-      <footer className="border-t bg-white py-6 text-center text-xs text-gray-400">
+      <footer className="border-t bg-white py-6 text-center text-xs text-gray-500">
         <div className="mx-auto max-w-3xl px-4">
           <p>
             Sheria Check is an informational tool based on publicly available legal texts.

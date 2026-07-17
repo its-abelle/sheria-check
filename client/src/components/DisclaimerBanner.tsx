@@ -25,6 +25,7 @@ export function DisclaimerBanner() {
         <button
           onClick={handleDismiss}
           className="shrink-0 rounded p-1 text-caution-500 hover:bg-caution-100 transition-colors"
+          aria-label="Dismiss disclaimer"
         >
           <X className="h-4 w-4" />
         </button>

@@ -44,7 +44,7 @@ export function OffenseCard({ offense }: OffenseCardProps) {
               <SevIcon className="h-3 w-3" />
               {offense.severity}
             </span>
-            <span className="text-xs text-gray-400">{offense.citation}</span>
+            <span className="text-xs text-gray-500">{offense.citation}</span>
           </div>
           <h3 className="font-semibold text-gray-900 truncate">{offense.name}</h3>
           <p className="mt-1 text-sm text-gray-500 line-clamp-2">{offense.description}</p>
@@ -57,7 +57,7 @@ export function OffenseCard({ offense }: OffenseCardProps) {
           {formatKES(offense.min_fine)} – {formatKES(offense.max_fine)}
         </span>
         {offense.max_imprisonment && (
-          <span className="text-gray-400">up to {offense.max_imprisonment}</span>
+          <span className="text-gray-500">up to {offense.max_imprisonment}</span>
         )}
       </div>
     </Link>

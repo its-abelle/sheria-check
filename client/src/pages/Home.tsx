@@ -98,7 +98,7 @@ export function Home() {
           ) : (
             <div className="mt-6 grid gap-3 sm:grid-cols-2">
               {categories.length === 0 && (
-                <p className="col-span-2 text-sm text-gray-400">
+                <p className="col-span-2 text-sm text-gray-500">
                   No categories available yet. Data is being compiled.
                 </p>
               )}
@@ -113,7 +113,7 @@ export function Home() {
       {/* Data freshness */}
       {status && (
         <section className="border-t bg-gray-50 px-4 py-4" aria-label="Data information">
-          <div className="mx-auto max-w-3xl text-center text-xs text-gray-400">
+          <div className="mx-auto max-w-3xl text-center text-xs text-gray-500">
             <p>
               Data version: {status.data_version} &middot; Last updated:{" "}
               {new Date(status.last_updated).toLocaleDateString("en-KE")} &middot;{" "}

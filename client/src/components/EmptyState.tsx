@@ -45,7 +45,7 @@ export function EmptyState({ variant, query }: EmptyStateProps) {
       </div>
       <h2 className="text-lg font-semibold text-gray-700">{c.title}</h2>
       <p className="mt-2 max-w-sm text-sm text-gray-500">{c.description}</p>
-      <p className="mt-3 text-xs text-gray-400">{c.action}</p>
+      <p className="mt-3 text-xs text-gray-500">{c.action}</p>
     </div>
   );
 }

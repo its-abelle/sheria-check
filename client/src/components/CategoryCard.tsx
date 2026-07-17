@@ -29,7 +29,7 @@ export function CategoryCard({ category }: CategoryCardProps) {
       <div className="flex-1 min-w-0">
         <h3 className="font-semibold text-gray-900">{category.name}</h3>
         <p className="text-sm text-gray-500 truncate">{category.description}</p>
-        <span className="text-xs text-gray-400">{category.count} offenses</span>
+        <span className="text-xs text-gray-500">{category.count} offenses</span>
       </div>
       <ArrowRight className="h-5 w-5 shrink-0 text-gray-300" />
     </Link>

@@ -2,7 +2,7 @@ FROM node:20-alpine AS build
 
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN npm install --no-audit --no-fund
 COPY tsconfig.json ./
 COPY src/ src/
 RUN npm run build
@@ -11,7 +11,7 @@ FROM node:20-alpine AS prod
 
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm ci --omit=dev
+RUN npm install --no-audit --no-fund --omit=dev
 COPY --from=build /app/dist ./dist
 
 ENV NODE_ENV=production
