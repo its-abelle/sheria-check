@@ -290,32 +290,47 @@ Status key: **✓** Done &nbsp;&nbsp; **◐** Partial &nbsp;&nbsp; **○** Not s
 
 ## Summary — Gaps by Priority
 
-### Critical (ship blockers)
+### Done (since last review)
 
-1. **Zero tests** — no unit, integration, or API tests exist anywhere (backend or frontend)
-2. **No production deployment** — not live, no deploy guide, Dockerfiles are dev-only
+| Item | Detail |
+|---|---|
+| ✓ Tests | 23 server API integration tests + 9 client component tests |
+| ✓ Production Docker | Multi-stage Dockerfiles, nginx config, docker-compose.prod.yml |
+| ✓ Deployment guide | `docs/DEPLOY.md` — Docker Compose, DO App Platform, Nginx |
+| ✓ Lighthouse audit | Performance 81-98, A11y 95, Best Practices 96, SEO 91 |
+| ✓ Rate limiters wired | searchLimiter (100/min), reportLimiter (10/min) |
+| ✓ Seed script | Reads 61 offenses from unified JSON |
+| ✓ Request ID | x-request-id header on all responses |
+| ✓ Error boundary | Brown-themed crash fallback with Go Home / Try Again |
+| ✓ Toast system | Slide-up notifications for success/error/info |
+| ✓ Confirm dialog | Shield + anonymous reassurance before report submit |
+| ✓ Offline search | IndexedDB cache, fallback on API failure |
+| ✓ Mobile responsive | Full-width buttons, stacked grids, touch targets |
+| ✓ Brown theme | #6B3A2A solid brown + BalanceScale animation |
+| ✓ CI runs tests | Server tests with PostgreSQL service container |
 
 ### High (should ship with)
 
-3. **No Lighthouse audit** — PWA score, performance, a11y, and SEO scores unknown
-4. **No Redis caching** — search results and categories recomputed on every request
-5. **No Sentry error monitoring** — unhandled errors only go to console
-6. **No CSRF protection** — reports endpoint has no anti-forgery protection
-7. **No CSP tightening** — Helmet CSP defaults are permissive
+1. **Data coverage at 61 offenses** — target 100+ from Traffic Act, subsidiary legislation
+2. **No production deployment** — Dockerfiles and deploy guide exist, but not deployed live
+3. **No Redis caching** — search results and categories recomputed on every request
+4. **No Sentry error monitoring** — unhandled errors only go to console
+5. **No CSRF protection** — reports endpoint has no anti-forgery protection
+6. **No CSP tightening** — Helmet CSP defaults are permissive
 
 ### Medium (v1.1)
 
-8. **Admin dashboard is read-only** — no edit/delete/list UI beyond API calls
-9. **Data coverage at 61 offenses** — target 100+ from Traffic Act, plus subsidiary legislation
-10. **No CI test/lint/data-validation steps**
-11. **No dark mode, no reduced-motion support**
-12. **No CDN for static assets**
-13. **No install prompt** for PWA
+7. **Admin dashboard is read-only** — no edit/delete/list UI beyond API calls
+8. **No dark mode, no reduced-motion support**
+9. **No CDN for static assets**
+10. **No install prompt** for PWA
+11. **No ESLint/lint step in CI**
+12. **Data validation not in CI** — verify_data.py not run automatically
 
 ### Low (post-v1 or never)
 
-14. **Swahili i18n** — important for reach, large translation effort
-15. **USSD channel** — requires Africa's Talking integration
-16. **Community features** — heatmap, corruption crowdsourcing, court finder
-17. **County by-laws** — requires scraping each county individually
-18. **Monetization** — fleet tier, M-Pesa donations
+13. **Swahili i18n** — important for reach, large translation effort
+14. **USSD channel** — requires Africa's Talking integration
+15. **Community features** — heatmap, corruption crowdsourcing, court finder
+16. **County by-laws** — requires scraping each county individually
+17. **Monetization** — fleet tier, M-Pesa donations
