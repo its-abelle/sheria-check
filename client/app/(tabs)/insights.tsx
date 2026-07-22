@@ -3,9 +3,8 @@ import { View, Text, ScrollView } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { BarChart3, MapPin, Calendar, TrendingUp } from "lucide-react-native";
 import { LoadingSpinner } from "../../src/components/LoadingSpinner";
+import { getIncidentInsights } from "../../src/services/api";
 import type { IncidentInsight } from "../../src/types";
-
-const BASE_URL = process.env.EXPO_PUBLIC_API_URL || "http://localhost:4000/api/v1";
 
 export default function InsightsScreen() {
   const [insights, setInsights] = useState<IncidentInsight[]>([]);
@@ -17,10 +16,7 @@ export default function InsightsScreen() {
     let cancelled = false;
     (async () => {
       try {
-        const res = await fetch(`${BASE_URL}/reports/insights`);
-        if (!res.ok) throw new Error("Failed to load insights");
-        const body = await res.json();
-        const data = Array.isArray(body) ? body : body?.data ?? [];
+        const data = await getIncidentInsights();
         if (!cancelled) setInsights(data);
       } catch (e) {
         if (!cancelled) setError(e instanceof Error ? e.message : "Failed to load insights");

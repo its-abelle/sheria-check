@@ -1,4 +1,4 @@
-import type { Offense, OffenseCategory, ReportPayload, ApiStatus } from "../types";
+import type { Offense, OffenseCategory, ReportPayload, ApiStatus, IncidentInsight } from "../types";
 
 const BASE_URL = process.env.EXPO_PUBLIC_API_URL || "http://localhost:4000/api/v1";
 
@@ -80,4 +80,11 @@ export async function getStatus(): Promise<ApiStatus | null> {
   } catch {
     return null;
   }
+}
+
+export async function getIncidentInsights(): Promise<IncidentInsight[]> {
+  const res = await fetchJSON<unknown>("/reports/insights");
+  if (hasDataField<IncidentInsight[]>(res)) return res.data;
+  if (Array.isArray(res)) return res as IncidentInsight[];
+  return [];
 }
