@@ -33,7 +33,18 @@ class OffenseRepository {
       if (cached) {
         this.currentData = JSON.parse(cached) as Offense[];
         this.buildIndex(this.currentData);
+        this.hydrated = true;
+        return;
       }
+    } catch {
+      // Fall through to bundled snapshot
+    }
+
+    // No valid cache — load bundled snapshot
+    try {
+      const snapshot = require("../../../assets/offenses.json") as Offense[];
+      this.currentData = snapshot;
+      this.buildIndex(snapshot);
     } catch {
       this.currentData = [];
     }
