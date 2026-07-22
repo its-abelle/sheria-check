@@ -105,12 +105,10 @@ class OffenseRepository {
       do {
         const result = await api.searchOffenses("*", cursor, 100);
         if (result.data.length === 0 && !cursor) {
-          let offset = 0;
           while (true) {
-            const batch = await api.searchOffenses("", undefined, 100);
+            const batch = await api.searchOffenses("", cursor, 100);
             if (batch.data.length === 0) break;
             all.push(...batch.data);
-            offset += batch.data.length;
             if (batch.nextCursor === null) break;
             cursor = batch.nextCursor;
           }
