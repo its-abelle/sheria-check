@@ -1,4 +1,4 @@
-import Fuse from "fuse.js";
+import Fuse, { type IFuseOptions } from "fuse.js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import type { Offense, OffenseCategory } from "../types";
 import * as api from "../services/api";
@@ -7,7 +7,7 @@ import { DEFAULT_CATEGORIES } from "../data/categories";
 const STORAGE_KEY = "offenses_cache";
 const DATA_VERSION_KEY = "offenses_data_version";
 
-const FUSE_OPTIONS: Fuse.IFuseOptions<Offense> = {
+const FUSE_OPTIONS: IFuseOptions<Offense> = {
   keys: [
     { name: "name", weight: 0.4 },
     { name: "aliases", weight: 0.25 },
