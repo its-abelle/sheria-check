@@ -1,7 +1,7 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { query } from "../db/index.js";
 
-export async function getInsights(_req: Request, res: Response) {
+export async function getInsights(_req: Request, res: Response, next: NextFunction) {
   try {
     const { rows } = await query(
       `
@@ -35,7 +35,6 @@ export async function getInsights(_req: Request, res: Response) {
 
     res.json({ data: insights });
   } catch (err) {
-    console.error("Insights query failed:", err);
-    res.json({ data: [] });
+    next(err);
   }
 }
