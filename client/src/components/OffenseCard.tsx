@@ -29,6 +29,7 @@ export function OffenseCard({ id, name, category, severity, min_fine, max_fine }
         "rounded-2xl border border-gray-200 bg-white p-4",
         "active:bg-gray-50"
       )}
+      accessibilityRole="button"
       accessibilityLabel={`${name}, severity ${severity}, fine KES ${min_fine.toLocaleString("en-KE")} to ${max_fine.toLocaleString("en-KE")}`}
     >
       <View className="flex-row items-start justify-between">

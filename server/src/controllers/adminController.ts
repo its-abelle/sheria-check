@@ -19,6 +19,7 @@ const offenseSchema = z.object({
   law_version: z.string().default("2024"),
 });
 
+/** Upsert a single offense record (admin-only endpoint, requires Bearer auth). */
 export async function createOffense(req: Request, res: Response) {
   const parsed = offenseSchema.safeParse(req.body);
   if (!parsed.success) {
@@ -51,6 +52,7 @@ export async function createOffense(req: Request, res: Response) {
   res.status(201).json({ ok: true });
 }
 
+/** Delete an offense by its ID and update the status count (admin-only endpoint). */
 export async function deleteOffense(req: Request, res: Response) {
   const { id } = req.params;
   await query("DELETE FROM offenses WHERE id = $1", [id]);
@@ -63,6 +65,7 @@ async function updateStatusCount() {
   await query("UPDATE status SET total_offenses = $1, last_updated = NOW() WHERE id = 1", [rows[0].count]);
 }
 
+/** Upsert an array of offenses in bulk, then update the status count (admin-only endpoint). */
 export async function bulkUpload(req: Request, res: Response) {
   const offenses = z.array(offenseSchema).safeParse(req.body);
   if (!offenses.success) {

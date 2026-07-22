@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { query } from "../db/index.js";
 
+/** Return anonymized incident insights aggregated by area and period (k-anonymity: cells with fewer than 5 reports are suppressed). */
 export async function getInsights(_req: Request, res: Response, next: NextFunction) {
   try {
     const { rows } = await query(

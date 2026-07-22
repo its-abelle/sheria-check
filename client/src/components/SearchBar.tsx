@@ -26,6 +26,7 @@ export function SearchBar({ value, onChangeText, placeholder = "Search offenses.
       {value.length > 0 && (
         <Pressable
           onPress={() => onChangeText("")}
+          accessibilityRole="button"
           accessibilityLabel="Clear search"
           hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
         >

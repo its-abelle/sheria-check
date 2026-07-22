@@ -26,6 +26,11 @@ class OffenseRepository {
   private currentData: Offense[] = [];
   private hydrated = false;
 
+  /**
+   * Load offenses from AsyncStorage cache, falling back to the bundled snapshot
+   * when the cache key is missing or its JSON is malformed.
+   * A valid cached empty array is used as-is and does NOT trigger a fallback.
+   */
   async hydrate(): Promise<void> {
     if (this.hydrated) return;
     try {
@@ -61,6 +66,7 @@ class OffenseRepository {
     }
   }
 
+  /** Perform a fuzzy search across all loaded offenses using fuse.js. */
   search(query: string): Offense[] {
     this.ensureIndex();
     if (!query.trim()) return this.currentData;
@@ -69,18 +75,22 @@ class OffenseRepository {
     return results.map((r) => r.item);
   }
 
+  /** Return every loaded offense without filtering. */
   getAll(): Offense[] {
     return this.currentData;
   }
 
+  /** Find a single offense by its unique ID. */
   getById(id: string): Offense | undefined {
     return this.currentData.find((o) => o.id === id);
   }
 
+  /** Return all offenses matching the given category slug. */
   getByCategory(categoryId: string): Offense[] {
     return this.currentData.filter((o) => o.category === categoryId);
   }
 
+  /** Compute category counts from loaded offenses, returning only categories with at least one offense. */
   getCategories(): OffenseCategory[] {
     const counts = new Map<string, number>();
     for (const o of this.currentData) {
@@ -92,6 +102,7 @@ class OffenseRepository {
     })).filter((c) => c.count > 0);
   }
 
+  /** Fetch the latest offenses from the API if the data version has changed, then cache them in AsyncStorage. */
   async refreshFromServer(): Promise<boolean> {
     try {
       const status = await api.getStatus();

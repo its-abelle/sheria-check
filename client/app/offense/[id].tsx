@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { View, Text, ScrollView, Pressable } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -11,6 +11,18 @@ import { ReportModal } from "../../src/components/ReportModal";
 import { formatKES, formatDate } from "../../src/utils/format";
 import { cn } from "../../src/utils/cn";
 
+const SEVERITY_MAP = {
+  minor: { label: "Minor", color: "text-green-700", bg: "bg-green-50" },
+  serious: { label: "Serious", color: "text-amber-700", bg: "bg-amber-50" },
+  felony: { label: "Felony", color: "text-red-700", bg: "bg-red-50" },
+} as const;
+
+const SEVERITY_FALLBACK = {
+  label: "Unknown",
+  color: "text-gray-700",
+  bg: "bg-gray-50",
+} as const;
+
 export default function OffenseDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { offense, loading, error } = useOffenseDetail(id || "");
@@ -19,6 +31,15 @@ export default function OffenseDetailScreen() {
   const insets = useSafeAreaInsets();
   const [reportOpen, setReportOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const copiedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const mountedRef = useRef(true);
+
+  useEffect(() => {
+    return () => {
+      mountedRef.current = false;
+      if (copiedTimerRef.current) clearTimeout(copiedTimerRef.current);
+    };
+  }, []);
 
   if (loading) {
     return (
@@ -39,16 +60,7 @@ export default function OffenseDetailScreen() {
     );
   }
 
-  const severityMap = {
-    minor: { label: "Minor", color: "text-green-700", bg: "bg-green-50" },
-    serious: { label: "Serious", color: "text-amber-700", bg: "bg-amber-50" },
-    felony: { label: "Felony", color: "text-red-700", bg: "bg-red-50" },
-  } as const;
-  const severityInfo = severityMap[offense.severity] ?? {
-    label: "Unknown",
-    color: "text-gray-700",
-    bg: "bg-gray-50",
-  };
+  const severityInfo = SEVERITY_MAP[offense.severity] ?? SEVERITY_FALLBACK;
 
   const handleShare = async () => {
     const result = await share({
@@ -69,9 +81,10 @@ export default function OffenseDetailScreen() {
         .join("\n"),
     });
 
-    if (result === "copied") {
+    if (result === "shared" && mountedRef.current) {
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      if (copiedTimerRef.current) clearTimeout(copiedTimerRef.current);
+      copiedTimerRef.current = setTimeout(() => setCopied(false), 2000);
     }
   };
 

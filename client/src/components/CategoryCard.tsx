@@ -29,6 +29,7 @@ export function CategoryCard({ category }: CategoryCardProps) {
         "flex-row items-center justify-between rounded-2xl border border-primary-100 bg-white p-4",
         "active:bg-primary-50"
       )}
+      accessibilityRole="button"
       accessibilityLabel={`${category.name}, ${category.count} offenses`}
     >
       <View className="flex-row items-center gap-3">
