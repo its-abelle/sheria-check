@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { searchOffenses as apiSearch } from "../services/api";
 import { offenseRepository } from "../repositories/OffenseRepository";
 import type { Offense } from "../types";
@@ -13,6 +13,12 @@ export function useSearch() {
   const [total, setTotal] = useState(0);
   const nextCursorRef = useRef<string | null>(null);
   const searchTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (searchTimer.current) clearTimeout(searchTimer.current);
+    };
+  }, []);
 
   const doLocalSearch = useCallback((q: string) => {
     const repoResults = offenseRepository.search(q);

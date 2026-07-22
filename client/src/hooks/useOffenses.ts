@@ -1,8 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  getCategories as apiGetCategories,
-  getStatus,
-} from "../services/api";
+import { getStatus } from "../services/api";
 import type { OffenseCategory, ApiStatus } from "../types";
 import { offenseRepository } from "../repositories/OffenseRepository";
 
@@ -109,7 +106,7 @@ export function useApiStatus() {
 
     getStatus().then((s) => {
       if (!cancelled) setStatus(s);
-    });
+    }).catch(() => {});
 
     return () => { cancelled = true; };
   }, []);

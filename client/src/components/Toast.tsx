@@ -72,7 +72,7 @@ function ToastItem({ toast, onDismiss }: { toast: Toast; onDismiss: () => void }
     <Animated.View style={{ opacity }} className="flex-row items-center gap-2 rounded-xl bg-white px-4 py-3 shadow-lg">
       <Icon size={18} color={iconColor} />
       <Text className="flex-1 text-sm text-primary-900">{toast.message}</Text>
-      <Pressable onPress={onDismiss} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+      <Pressable onPress={onDismiss} accessibilityRole="button" accessibilityLabel="Dismiss notification" hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
         <X size={16} color="#A87A5E" />
       </Pressable>
     </Animated.View>
