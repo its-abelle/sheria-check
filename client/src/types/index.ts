@@ -48,8 +48,8 @@ export interface IncidentInsight {
   period: string;
   area: string;
   report_count: number;
-  median_amount_demanded: number;
-  median_amount_legal: number;
+  median_amount_demanded: number | null;
+  median_amount_legal: number | null;
   top_offense_id: string | null;
   top_offense_name: string | null;
 }
