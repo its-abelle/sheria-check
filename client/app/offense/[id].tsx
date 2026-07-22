@@ -39,11 +39,16 @@ export default function OffenseDetailScreen() {
     );
   }
 
-  const severityInfo = {
+  const severityMap = {
     minor: { label: "Minor", color: "text-green-700", bg: "bg-green-50" },
     serious: { label: "Serious", color: "text-amber-700", bg: "bg-amber-50" },
     felony: { label: "Felony", color: "text-red-700", bg: "bg-red-50" },
-  }[offense.severity];
+  } as const;
+  const severityInfo = severityMap[offense.severity] ?? {
+    label: "Unknown",
+    color: "text-gray-700",
+    bg: "bg-gray-50",
+  };
 
   const handleShare = async () => {
     const result = await share({
