@@ -63,12 +63,12 @@ export async function getOffenseById(id: string): Promise<Offense | null> {
 }
 
 export async function submitReport(payload: ReportPayload): Promise<boolean> {
-  const res = await fetchJSON<unknown>("/reports", {
+  const res = await fetchJSON<{ ok?: boolean; error?: string }>("/reports", {
     method: "POST",
     body: JSON.stringify(payload),
   });
-  if (hasDataField<unknown>(res)) return true;
-  return true;
+  if (res.ok === true) return true;
+  throw new Error(res.error || "Report submission failed");
 }
 
 export async function getStatus(): Promise<ApiStatus | null> {
