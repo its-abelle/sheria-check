@@ -29,9 +29,10 @@ export default function RootLayout() {
   }, [fontsLoaded]);
 
   useEffect(() => {
-    offenseRepository.hydrate().then(() => {
-      offenseRepository.refreshFromServer();
-    });
+    offenseRepository
+      .hydrate()
+      .then(() => offenseRepository.refreshFromServer())
+      .catch((err) => console.error("Offense repository init failed:", err));
   }, []);
 
   if (!fontsLoaded) return null;
