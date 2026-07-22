@@ -1,159 +1,100 @@
 import { useState, useEffect } from "react";
 import {
-  getOffensesByCategory as apiGetByCategory,
-  getOffenseById as apiGetById,
   getCategories as apiGetCategories,
   getStatus,
 } from "../services/api";
-import {
-  cacheOffenses,
-  getOffenseById as localGetById,
-  getOffensesByCategory as localGetByCategory,
-} from "../utils/offlineDb";
-import type { Offense, OffenseCategory, ApiStatus } from "../types";
+import type { OffenseCategory, ApiStatus } from "../types";
+import { offenseRepository } from "../repositories/OffenseRepository";
 
-function isOffline(): boolean {
-  return !navigator.onLine;
-}
-
-export function useOffensesByCategory(category: string) {
-  const [offenses, setOffenses] = useState<Offense[]>([]);
+export function useCategories() {
+  const [categories, setCategories] = useState<OffenseCategory[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!category) return;
     let cancelled = false;
-    setLoading(true);
 
-    if (isOffline()) {
-      localGetByCategory(category)
-        .then((data) => {
-          if (!cancelled) {
-            setOffenses(data);
-            setLoading(false);
-          }
-        })
-        .catch(() => {
-          if (!cancelled) {
-            setError("You are offline. Connect to the internet to load offenses.");
-            setLoading(false);
-          }
-        });
-      return () => { cancelled = true; };
+    async function load() {
+      try {
+        await offenseRepository.hydrate();
+        if (cancelled) return;
+        setCategories(offenseRepository.getCategories());
+      } catch (e) {
+        if (!cancelled) setError(e instanceof Error ? e.message : "Failed to load categories.");
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
     }
 
-    apiGetByCategory(category)
-      .then((data) => {
-        if (!cancelled) {
-          setOffenses(data);
-          cacheOffenses(data).catch(() => {});
-        }
-      })
-      .catch((e) => {
-        if (!cancelled) {
-          localGetByCategory(category)
-            .then((cached) => {
-              if (!cancelled) {
-                setOffenses(cached);
-                setError(cached.length > 0 ? null : e.message || "Failed to load offenses");
-              }
-            })
-            .catch(() => {
-              if (!cancelled) setError(e.message || "Failed to load offenses");
-            });
-        }
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
-
+    load();
     return () => { cancelled = true; };
-  }, [category]);
+  }, []);
+
+  return { categories, loading, error };
+}
+
+export function useOffensesByCategory(categoryId: string) {
+  const [offenses, setOffenses] = useState<import("../types").Offense[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function load() {
+      setLoading(true);
+      setError(null);
+      try {
+        await offenseRepository.hydrate();
+        const results = offenseRepository.getByCategory(categoryId);
+        if (!cancelled) setOffenses(results);
+      } catch (e) {
+        if (!cancelled) setError(e instanceof Error ? e.message : "Failed to load offenses.");
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    if (categoryId) load();
+    return () => { cancelled = true; };
+  }, [categoryId]);
 
   return { offenses, loading, error };
 }
 
 export function useOffenseDetail(id: string) {
-  const [offense, setOffense] = useState<Offense | null>(null);
+  const [offense, setOffense] = useState<import("../types").Offense | undefined>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!id) return;
     let cancelled = false;
-    setLoading(true);
 
-    if (isOffline()) {
-      localGetById(id)
-        .then((data) => {
-          if (!cancelled) {
-            setOffense(data);
-            if (!data) setError("Offense not available offline.");
-            setLoading(false);
+    async function load() {
+      setLoading(true);
+      setError(null);
+      try {
+        await offenseRepository.hydrate();
+        const found = offenseRepository.getById(id);
+        if (!cancelled) {
+          if (found) {
+            setOffense(found);
+          } else {
+            setError("Offense not found.");
           }
-        })
-        .catch(() => {
-          if (!cancelled) {
-            setError("You are offline.");
-            setLoading(false);
-          }
-        });
-      return () => { cancelled = true; };
+        }
+      } catch (e) {
+        if (!cancelled) setError(e instanceof Error ? e.message : "Failed to load offense.");
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
     }
 
-    apiGetById(id)
-      .then((data) => {
-        if (!cancelled) {
-          setOffense(data);
-          cacheOffenses([data]).catch(() => {});
-        }
-      })
-      .catch((e) => {
-        if (!cancelled) {
-          localGetById(id)
-            .then((cached) => {
-              if (!cancelled) {
-                setOffense(cached);
-                setError(cached ? null : e.message || "Failed to load offense details");
-              }
-            })
-            .catch(() => {
-              if (!cancelled) setError(e.message || "Failed to load offense details");
-            });
-        }
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
-
+    if (id) load();
     return () => { cancelled = true; };
   }, [id]);
 
   return { offense, loading, error };
-}
-
-export function useCategories() {
-  const [categories, setCategories] = useState<OffenseCategory[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    let cancelled = false;
-    apiGetCategories()
-      .then((data) => {
-        if (!cancelled) setCategories(data);
-      })
-      .catch(() => {
-        if (!cancelled) setCategories([]);
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
-
-    return () => { cancelled = true; };
-  }, []);
-
-  return { categories, loading };
 }
 
 export function useApiStatus() {
@@ -161,13 +102,10 @@ export function useApiStatus() {
 
   useEffect(() => {
     let cancelled = false;
-    getStatus()
-      .then((data) => {
-        if (!cancelled) setStatus(data);
-      })
-      .catch(() => {
-        if (!cancelled) setStatus(null);
-      });
+
+    getStatus().then((s) => {
+      if (!cancelled) setStatus(s);
+    });
 
     return () => { cancelled = true; };
   }, []);

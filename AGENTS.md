@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Sheria Check is a PWA for Kenyan motorists to look up traffic offense fines and penalties. It uses React (Vite) + Tailwind CSS on the frontend, Express + PostgreSQL on the backend, and is deployed on DigitalOcean.
+Sheria Check is a mobile app (Expo/React Native) for Kenyan motorists to look up traffic offense fines and penalties. It uses React Native + NativeWind (Tailwind) on the client, Express + PostgreSQL on the backend, and is deployed on DigitalOcean. The app ships offline-first: offenses are bundled in the app binary and refreshed from the API in the background.
 
 **Core principle:** Transparency is the product. Users are anonymous. No login. No tracking.
 
@@ -12,7 +12,7 @@ Sheria Check is a PWA for Kenyan motorists to look up traffic offense fines and 
 
 | Layer | Technology | Notes |
 |---|---|---|
-| Frontend | React 18, Vite 5, Tailwind CSS 3, react-router-dom 6 | PWA enabled via vite-plugin-pwa |
+| Frontend | React Native (Expo SDK 57), NativeWind (Tailwind CSS 4), Expo Router v4 | Offline-first with bundled offense snapshot |
 | Backend | Node.js 20, Express 4 | ES Modules (`"type": "module"`) |
 | Database | PostgreSQL 16 | Pooled via `pg` library |
 | Cache | Redis (via Upstash or ioredis) | Optional, for query caching |
@@ -26,23 +26,32 @@ Sheria Check is a PWA for Kenyan motorists to look up traffic offense fines and 
 
 ```
 sheria_check/
-├── client/                    # React PWA frontend
-│   ├── public/
-│   │   ├── manifest.json
-│   │   └── vite.svg
+├── client/                    # Expo mobile app (React Native)
+│   ├── app/                   # Expo Router routes (file-based routing)
+│   │   ├── (tabs)/            # Tab navigator screens
+│   │   │   ├── index.tsx      # Home (search + categories)
+│   │   │   ├── insights.tsx   # Incident insights (anonymized stats)
+│   │   │   └── disclaimer.tsx # Legal disclaimer
+│   │   ├── category/[id].tsx  # Category browse screen
+│   │   ├── offense/[id].tsx   # Offense detail screen
+│   │   ├── +not-found.tsx     # 404 screen
+│   │   └── _layout.tsx        # Root layout (providers, fonts, Stack)
 │   ├── src/
 │   │   ├── components/        # Reusable UI components
-│   │   ├── pages/            # Route-level page components
 │   │   ├── hooks/            # Custom React hooks
-│   │   ├── services/         # API client
+│   │   ├── services/         # API client (fetch wrapper)
 │   │   ├── types/            # TypeScript type definitions
-│   │   ├── utils/            # Utility functions
-│   │   ├── data/             # Static data (category defaults, etc.)
-│   │   ├── App.tsx           # Router configuration
-│   │   ├── main.tsx          # Entry point
-│   │   └── index.css         # Tailwind directives
-│   ├── vite.config.ts
-│   ├── tailwind.config.js
+│   │   ├── utils/            # Utility functions (cn, format)
+│   │   ├── data/             # Static data (category defaults)
+│   │   └── repositories/     # OffenseRepository (offline-first data layer)
+│   ├── assets/
+│   │   ├── fonts/            # Custom typefaces (Fraunces, Source Sans 3)
+│   │   └── images/           # App icon, splash, adaptive icon layers
+│   ├── app.css               # NativeWind/Tailwind CSS entry
+│   ├── app.json              # Expo config (name, scheme, plugins)
+│   ├── babel.config.js       # NativeWind babel preset
+│   ├── metro.config.js       # NativeWind metro integration
+│   ├── tailwind.config.js    # NativeWind theme (primary-*, caution-* palette)
 │   └── package.json
 ├── server/                    # Express API backend
 │   ├── src/
@@ -80,10 +89,11 @@ docker compose up db -d
 cd server && npm install && npm run migrate && npm run seed && npm run dev
 
 # 3. Install and start client (separate terminal)
-cd client && npm install && npm run dev
+cd client && npm install && npx expo start
 ```
 
-Client runs on `http://localhost:5173`, server on `http://localhost:4000`.
+Scan the QR code with Expo Go on your phone, or press `a` for Android emulator / `i` for iOS simulator.
+Set `EXPO_PUBLIC_API_URL` in `client/.env` to your machine's LAN IP (e.g. `http://192.168.1.100:4000/api/v1`) for device testing.
 
 ---
 
@@ -130,7 +140,7 @@ export function SearchBar({ value, onChange }: SearchBarProps) {
 
 - All API calls go through `src/services/api.ts`.
 - Every function has a typed return: `Promise<Offense[]>`.
-- Base URL is configured via `VITE_API_URL` env var (defaults to `/api` proxy).
+- Base URL is configured via `EXPO_PUBLIC_API_URL` env var (defaults to `http://localhost:4000/api/v1`).
 
 ### Backend Patterns
 
@@ -148,7 +158,7 @@ export function SearchBar({ value, onChange }: SearchBarProps) {
 2. **Never introduce authentication for motorists.** Sheria Check is anonymous by design.
 3. **Never add analytics/tracking that identifies individual users.** Privacy-preserving analytics only (e.g., page view counts without IPs).
 4. **Never hardcode fine amounts without a source citation.** Every offense must reference the Act and Section.
-5. **Never modify service worker or PWA config without testing offline behavior.**
+5. **Never display unverified officer identities in public views.** Incident stats are aggregate/anonymized only (cells <5 suppressed).
 6. **Never skip error handling.** Every API call must handle network errors, empty results, and 4xx/5xx responses.
 7. **Never add runtime dependencies without evaluating bundle size impact** (frontend) or security audit (backend).
 
@@ -156,7 +166,7 @@ export function SearchBar({ value, onChange }: SearchBarProps) {
 
 ## Testing
 
-- Unit tests: Vitest (frontend), Vitest (backend)
+- Unit tests: jest-expo (client), Vitest (backend)
 - Run: `npm test`
 - API integration tests: Supertest + PostgreSQL test DB
 - E2E: Playwright (future)
@@ -185,7 +195,7 @@ main ← production-ready
 ### Client (`client/.env`)
 | Variable | Default | Description |
 |---|---|---|
-| `VITE_API_URL` | `/api/v1` | API base URL (proxied in dev) |
+| `EXPO_PUBLIC_API_URL` | `http://localhost:4000/api/v1` | API base URL (set to LAN IP for device testing) |
 
 ### Server (`server/.env`)
 | Variable | Default | Description |

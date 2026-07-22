@@ -1,51 +1,43 @@
-import { SearchX, FileQuestion, WifiOff, MapPin } from "lucide-react";
+import { View, Text } from "react-native";
+import { Scale, SearchX, FolderOpen } from "lucide-react-native";
 
 interface EmptyStateProps {
-  variant: "no-results" | "no-offenses" | "offline" | "coming-soon";
+  variant: "no-results" | "no-offenses" | "error";
   query?: string;
 }
 
 export function EmptyState({ variant, query }: EmptyStateProps) {
-  const config = {
-    "no-results": {
-      icon: SearchX,
-      title: "No offenses found",
-      description: query
-        ? `We couldn't find anything matching "${query}". Try a different word like "speeding", "overtaking", or "license".`
-        : "Try typing an offense name or select a category below.",
-      action: "Not sure what to search? Try common ones like speeding, parking, or insurance.",
-    },
-    "no-offenses": {
-      icon: FileQuestion,
-      title: "No offenses here yet",
-      description: "This category doesn't have any offenses listed yet. We're still compiling data from the Traffic Act.",
-      action: "Check back soon as we continue adding more offenses.",
-    },
-    offline: {
-      icon: WifiOff,
-      title: "You're offline",
-      description: "You need an internet connection to search offenses. Previously viewed offenses may still be available.",
-      action: "Connect to the internet and try again.",
-    },
-    "coming-soon": {
-      icon: MapPin,
-      title: "Coming soon",
-      description: "We're working on adding more features and data to Sheria Check.",
-      action: "Follow our progress and updates.",
-    },
-  };
+  if (variant === "no-results") {
+    return (
+      <View className="items-center py-12">
+        <SearchX size={48} color="#A87A5E" />
+        <Text className="mt-4 text-lg font-semibold text-primary-900">No results found</Text>
+        <Text className="mt-2 text-center text-sm text-gray-500">
+          No offenses match "{query}". Try different keywords.
+        </Text>
+      </View>
+    );
+  }
 
-  const c = config[variant];
-  const Icon = c.icon;
+  if (variant === "no-offenses") {
+    return (
+      <View className="items-center py-12">
+        <FolderOpen size={48} color="#A87A5E" />
+        <Text className="mt-4 text-lg font-semibold text-primary-900">No offenses available</Text>
+        <Text className="mt-2 text-center text-sm text-gray-500">
+          The offense database for this category is currently empty.
+        </Text>
+      </View>
+    );
+  }
 
   return (
-    <div className="flex flex-col items-center px-4 py-12 text-center" role="status">
-      <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100">
-        <Icon className="h-8 w-8 text-gray-400" aria-hidden="true" />
-      </div>
-      <h2 className="text-lg font-semibold text-gray-700">{c.title}</h2>
-      <p className="mt-2 max-w-sm text-sm text-gray-500">{c.description}</p>
-      <p className="mt-3 text-xs text-gray-500">{c.action}</p>
-    </div>
+    <View className="items-center py-12">
+      <Scale size={48} color="#A87A5E" />
+      <Text className="mt-4 text-lg font-semibold text-primary-900">Something went wrong</Text>
+      <Text className="mt-2 text-center text-sm text-gray-500">
+        Please check your connection and try again.
+      </Text>
+    </View>
   );
 }

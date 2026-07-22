@@ -1,65 +1,51 @@
-import { Link } from "react-router-dom";
-import { ArrowRight, AlertTriangle, Skull, Info } from "lucide-react";
-import type { Offense } from "../types";
+import { View, Pressable, Text } from "react-native";
+import { useRouter } from "expo-router";
+import { ChevronRight } from "lucide-react-native";
 import { cn } from "../utils/cn";
-import { formatKES } from "../utils/format";
 
 interface OffenseCardProps {
-  offense: Offense;
+  id: string;
+  name: string;
+  category: string;
+  severity: "minor" | "serious" | "felony";
+  min_fine: number;
+  max_fine: number;
 }
 
-const severityConfig = {
-  minor: {
-    icon: Info,
-    class: "border-green-200 bg-green-50 text-green-700",
-  },
-  serious: {
-    icon: AlertTriangle,
-    class: "border-caution-200 bg-caution-50 text-caution-600",
-  },
-  felony: {
-    icon: Skull,
-    class: "border-red-200 bg-red-50 text-red-700",
-  },
-};
+const SEVERITY_COLORS = {
+  minor: { bg: "bg-green-50", text: "text-green-700", label: "Minor" },
+  serious: { bg: "bg-amber-50", text: "text-amber-700", label: "Serious" },
+  felony: { bg: "bg-red-50", text: "text-red-700", label: "Felony" },
+} as const;
 
-export function OffenseCard({ offense }: OffenseCardProps) {
-  const sev = severityConfig[offense.severity];
-  const SevIcon = sev.icon;
+export function OffenseCard({ id, name, category, severity, min_fine, max_fine }: OffenseCardProps) {
+  const router = useRouter();
+  const sev = SEVERITY_COLORS[severity];
 
   return (
-    <Link
-      to={`/offense/${offense.id}`}
-      className="block rounded-xl border border-gray-200 bg-white p-4 shadow-sm transition-all hover:border-primary-200 hover:shadow-md"
+    <Pressable
+      onPress={() => router.push(`/offense/${id}`)}
+      className={cn(
+        "rounded-2xl border border-gray-200 bg-white p-4",
+        "active:bg-gray-50"
+      )}
+      accessibilityLabel={`${name}, severity ${severity}, fine KES ${min_fine.toLocaleString("en-KE")} to ${max_fine.toLocaleString("en-KE")}`}
     >
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1">
-            <span
-              className={cn(
-                "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-medium",
-                sev.class
-              )}
-            >
-              <SevIcon className="h-3 w-3" />
-              {offense.severity}
-            </span>
-            <span className="text-xs text-gray-500">{offense.citation}</span>
-          </div>
-          <h3 className="font-semibold text-gray-900 truncate">{offense.name}</h3>
-          <p className="mt-1 text-sm text-gray-500 line-clamp-2">{offense.description}</p>
-        </div>
-        <ArrowRight className="mt-2 h-5 w-5 shrink-0 text-gray-300" />
-      </div>
-
-      <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
-        <span className="font-medium text-primary-500">
-          {formatKES(offense.min_fine)} – {formatKES(offense.max_fine)}
-        </span>
-        {offense.max_imprisonment && (
-          <span className="text-gray-500">up to {offense.max_imprisonment}</span>
-        )}
-      </div>
-    </Link>
+      <View className="flex-row items-start justify-between">
+        <View className="flex-1 pr-3">
+          <Text className="text-base font-semibold text-primary-900">{name}</Text>
+          <Text className="mt-1 text-sm text-gray-500">{category}</Text>
+          <View className="mt-2 flex-row items-center gap-2">
+            <View className={cn("rounded-full px-2 py-0.5", sev.bg)}>
+              <Text className={cn("text-xs font-medium", sev.text)}>{sev.label}</Text>
+            </View>
+            <Text className="text-sm text-primary-600">
+              KES {min_fine.toLocaleString("en-KE")} – {max_fine.toLocaleString("en-KE")}
+            </Text>
+          </View>
+        </View>
+        <ChevronRight size={20} color="#A87A5E" style={{ marginTop: 2 }} />
+      </View>
+    </Pressable>
   );
 }

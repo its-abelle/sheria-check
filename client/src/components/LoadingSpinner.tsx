@@ -1,16 +1,14 @@
-import { Loader2 } from "lucide-react";
-import { cn } from "../utils/cn";
+import { ActivityIndicator, View } from "react-native";
 
 interface LoadingSpinnerProps {
-  text?: string;
-  className?: string;
+  size?: number;
+  color?: string;
 }
 
-export function LoadingSpinner({ text = "Loading...", className }: LoadingSpinnerProps) {
+export function LoadingSpinner({ size = 32, color = "#6B3A2A" }: LoadingSpinnerProps) {
   return (
-    <div className={cn("flex items-center justify-center gap-2 py-12 text-gray-500", className)}>
-      <Loader2 className="h-5 w-5 animate-spin" />
-      {text && <span className="text-sm">{text}</span>}
-    </div>
+    <View className="items-center justify-center py-8">
+      <ActivityIndicator size={size} color={color} />
+    </View>
   );
 }

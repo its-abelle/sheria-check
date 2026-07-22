@@ -1,6 +1,13 @@
-import { createContext, useContext, useState, useCallback, type ReactNode } from "react";
-import { CheckCircle, XCircle, Info, X } from "lucide-react";
-import { cn } from "../utils/cn";
+import {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useEffect,
+  useRef,
+} from "react";
+import { View, Text, Pressable, Animated } from "react-native";
+import { CheckCircle, XCircle, Info, X } from "lucide-react-native";
 
 export type ToastVariant = "success" | "error" | "info";
 
@@ -18,7 +25,7 @@ const ToastContext = createContext<ToastContextValue | null>(null);
 
 let nextId = 0;
 
-export function ToastProvider({ children }: { children: ReactNode }) {
+export function ToastProvider({ children }: { children: React.ReactNode }) {
   const [toasts, setToasts] = useState<Toast[]>([]);
 
   const addToast = useCallback((message: string, variant: ToastVariant = "info") => {
@@ -36,44 +43,44 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   return (
     <ToastContext.Provider value={{ toast: addToast }}>
       {children}
-      <div
-        className="fixed bottom-4 left-4 right-4 z-50 flex flex-col-reverse gap-2 sm:left-auto sm:right-4 sm:max-w-sm"
-        aria-live="polite"
-        aria-label="Notifications"
-      >
-        {toasts.map((t) => (
-          <div
-            key={t.id}
-            className={cn(
-              "flex items-center gap-3 rounded-lg border px-4 py-3 text-sm shadow-lg animate-slide-up",
-              t.variant === "success" && "border-green-200 bg-green-50 text-green-800",
-              t.variant === "error" && "border-red-200 bg-red-50 text-red-800",
-              t.variant === "info" && "border-primary-200 bg-primary-50 text-primary-800",
-            )}
-            role="alert"
-          >
-            {t.variant === "success" && <CheckCircle className="h-4 w-4 shrink-0 text-green-500" />}
-            {t.variant === "error" && <XCircle className="h-4 w-4 shrink-0 text-red-500" />}
-            {t.variant === "info" && <Info className="h-4 w-4 shrink-0 text-primary-400" />}
-            <span className="flex-1">{t.message}</span>
-            <button
-              onClick={() => dismiss(t.id)}
-              className="shrink-0 rounded p-0.5 hover:bg-black/5 transition-colors"
-              aria-label="Dismiss notification"
-            >
-              <X className="h-3.5 w-3.5 opacity-50" />
-            </button>
-          </div>
-        ))}
-      </div>
+      {toasts.length > 0 && (
+        <View className="absolute bottom-4 left-4 right-4 z-50 gap-2" accessibilityLiveRegion="polite">
+          {toasts.map((t) => (
+            <ToastItem key={t.id} toast={t} onDismiss={() => dismiss(t.id)} />
+          ))}
+        </View>
+      )}
     </ToastContext.Provider>
+  );
+}
+
+function ToastItem({ toast, onDismiss }: { toast: Toast; onDismiss: () => void }) {
+  const opacity = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.timing(opacity, {
+      toValue: 1,
+      duration: 200,
+      useNativeDriver: true,
+    }).start();
+  }, [opacity]);
+
+  const Icon = toast.variant === "success" ? CheckCircle : toast.variant === "error" ? XCircle : Info;
+  const iconColor = toast.variant === "success" ? "#16a34a" : toast.variant === "error" ? "#dc2626" : "#2563eb";
+
+  return (
+    <Animated.View style={{ opacity }} className="flex-row items-center gap-2 rounded-xl bg-white px-4 py-3 shadow-lg">
+      <Icon size={18} color={iconColor} />
+      <Text className="flex-1 text-sm text-primary-900">{toast.message}</Text>
+      <Pressable onPress={onDismiss} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+        <X size={16} color="#A87A5E" />
+      </Pressable>
+    </Animated.View>
   );
 }
 
 export function useToast(): ToastContextValue {
   const ctx = useContext(ToastContext);
-  if (!ctx) {
-    throw new Error("useToast must be used within a ToastProvider");
-  }
+  if (!ctx) throw new Error("useToast must be used within a ToastProvider");
   return ctx;
 }

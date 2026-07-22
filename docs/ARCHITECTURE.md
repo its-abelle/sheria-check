@@ -62,7 +62,7 @@ Home → Browse Categories → Select Category
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                      User                                │
-│  (Phone / Desktop / Installed PWA)                       │
+│  (Android phone / iOS phone)                             │
 └────────────────────────┬────────────────────────────────┘
                          │ HTTPS
                          ▼
@@ -74,11 +74,11 @@ Home → Browse Categories → Select Category
             ┌────────┴────────┐
             ▼                  ▼
 ┌───────────────────┐  ┌──────────────────┐
-│  Client (PWA)     │  │  Server (Node)   │
-│  React 18 + Vite  │──│  Express         │
-│  Tailwind CSS     │  │  API v1          │
-│  react-router v6  │  │  Zod validation  │
-│  Workbox (SW)     │  │  Rate-limited    │
+│  Client (Expo)    │  │  Server (Node)   │
+│  React Native 0.86│──│  Express         │
+│  NativeWind v4    │  │  API v1          │
+│  Expo Router v4   │  │  Zod validation  │
+│  Offline-first    │  │  Rate-limited    │
 └───────────────────┘  └────────┬─────────┘
                                 │
                     ┌───────────┴───────────┐

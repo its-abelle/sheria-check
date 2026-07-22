@@ -1,35 +1,14 @@
-import { useState } from "react";
-import { X, AlertTriangle } from "lucide-react";
+import { View, Text } from "react-native";
+import { AlertTriangle } from "lucide-react-native";
 
 export function DisclaimerBanner() {
-  const [dismissed, setDismissed] = useState(
-    () => sessionStorage.getItem("disclaimer_dismissed") === "true"
-  );
-
-  if (dismissed) return null;
-
-  function handleDismiss() {
-    sessionStorage.setItem("disclaimer_dismissed", "true");
-    setDismissed(true);
-  }
-
   return (
-    <div className="bg-caution-50 border-b border-caution-200 px-4 py-3">
-      <div className="mx-auto flex max-w-3xl items-start gap-3">
-        <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-caution-500" />
-        <p className="text-xs text-caution-700 flex-1">
-          This tool is for informational purposes only. Laws may change. Always verify with a
-          qualified legal professional or the relevant court. Do not pay any fine on the spot
-          without verifying.
-        </p>
-        <button
-          onClick={handleDismiss}
-          className="shrink-0 rounded p-1 text-caution-500 hover:bg-caution-100 transition-colors"
-          aria-label="Dismiss disclaimer"
-        >
-          <X className="h-4 w-4" />
-        </button>
-      </div>
-    </div>
+    <View className="flex-row items-start gap-2 rounded-xl bg-caution-50 px-4 py-3">
+      <AlertTriangle size={18} color="#B8860B" style={{ marginTop: 1 }} />
+      <Text className="flex-1 text-xs leading-5 text-caution-700">
+        Sheria Check is an informational tool based on publicly available legal texts. It does not
+        constitute legal advice. Always verify with official sources.
+      </Text>
+    </View>
   );
 }

@@ -1,27 +1,39 @@
-import { Search } from "lucide-react";
+import { View, TextInput, Pressable } from "react-native";
+import { Search } from "lucide-react-native";
+import { cn } from "../utils/cn";
 
 interface SearchBarProps {
   value: string;
-  onChange: (value: string) => void;
+  onChangeText: (text: string) => void;
   placeholder?: string;
 }
 
-export function SearchBar({
-  value,
-  onChange,
-  placeholder = "Search an offense... e.g. speeding, overtaking on yellow line",
-}: SearchBarProps) {
+export function SearchBar({ value, onChangeText, placeholder = "Search offenses..." }: SearchBarProps) {
   return (
-    <div className="relative">
-      <Search className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
-      <input
-        type="search"
+    <View className="flex-row items-center rounded-2xl border border-primary-200 bg-white px-4 py-3">
+      <Search size={20} color="#6B3A2A" />
+      <TextInput
+        className="ml-3 flex-1 text-base text-primary-900"
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChangeText={onChangeText}
         placeholder={placeholder}
-        aria-label="Search traffic offenses"
-        className="w-full rounded-xl border border-gray-200 bg-white py-3.5 pl-10 pr-4 text-sm text-gray-900 shadow-sm placeholder:text-gray-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+        placeholderTextColor="#A87A5E"
+        autoCapitalize="none"
+        autoCorrect={false}
+        returnKeyType="search"
+        accessibilityLabel="Search traffic offenses"
       />
-    </div>
+      {value.length > 0 && (
+        <Pressable
+          onPress={() => onChangeText("")}
+          accessibilityLabel="Clear search"
+          hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+        >
+          <View className="h-6 w-6 items-center justify-center rounded-full bg-primary-100">
+            <Search size={12} color="#6B3A2A" />
+          </View>
+        </Pressable>
+      )}
+    </View>
   );
 }

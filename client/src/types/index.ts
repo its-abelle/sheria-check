@@ -43,3 +43,13 @@ export interface ApiStatus {
   last_updated: string;
   total_offenses: number;
 }
+
+export interface IncidentInsight {
+  period: string;
+  area: string;
+  report_count: number;
+  median_amount_demanded: number | null;
+  median_amount_legal: number | null;
+  top_offense_id: string | null;
+  top_offense_name: string | null;
+}

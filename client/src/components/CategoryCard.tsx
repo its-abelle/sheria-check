@@ -1,14 +1,18 @@
-import { Link } from "react-router-dom";
-import { Gauge, FileText, Wrench, TrafficCone, Truck, Beer, ArrowRight } from "lucide-react";
+import { View, Text, Pressable } from "react-native";
+import { useRouter } from "expo-router";
+import { ChevronRight } from "lucide-react-native";
+import { cn } from "../utils/cn";
 import type { OffenseCategory } from "../types";
 
-const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
-  gauge: Gauge,
-  "file-text": FileText,
-  wrench: Wrench,
-  "traffic-cone": TrafficCone,
-  truck: Truck,
-  beer: Beer,
+const ICON_MAP: Record<string, string> = {
+  gauge: "⏱",
+  "file-text": "📄",
+  wine: "🍷",
+  car: "🚗",
+  "square-parking": "🅿",
+  bus: "🚌",
+  sign: "🪧",
+  list: "📋",
 };
 
 interface CategoryCardProps {
@@ -16,22 +20,27 @@ interface CategoryCardProps {
 }
 
 export function CategoryCard({ category }: CategoryCardProps) {
-  const Icon = iconMap[category.icon] || FileText;
+  const router = useRouter();
 
   return (
-    <Link
-      to={`/category/${category.id}`}
-      className="flex items-center gap-4 rounded-xl border border-gray-200 bg-white p-4 shadow-sm transition-all hover:border-primary-200 hover:shadow-md"
+    <Pressable
+      onPress={() => router.push(`/category/${category.id}`)}
+      className={cn(
+        "flex-row items-center justify-between rounded-2xl border border-primary-100 bg-white p-4",
+        "active:bg-primary-50"
+      )}
+      accessibilityLabel={`${category.name}, ${category.count} offenses`}
     >
-      <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary-50 text-primary-500">
-        <Icon className="h-6 w-6" />
-      </div>
-      <div className="flex-1 min-w-0">
-        <h3 className="font-semibold text-gray-900">{category.name}</h3>
-        <p className="text-sm text-gray-500 truncate">{category.description}</p>
-        <span className="text-xs text-gray-500">{category.count} offenses</span>
-      </div>
-      <ArrowRight className="h-5 w-5 shrink-0 text-gray-300" />
-    </Link>
+      <View className="flex-row items-center gap-3">
+        <View className="h-10 w-10 items-center justify-center rounded-xl bg-primary-50">
+          <Text className="text-lg">{ICON_MAP[category.icon] || "📋"}</Text>
+        </View>
+        <View>
+          <Text className="text-base font-semibold text-primary-900">{category.name}</Text>
+          <Text className="text-sm text-gray-500">{category.count} offense{category.count !== 1 ? "s" : ""}</Text>
+        </View>
+      </View>
+      <ChevronRight size={18} color="#A87A5E" />
+    </Pressable>
   );
 }
