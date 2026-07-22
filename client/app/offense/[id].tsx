@@ -81,7 +81,7 @@ export default function OffenseDetailScreen() {
         .join("\n"),
     });
 
-    if (result === "copied" && mountedRef.current) {
+    if (result === "shared" && mountedRef.current) {
       setCopied(true);
       if (copiedTimerRef.current) clearTimeout(copiedTimerRef.current);
       copiedTimerRef.current = setTimeout(() => setCopied(false), 2000);
