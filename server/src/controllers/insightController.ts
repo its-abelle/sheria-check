@@ -5,18 +5,37 @@ export async function getInsights(_req: Request, res: Response, next: NextFuncti
   try {
     const { rows } = await query(
       `
+      WITH area_period_stats AS (
+        SELECT
+          COALESCE(location, 'Unknown') AS area,
+          to_char(created_at, 'YYYY-MM') AS period,
+          COUNT(*)::int AS report_count,
+          PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY amount_demanded) AS median_amount_demanded
+        FROM reports
+        GROUP BY COALESCE(location, 'Unknown'), to_char(created_at, 'YYYY-MM')
+        HAVING COUNT(*) >= 5
+      ),
+      top_offenses AS (
+        SELECT DISTINCT ON (COALESCE(r2.location, 'Unknown'), to_char(r2.created_at, 'YYYY-MM'))
+          COALESCE(r2.location, 'Unknown') AS area,
+          to_char(r2.created_at, 'YYYY-MM') AS period,
+          o.id AS top_offense_id,
+          o.name AS top_offense_name
+        FROM reports r2
+        LEFT JOIN offenses o ON o.id = r2.offense_id
+        GROUP BY COALESCE(r2.location, 'Unknown'), to_char(r2.created_at, 'YYYY-MM'), o.id, o.name
+        ORDER BY COALESCE(r2.location, 'Unknown'), to_char(r2.created_at, 'YYYY-MM'), COUNT(*) DESC
+      )
       SELECT
-        COALESCE(location, 'Unknown') AS area,
-        to_char(created_at, 'YYYY-MM') AS period,
-        COUNT(*)::int AS report_count,
-        PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY amount_demanded) AS median_amount_demanded,
-        o.name AS top_offense_name,
-        o.id AS top_offense_id
-      FROM reports r
-      LEFT JOIN offenses o ON o.id = r.offense_id
-      GROUP BY COALESCE(location, 'Unknown'), to_char(created_at, 'YYYY-MM'), o.id, o.name
-      HAVING COUNT(*) >= 5
-      ORDER BY period DESC, report_count DESC
+        s.area,
+        s.period,
+        s.report_count,
+        s.median_amount_demanded,
+        t.top_offense_id,
+        t.top_offense_name
+      FROM area_period_stats s
+      LEFT JOIN top_offenses t ON t.area = s.area AND t.period = s.period
+      ORDER BY s.period DESC, s.report_count DESC
       LIMIT 50
       `
     );
