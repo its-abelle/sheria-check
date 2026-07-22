@@ -32,9 +32,11 @@ export default function OffenseDetailScreen() {
   const [reportOpen, setReportOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const copiedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const mountedRef = useRef(true);
 
   useEffect(() => {
     return () => {
+      mountedRef.current = false;
       if (copiedTimerRef.current) clearTimeout(copiedTimerRef.current);
     };
   }, []);
@@ -79,7 +81,7 @@ export default function OffenseDetailScreen() {
         .join("\n"),
     });
 
-    if (result === "copied") {
+    if (result === "copied" && mountedRef.current) {
       setCopied(true);
       if (copiedTimerRef.current) clearTimeout(copiedTimerRef.current);
       copiedTimerRef.current = setTimeout(() => setCopied(false), 2000);
