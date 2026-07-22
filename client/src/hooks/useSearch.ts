@@ -1,11 +1,7 @@
 import { useState, useCallback, useRef } from "react";
-import { searchOffenses } from "../services/api";
-import { searchOffensesLocal, cacheOffenses } from "../utils/offlineDb";
+import { searchOffenses as apiSearch } from "../services/api";
+import { offenseRepository } from "../repositories/OffenseRepository";
 import type { Offense } from "../types";
-
-function isOffline(): boolean {
-  return !navigator.onLine;
-}
 
 export function useSearch() {
   const [query, setQuery] = useState("");
@@ -14,75 +10,45 @@ export function useSearch() {
   const [error, setError] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState(false);
   const [total, setTotal] = useState(0);
-  const cursorRef = useRef(0);
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const lastQueryRef = useRef("");
+  const nextCursorRef = useRef<string | null>(null);
+  const searchTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const search = useCallback((q: string) => {
-    setQuery(q);
-    if (timerRef.current) clearTimeout(timerRef.current);
-
-    if (!q.trim()) {
-      setResults([]);
-      setHasMore(false);
-      setTotal(0);
-      setLoading(false);
-      return;
-    }
-
-    setLoading(true);
+  const doLocalSearch = useCallback((q: string) => {
+    const repoResults = offenseRepository.search(q);
+    setResults(repoResults);
+    setTotal(repoResults.length);
+    setHasMore(false);
     setError(null);
-    cursorRef.current = 0;
-    lastQueryRef.current = q;
-
-    timerRef.current = setTimeout(async () => {
-      try {
-        if (isOffline()) {
-          const local = await searchOffensesLocal(q);
-          if (lastQueryRef.current !== q) return;
-          setResults(local);
-          setHasMore(false);
-          setTotal(local.length);
-          if (local.length === 0) {
-            setError("You are offline. Only previously viewed offenses are searchable.");
-          }
-        } else {
-          const res = await searchOffenses(q, 0, 20);
-          if (lastQueryRef.current !== q) return;
-          setResults(res.data);
-          setHasMore(res.pagination.has_more);
-          setTotal(res.pagination.total);
-          cursorRef.current = res.pagination.cursor;
-          cacheOffenses(res.data).catch(() => {});
-        }
-      } catch (e) {
-        if (lastQueryRef.current !== q) return;
-        const local = await searchOffensesLocal(q);
-        if (lastQueryRef.current !== q) return;
-        if (local.length > 0) {
-          setResults(local);
-          setHasMore(false);
-          setTotal(local.length);
-          setError("Showing cached results. Connect to the internet for latest data.");
-        } else {
-          setError(e instanceof Error ? e.message : "Search failed. Check your connection.");
-        }
-      } finally {
-        if (lastQueryRef.current === q) setLoading(false);
-      }
-    }, 300);
   }, []);
 
-  const loadMore = useCallback(async () => {
-    if (loading || !hasMore || !query.trim() || isOffline()) return;
+  const search = useCallback(
+    (value: string) => {
+      setQuery(value);
+      if (searchTimer.current) clearTimeout(searchTimer.current);
 
+      if (!value.trim()) {
+        setResults([]);
+        setTotal(0);
+        setHasMore(false);
+        nextCursorRef.current = null;
+        return;
+      }
+
+      searchTimer.current = setTimeout(() => {
+        doLocalSearch(value.trim());
+      }, 200);
+    },
+    [doLocalSearch]
+  );
+
+  const loadMore = useCallback(async () => {
+    if (loading || !hasMore || !nextCursorRef.current) return;
     setLoading(true);
     try {
-      const res = await searchOffenses(query, cursorRef.current, 20);
-      setResults((prev) => [...prev, ...res.data]);
-      setHasMore(res.pagination.has_more);
-      cursorRef.current = res.pagination.cursor;
-      cacheOffenses(res.data).catch(() => {});
+      const result = await apiSearch(query, nextCursorRef.current);
+      setResults((prev) => [...prev, ...result.data]);
+      nextCursorRef.current = result.nextCursor;
+      setHasMore(result.nextCursor !== null);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to load more results.");
     } finally {

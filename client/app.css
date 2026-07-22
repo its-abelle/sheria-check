@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary-50: #F5EDE4;
+  --color-primary-100: #E2CBB8;
+  --color-primary-200: #C59B7E;
+  --color-primary-300: #A87A5E;
+  --color-primary-400: #8B5A42;
+  --color-primary-500: #6B3A2A;
+  --color-primary-600: #562F22;
+  --color-primary-700: #422418;
+  --color-primary-800: #2E1A11;
+  --color-primary-900: #1B100A;
+
+  --color-caution-50: #FFF8E1;
+  --color-caution-100: #FFECB3;
+  --color-caution-200: #FFE082;
+  --color-caution-300: #FFD54F;
+  --color-caution-400: #FFCA28;
+  --color-caution-500: #D4920A;
+  --color-caution-600: #B8860B;
+  --color-caution-700: #8B6508;
+
+  --color-surface: #FAFAF8;
+
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "Source Sans 3", system-ui, sans-serif;
+}
+
+/* Base typography for NativeWind */
+@layer base {
+  body {
+    font-family: var(--font-body);
+  }
+}

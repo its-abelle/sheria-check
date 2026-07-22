@@ -1,34 +1,31 @@
 import { useCallback } from "react";
+import { Share, Platform } from "react-native";
 
 interface SharePayload {
   title: string;
-  text: string;
-  url: string;
+  message: string;
+  url?: string;
 }
 
 export function useShare() {
-  const share = useCallback(async (payload: SharePayload) => {
-    if (!navigator.share) {
-      // Fallback: copy to clipboard
-      try {
-        await navigator.clipboard.writeText(`${payload.title}\n${payload.text}\n${payload.url}`);
-        return "copied";
-      } catch {
-        return null;
-      }
-    }
-
+  const share = useCallback(async (payload: SharePayload): Promise<"shared" | "copied" | null> => {
     try {
-      await navigator.share(payload);
-      return "shared";
-    } catch (err: any) {
-      if (err.name === "AbortError") return null; // User cancelled
+      const result = await Share.share({
+        title: payload.title,
+        message: payload.url
+          ? `${payload.message}\n\n${payload.url}`
+          : payload.message,
+        ...(Platform.OS === "ios" ? { url: payload.url } : {}),
+      });
+
+      if (result.action === Share.sharedAction) {
+        return "shared";
+      }
+      return null;
+    } catch {
       return null;
     }
   }, []);
 
-  const canShare = typeof navigator !== "undefined" && !!navigator.share;
-  const canCopy = typeof navigator !== "undefined" && !!navigator.clipboard;
-
-  return { share, canShare, canCopy };
+  return { share, canShare: true };
 }

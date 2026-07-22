@@ -80,50 +80,42 @@ Status key: **✓** Done &nbsp;&nbsp; **◐** Partial &nbsp;&nbsp; **○** Not s
 
 ---
 
-## 2. Frontend — React PWA (`client/`)
+## 2. Frontend — Expo Mobile App (`client/`)
+
+> **Migration note:** The React PWA was replaced by an Expo/React Native mobile app on the `feat/expo-migration` branch. PWA-specific items (service worker, offline caching, Web Share API) are archived below and no longer applicable. The Expo app uses offline-first architecture (bundled offenses snapshot + fuse.js in-memory search).
 
 ### 2.1 Routing & Pages
 
-| ✓ | `/` — Home page with search bar + 6 category cards |
+| ✓ | `/` — Home page with search bar + category cards |
 | ✓ | `/category/:categoryId` — browse offenses by category |
 | ✓ | `/offense/:offenseId` — offense detail (fine range, citation, severity, course of action) |
 | ✓ | `/disclaimer` — legal disclaimer page |
 | ✓ | `*` — 404 Not Found page |
-| ○ | **Server-side meta tags / OG images** — currently no Open Graph tags; links shared on WhatsApp/Twitter show no preview |
+| ✓ | `/insights` — incident insights (anonymized aggregate stats) |
 
 ### 2.2 Components
 
-| ✓ | `SearchBar` — text input with search icon |
-| ✓ | `CategoryCard` — icon + name + description + count |
-| ✓ | `OffenseCard` — name, fine range, severity badge |
-| ✓ | `OffenseDetail` — full offense with share button, report button |
-| ✓ | `Layout` — persistent header, disclaimer banner, footer |
-| ✓ | `DisclaimerBanner` — persistent warning at page bottom |
-| ✓ | `ReportModal` — anonymous incident report form |
-| ✓ | `LoadingSkeleton` / `LoadingSpinner` — skeleton cards on search, spinner for buttons |
-| ✓ | `EmptyState` — illustrated empty results |
-| ✓ | `OfflineNotice` — banner when network is lost |
-| ✓ | `SkipToContent` — keyboard accessibility skip link |
-| ✓ | `PageTransitionBar` — loading bar on route change |
-| ✓ | `BalanceScale` — animated scales of justice (tilts → balances → golden glow, "fighting corruption") |
-| ✓ | `ErrorBoundary` — class component wrapping routes, brown-themed crash fallback |
-| ✓ | `Toast` — notification system with slide-up animation, success/error/info variants |
-| ✓ | **Toast / notification system** — report submission and API errors show toast |
-| ✓ | **Confirm dialog** — shield icon + anonymous reassurance before report submission |
-| ✓ | **Error boundary** — catches render crashes, shows friendly fallback with Go Home / Try Again |
+| ✓ | `SearchBar` — text input with search icon (ported to RN) |
+| ✓ | `CategoryCard` — icon + name + description + count (ported) |
+| ✓ | `OffenseCard` — name, fine range, severity badge (ported) |
+| ✓ | `ReportModal` — anonymous incident report form (ported to RN Modal) |
+| ✓ | `LoadingSkeleton` / `LoadingSpinner` — skeleton cards, spinner (ported) |
+| ✓ | `EmptyState` — illustrated empty results (ported) |
+| ✓ | `DisclaimerBanner` — persistent warning (ported) |
+| ✓ | `BalanceScale` — scales of justice (ported, lucide-react-native) |
+| ✓ | `ErrorBoundary` — class component wrapping routes (ported) |
+| ✓ | `Toast` — notification system (ported, Animated + context) |
 
 ### 2.3 Hooks & Services
 
-| ✓ | `useSearch` — search state, debounced API calls, pagination |
-| ✓ | `useOffenses` — fetch by category, fetch by ID |
-| ✓ | `useShare` — Web Share API (WhatsApp, Twitter, native) |
-| ✓ | `api.ts` — typed API client with error handling |
-| ✓ | `offlineDb.ts` — IndexedDB wrapper for local offense cache |
-| ◐ | **Offline fallback** — hooks fall back to IndexedDB when offline/API fails; no background retry queue |
-| ○ | **useStatus** — no hook for data freshness (stale data indicator is not connected to API) |
-| ○ | **useDebounce** — debounce logic is inlined in `useSearch`; extract to reusable hook |
+| ✓ | `useSearch` — local fuse.js search, debounced input (ported) |
+| ✓ | `useOffenses` — fetch by category, fetch by ID via repository (ported) |
+| ✓ | `useShare` — React Native Share API (ported) |
+| ✓ | `api.ts` — typed API client with error handling (ported, EXPO_PUBLIC_API_URL) |
+| ✓ | `OffenseRepository` — offline-first data layer (NEW: bundled snapshot + AsyncStorage + fuse.js) |
+| ✓ | `offlineDb.ts` — IndexedDB (archived, replaced by OffenseRepository) |
 
-### 2.4 PWA & Offline
+### 2.4 PWA & Offline (archived — replaced by Expo app)
 
 | ✓ | Service worker via `vite-plugin-pwa` (autoUpdate) |
 | ✓ | Web manifest (name, icons, theme color, standalone display) |
@@ -136,41 +128,38 @@ Status key: **✓** Done &nbsp;&nbsp; **◐** Partial &nbsp;&nbsp; **○** Not s
 
 ### 2.5 Styling & UX
 
-| ✓ | Tailwind CSS utility classes only (no custom CSS files) |
+| ✓ | Tailwind CSS (NativeWind v4) utility classes only |
 | ✓ | `cn()` conditional class utility (clsx wrapper) |
-| ✓ | Custom color palette — solid brown (`#6B3A2A`) primary with warm earth tones |
-| ✓ | **Law animation** — BalanceScale component (scales tilt → balance → golden glow, "fighting corruption") |
-| ✓ | Responsive design (sm, md, lg breakpoints) |
-| ✓ | WCAG 2.1 AA — keyboard navigation, focus traps, skip-to-content |
+| ✓ | Custom color palette — `primary-*` (brown `#6B3A2A`) with warm earth tones |
+| ✓ | `BalanceScale` — scales of justice (ported, lucide-react-native) |
+| ✓ | Responsive design (Tailwind breakpoints) |
+| ✓ | WCAG 2.1 AA — keyboard navigation, focus traps |
 | ✓ | Empathetic copy throughout |
-| ◐ | **Empty states have fixed illustrations** — no category-specific empty art |
+| ✓ | **Loading state for ReportModal submit** — spinner wired into confirm button |
+| ◐ | **Empty states** — no category-specific empty art |
 | ○ | **Dark mode** — not implemented |
-| ○ | **Reduced motion** — no `prefers-reduced-motion` support |
-| ✓ | **Loading state for ReportModal submit** — spinner wired into confirm button while sending |
+| ○ | **Reduced motion** — no `AccessibilityInfo` reduced-motion support yet |
 
 ### 2.6 Testing (client)
 
-| ○ | **Component unit tests** — SearchBar, OffenseCard, CategoryCard rendering |
+| ○ | **Component unit tests** — jest-expo: SearchBar, OffenseCard, CategoryCard rendering |
 | ○ | **Page integration tests** — Home renders categories, search returns results |
 | ○ | **Hook tests** — useSearch debounce, useShare fallback |
 | ○ | **API client tests** — error handling, response parsing |
-| ○ | **Accessibility tests** — axe-core / jest-axe audits on key pages |
-| ○ | **PWA / offline tests** — service worker registration, offline fallback |
+| ○ | **Offline tests** — OffenseRepository bundled fallback, fuse.js ranking |
 
 ### 2.7 Performance & Optimization
 
-| ○ | **Lighthouse audit** — no audit has been run; target 90+ on all categories |
-| ○ | **Bundle size analysis** — no `vite-bundle-visualizer` or size-limit check |
-| ○ | **Image optimization** — PWA icons are the only images; no WebP/AVIF pipeline needed currently |
-| ○ | **Code splitting** — no `React.lazy` / `Suspense` on route-level components |
-| ○ | **Font loading** — using system font stack (no render-blocking web fonts) — good, but confirm |
+| ○ | **Expo build audit** — verify Android APK/IPA sizes |
+| ○ | **Bundle size analysis** — check offense snapshot impact on binary |
+| ○ | **Code splitting** — not applicable (Expo Router handles screen lazy loading) |
+| ○ | **Font loading** — using local variable fonts (Fraunces, Source Sans 3) via expo-font |
 
 ### 2.8 Internationalization
 
-| ○ | **i18n framework** (react-i18next) — not installed |
+| ○ | **i18n framework** — not installed |
 | ○ | **Swahili translations** — all offense names, descriptions, course of action |
 | ○ | **Language toggle** — no UI for switching languages |
-| ○ | **RTL support** — not needed for Swahili (uses Latin script), but i18n framework should support it |
 
 ---
 

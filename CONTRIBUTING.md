@@ -31,13 +31,13 @@ All code must pass these checks before merging. No exceptions.
 
 ---
 
-## React
+## React (Native / Expo)
 
-- **Functional components only.** No class components. No `React.FC` (use explicit props interface).
+- **Functional components only.** No class components (except `ErrorBoundary` which requires lifecycle methods).
 - **One component per file.** The file name must match the component name.
 - **Props interfaces defined above the component** in the same file, exported if used elsewhere.
 - **Custom hooks** encapsulate state + side effects. Components do not contain raw `useEffect` or `useState` for complex logic.
-- **No inline styles.** Use Tailwind classes only.
+- **No inline styles.** Use NativeWind (Tailwind) classes only.
 - **No default exports** — prefer named exports for all components and functions.
 
 ### Component Template
@@ -51,16 +51,16 @@ interface ButtonProps {
 
 export function Button({ label, variant = "primary", onPress }: ButtonProps) {
   return (
-    <button
-      onClick={onPress}
+    <TouchableOpacity
+      onPress={onPress}
       className={cn(
-        "rounded-lg px-4 py-2 text-sm font-medium",
-        variant === "primary" && "bg-primary-500 text-white hover:bg-primary-600",
-        variant === "secondary" && "border border-gray-200 text-gray-600 hover:bg-gray-50"
+        "rounded-lg px-4 py-2",
+        variant === "primary" && "bg-primary-500",
+        variant === "secondary" && "border border-gray-200"
       )}
     >
-      {label}
-    </button>
+      <Text className="text-sm font-medium text-white">{label}</Text>
+    </TouchableOpacity>
   );
 }
 ```
@@ -185,4 +185,46 @@ feat(server): add pagination to offense search
 fix(client): correct fine range formatting for values > 9999
 docs(roadmap): add phase 5 monetization details
 chore(deps): upgrade express to 4.21.0
+```
+
+---
+
+## Local Development Setup
+
+### Prerequisites
+
+- Node.js 20+
+- Docker + Docker Compose
+- Expo CLI (`npm install -g expo-cli`)
+- Expo Go app on your phone (for testing)
+
+### 1. Start PostgreSQL
+
+```bash
+docker compose up db -d
+```
+
+### 2. Start the Server
+
+```bash
+cd server
+npm install
+npm run migrate
+npm run seed
+npm run dev
+```
+
+### 3. Start the Expo App
+
+```bash
+cd client
+npm install
+npx expo start
+```
+
+Scan the QR code with Expo Go on your phone, or press `a` for Android emulator / `i` for iOS simulator.
+
+Set `EXPO_PUBLIC_API_URL` in `client/.env` to your machine's LAN IP for device testing:
+```
+EXPO_PUBLIC_API_URL=http://192.168.1.100:4000/api/v1
 ```
