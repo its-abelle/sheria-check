@@ -6,6 +6,7 @@ import {
 import type { OffenseCategory, ApiStatus } from "../types";
 import { offenseRepository } from "../repositories/OffenseRepository";
 
+/** Hook that loads offense categories from the local repository with loading/error state. */
 export function useCategories() {
   const [categories, setCategories] = useState<OffenseCategory[]>([]);
   const [loading, setLoading] = useState(true);
@@ -33,6 +34,7 @@ export function useCategories() {
   return { categories, loading, error };
 }
 
+/** Hook that loads offenses filtered by category from the local repository. */
 export function useOffensesByCategory(categoryId: string) {
   const [offenses, setOffenses] = useState<import("../types").Offense[]>([]);
   const [loading, setLoading] = useState(true);
@@ -62,6 +64,7 @@ export function useOffensesByCategory(categoryId: string) {
   return { offenses, loading, error };
 }
 
+/** Hook that loads a single offense by ID from the local repository. */
 export function useOffenseDetail(id: string) {
   const [offense, setOffense] = useState<import("../types").Offense | undefined>();
   const [loading, setLoading] = useState(true);
@@ -97,6 +100,7 @@ export function useOffenseDetail(id: string) {
   return { offense, loading, error };
 }
 
+/** Hook that fetches API status (data version, total offenses) from the server. */
 export function useApiStatus() {
   const [status, setStatus] = useState<ApiStatus | null>(null);
 

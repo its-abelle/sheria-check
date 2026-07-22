@@ -11,6 +11,7 @@ const reportSchema = z.object({
   description: z.string().min(1, "Description is required").max(2000),
 });
 
+/** Validate and insert an anonymous corruption report into the database. */
 export async function createReport(req: Request, res: Response) {
   const parsed = reportSchema.safeParse(req.body);
   if (!parsed.success) {

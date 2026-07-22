@@ -18,6 +18,7 @@ function hasDataField<T>(response: unknown): response is { data: T } {
   return typeof response === "object" && response !== null && "data" in response;
 }
 
+/** Fetch a paginated list of offenses matching the given search query. */
 export async function searchOffenses(
   query: string,
   cursor?: string,
@@ -36,6 +37,7 @@ export async function searchOffenses(
   return { data: [], nextCursor: null, total: 0 };
 }
 
+/** Fetch the list of offense categories with their counts. */
 export async function getCategories(): Promise<OffenseCategory[]> {
   const res = await fetchJSON<unknown>("/offenses/categories");
   if (hasDataField<OffenseCategory[]>(res)) return res.data;
@@ -43,6 +45,7 @@ export async function getCategories(): Promise<OffenseCategory[]> {
   return [];
 }
 
+/** Fetch all offenses belonging to a specific category. */
 export async function getOffensesByCategory(category: string): Promise<Offense[]> {
   const res = await fetchJSON<unknown>(`/offenses?category=${encodeURIComponent(category)}`);
   if (hasDataField<Offense[]>(res)) return res.data;
@@ -50,6 +53,7 @@ export async function getOffensesByCategory(category: string): Promise<Offense[]
   return [];
 }
 
+/** Fetch a single offense by its unique ID, returning null if not found. */
 export async function getOffenseById(id: string): Promise<Offense | null> {
   if (!id) return null;
   try {
@@ -62,6 +66,7 @@ export async function getOffenseById(id: string): Promise<Offense | null> {
   }
 }
 
+/** Submit an anonymous corruption report to the server. */
 export async function submitReport(payload: ReportPayload): Promise<boolean> {
   const res = await fetchJSON<{ ok?: boolean; error?: string }>("/reports", {
     method: "POST",
@@ -71,6 +76,7 @@ export async function submitReport(payload: ReportPayload): Promise<boolean> {
   throw new Error(res.error || "Report submission failed");
 }
 
+/** Fetch API status including data version and total offense count. */
 export async function getStatus(): Promise<ApiStatus | null> {
   try {
     const res = await fetchJSON<unknown>("/status");
@@ -82,6 +88,7 @@ export async function getStatus(): Promise<ApiStatus | null> {
   }
 }
 
+/** Fetch anonymized, aggregated incident insights from the server. */
 export async function getIncidentInsights(): Promise<IncidentInsight[]> {
   const res = await fetchJSON<unknown>("/reports/insights");
   if (hasDataField<IncidentInsight[]>(res)) return res.data;

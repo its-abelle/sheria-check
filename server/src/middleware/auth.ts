@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin123";
 
+/** Middleware that rejects requests without a valid Bearer token in the Authorization header. */
 export function requireAdmin(req: Request, res: Response, next: NextFunction) {
   const auth = req.headers.authorization;
 

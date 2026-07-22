@@ -8,14 +8,17 @@ pool.on("error", (err) => {
   console.error("Unexpected pool error:", err);
 });
 
+/** Execute a parameterized SQL query against the PostgreSQL connection pool. */
 export function query(text: string, params?: unknown[]) {
   return pool.query(text, params);
 }
 
+/** Check out a dedicated client from the pool for transactions or long-running operations. */
 export function getClient() {
   return pool.connect();
 }
 
+/** Initialize the database schema by creating all required tables and indexes. */
 export async function initDb() {
   await query(`
     CREATE TABLE IF NOT EXISTS offenses (

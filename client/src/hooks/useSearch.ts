@@ -3,6 +3,7 @@ import { searchOffenses as apiSearch } from "../services/api";
 import { offenseRepository } from "../repositories/OffenseRepository";
 import type { Offense } from "../types";
 
+/** Hook that manages local fuzzy search state with debounced input and pagination. */
 export function useSearch() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Offense[]>([]);

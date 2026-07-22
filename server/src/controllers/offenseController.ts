@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { query } from "../db/index.js";
 
+/** Full-text and ILIKE search across offenses with cursor-based pagination. */
 export async function searchOffenses(req: Request, res: Response) {
   const q = (req.query.q as string || "").trim();
   const cursor = Math.max(0, parseInt(req.query.cursor as string || "0", 10));
@@ -55,6 +56,7 @@ export async function searchOffenses(req: Request, res: Response) {
   });
 }
 
+/** Fetch a single offense by its ID, returning 404 if not found. */
 export async function getOffenseById(req: Request, res: Response) {
   const { id } = req.params;
   const { rows } = await query("SELECT * FROM offenses WHERE id = $1", [id]);
@@ -65,6 +67,7 @@ export async function getOffenseById(req: Request, res: Response) {
   res.json({ data: rows[0] });
 }
 
+/** Fetch offenses filtered by category, or all offenses if no category is provided. */
 export async function getOffensesByCategory(req: Request, res: Response) {
   const category = req.query.category as string;
   if (!category) {
@@ -79,6 +82,7 @@ export async function getOffensesByCategory(req: Request, res: Response) {
   res.json({ data: rows });
 }
 
+/** Return the list of offense categories with their offense counts and display metadata. */
 export async function getCategories(_req: Request, res: Response) {
   const { rows } = await query(
     `SELECT category AS id,

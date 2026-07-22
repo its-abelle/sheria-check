@@ -79,6 +79,7 @@ function ToastItem({ toast, onDismiss }: { toast: Toast; onDismiss: () => void }
   );
 }
 
+/** Access the toast notification context; must be used inside a ToastProvider. */
 export function useToast(): ToastContextValue {
   const ctx = useContext(ToastContext);
   if (!ctx) throw new Error("useToast must be used within a ToastProvider");

@@ -7,6 +7,7 @@ interface SharePayload {
   url?: string;
 }
 
+/** Hook that wraps the React Native Share API for sharing offense details. */
 export function useShare() {
   const share = useCallback(async (payload: SharePayload): Promise<"shared" | "copied" | null> => {
     try {
