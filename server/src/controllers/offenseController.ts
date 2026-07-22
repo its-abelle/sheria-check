@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { query } from "../db/index.js";
 
-/** Full-text and ILIKE search across offenses with cursor-based pagination. */
+/** Full-text and ILIKE search across offenses with offset-based pagination (cursor = SQL OFFSET). */
 export async function searchOffenses(req: Request, res: Response) {
   const q = (req.query.q as string || "").trim();
   const cursor = Math.max(0, parseInt(req.query.cursor as string || "0", 10));
