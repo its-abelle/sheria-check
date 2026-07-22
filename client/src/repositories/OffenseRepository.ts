@@ -26,7 +26,11 @@ class OffenseRepository {
   private currentData: Offense[] = [];
   private hydrated = false;
 
-  /** Load offenses from AsyncStorage cache, falling back to the bundled snapshot if empty. */
+  /**
+   * Load offenses from AsyncStorage cache, falling back to the bundled snapshot
+   * when the cache key is missing or its JSON is malformed.
+   * A valid cached empty array is used as-is and does NOT trigger a fallback.
+   */
   async hydrate(): Promise<void> {
     if (this.hydrated) return;
     try {
