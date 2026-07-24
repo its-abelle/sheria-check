@@ -1,12 +1,43 @@
+# Dependencies
 node_modules/
+
+# Build output
 dist/
+.expo/
+
+# Environment files
 .env
 .env.local
+.env.production
+.env.development
+.env.staging
+
+# TypeScript
+*.tsbuildinfo
+
+# Testing
+coverage/
+
+# Python
 *.pyc
 __pycache__/
+
+# OS
 .DS_Store
+
+# Logs
 *.log
+
+# Android/iOS build artifacts
+android/
+ios/
+*.jks
+*.keystore
+
+# PDFs (source documents, not needed in repo)
 Traffic Act.pdf
 traffic_act.pdf
 Traffic_Act.pdf
+
+# Reports
 lighthouse-report.json
