@@ -2,6 +2,7 @@ import pg from "pg";
 
 const pool = new pg.Pool({
   connectionString: process.env.DATABASE_URL || "postgres://sheria:sheria_dev@localhost:5432/sheria_check",
+  max: parseInt(process.env.PG_POOL_SIZE || "20", 10),
 });
 
 pool.on("error", (err) => {
