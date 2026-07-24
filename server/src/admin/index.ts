@@ -33,10 +33,11 @@ router.get("/", (_req, res) => {
     </div>
   </div>
   <script>
-    fetch('/api/status').then(r=>r.json()).then(d => {
-      document.getElementById('count').textContent = d.total_offenses;
-      document.getElementById('version').textContent = d.data_version;
-      document.getElementById('updated').textContent = new Date(d.last_updated).toLocaleDateString();
+    fetch('/api/v1/status').then(r=>r.json()).then(({data}) => {
+      if (!data) return;
+      document.getElementById('count').textContent = data.total_offenses;
+      document.getElementById('version').textContent = data.data_version;
+      document.getElementById('updated').textContent = new Date(data.last_updated).toLocaleDateString();
     });
   </script>
 </body>
