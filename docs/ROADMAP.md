@@ -218,23 +218,21 @@ Status key: **✓** Done &nbsp;&nbsp; **◐** Partial &nbsp;&nbsp; **○** Not s
 
 ### 4.1 Docker
 
-| ✓ | `docker-compose.yml` — PostgreSQL + server + client services |
+| ✓ | `docker-compose.yml` — PostgreSQL + server services (client removed, now Expo app) |
 | ✓ | DB health check (`pg_isready`) with service dependency ordering |
 | ✓ | Server health check (HTTP wget) |
 | ✓ | Named volume for PostgreSQL data persistence |
-| ✓ | `server/Dockerfile` — Node 20 Alpine |
-| ✓ | `client/Dockerfile` — Node 20 Alpine |
-| ◐ | **Dockerfiles are dev-only** — both run `npm run dev` (tsx watch / Vite dev server); no production multi-stage builds |
-| ○ | **Production server Dockerfile** — multi-stage: `tsc` build → production deps only → `node dist/index.js` |
-| ○ | **Production client Dockerfile** — build step → Nginx serving static `dist/` with API proxy |
-| ○ | **`.dockerignore`** — not present; node_modules, dist, .env could leak into images |
+| ✓ | `server/Dockerfile` — multi-stage: `tsc` build → production deps only → `node dist/index.js` |
+| ✓ | `.dockerignore` — excludes node_modules, dist, .env, .git, logs |
+| ✓ | `docker-compose.prod.yml` — production config with configurable secrets |
+| ○ | **Client distribution** — Expo app distributed via app stores, not Docker |
 
 ### 4.2 CI/CD
 
 | ✓ | GitHub Actions — TypeScript check + build on client |
 | ✓ | GitHub Actions — TypeScript check on server |
-| ◐ | **No test step in CI** — CI only runs `tsc --noEmit` and `vite build` (no tests exist to run) |
-| ○ | **Lint step in CI** — no ESLint or Prettier check |
+| ✓ | CI runs server tests — PostgreSQL service container |
+| ◐ | **Lint step in CI** — ESLint configured locally but not in CI workflow |
 | ○ | **Data validation in CI** — no verify_data.py run |
 | ○ | **Docker build in CI** — images are not built or pushed in CI |
 | ○ | **Deploy on merge to main** — no CD pipeline to DigitalOcean |
@@ -245,7 +243,7 @@ Status key: **✓** Done &nbsp;&nbsp; **◐** Partial &nbsp;&nbsp; **○** Not s
 | ○ | **Domain & SSL** — not configured |
 | ○ | **Environment variable management** — no DO App-level env vars or .env for production |
 | ○ | **Database provisioning** — no managed PostgreSQL on DO; currently only Docker-based |
-| ○ | **Deployment guide** — no step-by-step deploy documentation |
+| ✓ | **Deployment guide** — `docs/DEPLOY.md` covers Docker Compose, DO App Platform, Nginx |
 
 ### 4.4 Monitoring & Alerting
 
@@ -283,20 +281,19 @@ Status key: **✓** Done &nbsp;&nbsp; **◐** Partial &nbsp;&nbsp; **○** Not s
 
 | Item | Detail |
 |---|---|
-| ✓ Tests | 23 server API integration tests + 9 client component tests |
-| ✓ Production Docker | Multi-stage Dockerfiles, nginx config, docker-compose.prod.yml |
+| ✓ Tests | 27 server API integration tests |
+| ✓ Production Docker | Multi-stage server Dockerfile, docker-compose.prod.yml |
 | ✓ Deployment guide | `docs/DEPLOY.md` — Docker Compose, DO App Platform, Nginx |
-| ✓ Lighthouse audit | Performance 81-98, A11y 95, Best Practices 96, SEO 91 |
 | ✓ Rate limiters wired | searchLimiter (100/min), reportLimiter (10/min) |
 | ✓ Seed script | Reads 61 offenses from unified JSON |
 | ✓ Request ID | x-request-id header on all responses |
 | ✓ Error boundary | Brown-themed crash fallback with Go Home / Try Again |
 | ✓ Toast system | Slide-up notifications for success/error/info |
-| ✓ Confirm dialog | Shield + anonymous reassurance before report submit |
-| ✓ Offline search | IndexedDB cache, fallback on API failure |
+| ✓ Offline search | OffenseRepository with Fuse.js, AsyncStorage, bundled snapshot |
 | ✓ Mobile responsive | Full-width buttons, stacked grids, touch targets |
-| ✓ Brown theme | #6B3A2A solid brown + BalanceScale animation |
+| ✓ Brown theme | #6B3A2A primary palette via NativeWind |
 | ✓ CI runs tests | Server tests with PostgreSQL service container |
+| ✓ ESLint + Prettier | Code quality tooling configured for server |
 
 ### High (should ship with)
 
