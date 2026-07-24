@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { query } from "../db/index.js";
+import { OffenseRow } from "../models/offense.js";
 
 /** Full-text and ILIKE search across offenses with offset-based pagination (cursor = SQL OFFSET). */
 export async function searchOffenses(req: Request, res: Response) {
@@ -125,7 +126,7 @@ export async function getCategories(_req: Request, res: Response) {
     },
   };
 
-  const categories = rows.map((r: any) => ({
+  const categories = rows.map((r) => ({
     id: r.id,
     ...categoryNames[r.id as string] || {
       name: r.id,
