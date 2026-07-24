@@ -1,17 +1,19 @@
 import { Request, Response } from "express";
 import { query } from "../db/index.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 
 /** Full-text and ILIKE search across offenses with offset-based pagination (cursor = SQL OFFSET). */
-export async function searchOffenses(req: Request, res: Response) {
+export const searchOffenses = asyncHandler(async (req: Request, res: Response) => {
   const q = (req.query.q as string || "").trim();
   const cursor = Math.max(0, parseInt(req.query.cursor as string || "0", 10));
   const limit = Math.min(50, Math.max(1, parseInt(req.query.limit as string || "20", 10)));
 
   if (!q) {
-    return res.json({
+    res.json({
       data: [],
       pagination: { cursor: 0, limit, has_more: false, total: 0 },
     });
+    return;
   }
 
   const { rows } = await query(
@@ -54,25 +56,27 @@ export async function searchOffenses(req: Request, res: Response) {
       total: countRows[0]?.total || 0,
     },
   });
-}
+});
 
 /** Fetch a single offense by its ID, returning 404 if not found. */
-export async function getOffenseById(req: Request, res: Response) {
+export const getOffenseById = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
   const { rows } = await query("SELECT * FROM offenses WHERE id = $1", [id]);
 
   if (rows.length === 0) {
-    return res.status(404).json({ error: "Offense not found" });
+    res.status(404).json({ error: "Offense not found" });
+    return;
   }
   res.json({ data: rows[0] });
-}
+});
 
 /** Fetch offenses filtered by category, or all offenses if no category is provided. */
-export async function getOffensesByCategory(req: Request, res: Response) {
+export const getOffensesByCategory = asyncHandler(async (req: Request, res: Response) => {
   const category = req.query.category as string;
   if (!category) {
     const { rows } = await query("SELECT * FROM offenses ORDER BY category, name");
-    return res.json({ data: rows });
+    res.json({ data: rows });
+    return;
   }
 
   const { rows } = await query(
@@ -80,10 +84,10 @@ export async function getOffensesByCategory(req: Request, res: Response) {
     [category]
   );
   res.json({ data: rows });
-}
+});
 
 /** Return the list of offense categories with their offense counts and display metadata. */
-export async function getCategories(_req: Request, res: Response) {
+export const getCategories = asyncHandler(async (_req: Request, res: Response) => {
   const { rows } = await query(
     `SELECT category AS id,
             COUNT(*)::int AS count
@@ -125,9 +129,14 @@ export async function getCategories(_req: Request, res: Response) {
     },
   };
 
-  const categories = rows.map((r: any) => ({
+  interface CategoryRow {
+    id: string;
+    count: number;
+  }
+
+  const categories = rows.map((r: CategoryRow) => ({
     id: r.id,
-    ...categoryNames[r.id as string] || {
+    ...categoryNames[r.id] || {
       name: r.id,
       description: "Other offenses",
       icon: "file-text",
@@ -136,4 +145,4 @@ export async function getCategories(_req: Request, res: Response) {
   }));
 
   res.json({ data: categories });
-}
+});
