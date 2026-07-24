@@ -1,11 +1,12 @@
 import pg from "pg";
+import { logger } from "../utils/logger.js";
 
 const pool = new pg.Pool({
   connectionString: process.env.DATABASE_URL || "postgres://sheria:sheria_dev@localhost:5432/sheria_check",
 });
 
 pool.on("error", (err) => {
-  console.error("Unexpected pool error:", err);
+  logger.error({ err }, "Unexpected pool error");
 });
 
 /** Execute a parameterized SQL query against the PostgreSQL connection pool. */
