@@ -23,7 +23,7 @@ export async function createReport(req: Request, res: Response) {
   }
 
   const data = parsed.data;
-  const { rows } = await query<ReportRow>(
+  const { rows } = await query<Pick<ReportRow, "id">>(
     `INSERT INTO reports (offense_id, officer_name, officer_badge, location, amount_demanded, description)
      VALUES ($1, $2, $3, $4, $5, $6)
      RETURNING id`,
