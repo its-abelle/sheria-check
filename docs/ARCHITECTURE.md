@@ -212,24 +212,26 @@ All endpoints prefixed with `/api/v1`.
 
 ```
 <App>
-  <BrowserRouter>
-    <Layout>                     ← Header nav + footer
-      <Outlet>
-        <Home />                  ← Hero search + categories grid + data freshness
-        <CategoryBrowse />        ← Category heading + offense list
-        <OffenseDetail />         ← Full offense card + report modal
-        <Disclaimer />            ← Legal disclaimer page
+  <ErrorBoundary>                  ← Catches rendering errors
+    <ToastProvider>                ← Global toast notifications
+      <Stack.Navigator>
+        <(tabs)/>
+          ├── Home                 ← Hero search + categories grid + API status
+          ├── Insights            ← Anonymized incident statistics
+          └── Disclaimer          ← Legal disclaimer page
+        <category/[id] />         ← Category browse screen
+        <offense/[id] />          ← Offense detail + report modal
         <NotFound />              ← 404
-      </Outlet>
-    </Layout>
-    <ReportModal />               ← Overlay, portal
-  </BrowserRouter>
+      </Stack.Navigator>
+    </ToastProvider>
+  </ErrorBoundary>
 </App>
 ```
 
 ### State Management
 - No global state library. Each page uses custom hooks (`useSearch`, `useOffenses`) that wrap the API client.
-- React Router handles URL state (category, offense ID).
+- Expo Router handles URL state via file-based routing and `useLocalSearchParams`.
+- Offline-first: `OffenseRepository` singleton manages local data with Fuse.js fuzzy search.
 - Modal open/close managed by local `useState`.
 
 ### Key Components
@@ -238,20 +240,22 @@ All endpoints prefixed with `/api/v1`.
 | `SearchBar` | Debounced input, emits query changes |
 | `OffenseCard` | Summary card (fine range, severity badge, citation) |
 | `CategoryCard` | Category card with icon + count |
-| `DisclaimerBanner` | Dismissable banner, stores dismiss in sessionStorage |
-| `ReportModal` | Anonymous incident form, 5 fields |
-| `LoadingSkeleton` | Pulse animation for loading states |
+| `DisclaimerBanner` | Persistent legal disclaimer banner |
+| `ReportModal` | Anonymous incident form, bottom sheet with confirmation |
+| `LoadingSkeleton` | Skeleton placeholders for loading states |
+| `Toast` | Slide-up notifications (success/error/info) |
+| `ErrorBoundary` | Catches rendering errors, shows recovery UI |
+| `EmptyState` | Contextual empty/error state illustrations |
 
 ## Performance Targets
 
 | Metric | Target | How |
 |---|---|---|
-| First Contentful Paint | < 1.5s | Code splitting, preload, SW caching |
-| Largest Contentful Paint | < 2.0s | Server-side search, skeleton screens |
-| First Input Delay | < 50ms | No blocking JS, lazy routes |
-| Time to Interactive | < 3.0s | Route-based code splitting |
-| Offline | Full offense browse | Service worker caches API + static assets |
-| Lighthouse PWA Score | > 90 | Manifest, SW, HTTPS, responsive |
+| App launch (cold) | < 3.0s | Splash screen, font preloading, bundled offense data |
+| Search latency | < 200ms | Local Fuse.js search (offline-first) |
+| API search | < 500ms | PostgreSQL full-text search with ranking |
+| Offline | Full offense browse | Bundled offenses.json snapshot in app binary |
+| Background refresh | Transparent | AsyncStorage cache + server data_version check |
 
 ## Security Model
 
@@ -261,14 +265,15 @@ All endpoints prefixed with `/api/v1`.
 4. **Input validation.** All inputs validated with Zod on the server. SQL injection prevented by parameterized queries.
 5. **CORS.** Restricted to known origins in production.
 6. **Headers.** Helmet.js for security headers (XSS, content-type sniffing, referrer policy).
-7. **No secrets in client.** API keys, tokens, and DB credentials are server-side only.
+7. **No secrets in client.** API keys, tokens, and DB credentials are server-side only. Client only holds `EXPO_PUBLIC_API_URL`.
 
 ## Caching Strategy
 
 | Layer | What | TTL | Invalidation |
 |---|---|---|---|
-| **Browser (Service Worker)** | App shell, static assets | Cache-first, swr | New SW version on deploy |
-| **Browser (SW)** | API search responses | Network-first, cache fallback | — |
+| **App (bundled)** | Offenses snapshot | Permanent (app binary) | New app release |
+| **App (AsyncStorage)** | Server-synced offenses | Until next refresh | `data_version` change from `/status` |
+| **App (Fuse.js)** | In-memory search index | Session lifetime | On data refresh |
 | **Server (Redis)** | Search results | 300s | On offense data update |
 | **Server (Redis)** | Category lists | 600s | On offense data update |
 | **CDN (DigitalOcean)** | Static assets | 1y (fingerprinted) | On deploy |
