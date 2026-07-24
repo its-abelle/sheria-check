@@ -8,9 +8,10 @@ pool.on("error", (err) => {
   console.error("Unexpected pool error:", err);
 });
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 /** Execute a parameterized SQL query against the PostgreSQL connection pool. */
-export function query(text: string, params?: unknown[]) {
-  return pool.query(text, params);
+export function query<R extends pg.QueryResultRow = Record<string, any>>(text: string, params?: unknown[]) {
+  return pool.query<R>(text, params);
 }
 
 /** Check out a dedicated client from the pool for transactions or long-running operations. */

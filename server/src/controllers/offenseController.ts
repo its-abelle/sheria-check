@@ -2,6 +2,11 @@ import { Request, Response } from "express";
 import { query } from "../db/index.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
+interface CategoryRow {
+  id: string;
+  count: number;
+}
+
 /** Full-text and ILIKE search across offenses with offset-based pagination (cursor = SQL OFFSET). */
 export const searchOffenses = asyncHandler(async (req: Request, res: Response) => {
   const q = (req.query.q as string || "").trim();
@@ -88,7 +93,7 @@ export const getOffensesByCategory = asyncHandler(async (req: Request, res: Resp
 
 /** Return the list of offense categories with their offense counts and display metadata. */
 export const getCategories = asyncHandler(async (_req: Request, res: Response) => {
-  const { rows } = await query(
+  const { rows } = await query<CategoryRow>(
     `SELECT category AS id,
             COUNT(*)::int AS count
      FROM offenses
@@ -129,12 +134,7 @@ export const getCategories = asyncHandler(async (_req: Request, res: Response) =
     },
   };
 
-  interface CategoryRow {
-    id: string;
-    count: number;
-  }
-
-  const categories = rows.map((r: CategoryRow) => ({
+  const categories = rows.map((r) => ({
     id: r.id,
     ...categoryNames[r.id] || {
       name: r.id,
