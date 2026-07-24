@@ -10,6 +10,7 @@ export function requestId(req: Request, res: Response, next: NextFunction) {
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Express {
     interface Request {
       requestId: string;

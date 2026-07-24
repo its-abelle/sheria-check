@@ -125,7 +125,7 @@ export async function getCategories(_req: Request, res: Response) {
     },
   };
 
-  const categories = rows.map((r: any) => ({
+  const categories = rows.map((r) => ({
     id: r.id,
     ...categoryNames[r.id as string] || {
       name: r.id,
