@@ -16,3 +16,22 @@ export interface OffenseRow {
   created_at: string;
   updated_at: string;
 }
+
+export interface ReportRow {
+  id: number;
+  offense_id: string | null;
+  officer_name: string | null;
+  officer_badge: string | null;
+  location: string | null;
+  amount_demanded: number | null;
+  description: string;
+  created_at: string;
+}
+
+export interface StatusRow {
+  id: number;
+  data_version: string;
+  statutes_covered: string[];
+  total_offenses: number;
+  last_updated: string;
+}
