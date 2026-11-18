@@ -1,97 +1,115 @@
-import type { Offense, OffenseCategory, ReportPayload, ApiStatus, IncidentInsight } from "../types";
+import { Platform } from "react-native";
+import type {
+  Offense,
+  OffenseCategory,
+  ApiStatus,
+  ApiResponse,
+} from "../types";
 
-const BASE_URL = process.env.EXPO_PUBLIC_API_URL || "http://localhost:4000/api/v1";
-
-async function fetchJSON<T>(path: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(`${BASE_URL}${path}`, {
-    headers: { "Content-Type": "application/json" },
-    ...init,
-  });
-  if (!res.ok) {
-    const body = await res.json().catch(() => null);
-    throw new Error(body?.error || `Request failed (${res.status})`);
+const configured = process.env.EXPO_PUBLIC_API_URL;
+const BASE_URL =
+  configured ||
+  (Platform.OS === "web" ? "/api/v1" : "http://localhost:4000/api/v1");
+export class ApiError extends Error {
+  constructor(
+    message: string,
+    public readonly status: number,
+  ) {
+    super(message);
+    this.name = "ApiError";
   }
-  return res.json();
 }
-
-function hasDataField<T>(response: unknown): response is { data: T } {
-  return typeof response === "object" && response !== null && "data" in response;
+/** Abort on unmount and after 15 seconds. Never persist queries or responses. */
+export async function fetchJSON<T>(
+  path: string,
+  signal?: AbortSignal,
+): Promise<ApiResponse<T>> {
+  const controller = new AbortController();
+  const abort = (): void => controller.abort();
+  if (signal?.aborted) controller.abort();
+  signal?.addEventListener("abort", abort);
+  const timeout = setTimeout(abort, 15000);
+  try {
+    const response = await fetch(`${BASE_URL}${path}`, {
+      signal: controller.signal,
+      credentials: "omit",
+      cache: "no-store",
+      headers: { Accept: "application/json" },
+    });
+    if (!response.ok)
+      throw new ApiError(
+        response.status === 404
+          ? "This published record could not be found."
+          : response.status === 400
+            ? "Check your search terms and try again."
+            : response.status === 429
+              ? "Too many requests. Please wait a minute and try again."
+              : "The service is temporarily unavailable. Please try again.",
+        response.status,
+      );
+    const body: unknown = await response.json();
+    if (!body || typeof body !== "object" || !("data" in body))
+      throw new ApiError("The service returned an unexpected response.", 502);
+    return body as ApiResponse<T>;
+  } catch (error) {
+    if (signal?.aborted) throw error;
+    if (error instanceof ApiError) throw error;
+    throw new ApiError(
+      "Unable to connect. Check your internet connection and try again.",
+      0,
+    );
+  } finally {
+    clearTimeout(timeout);
+    signal?.removeEventListener("abort", abort);
+  }
 }
-
-/** Fetch a paginated list of offenses matching the given search query. */
 export async function searchOffenses(
   query: string,
   cursor?: string,
-  limit = 20
+  limit = 20,
+  signal?: AbortSignal,
 ): Promise<{ data: Offense[]; nextCursor: string | null; total: number }> {
   const params = new URLSearchParams({ q: query, limit: String(limit) });
   if (cursor) params.set("cursor", cursor);
-  const res = await fetchJSON<unknown>(`/offenses/search?${params}`);
-  if (hasDataField<{ items: Offense[]; nextCursor: string | null; total: number }>(res)) {
-    return {
-      data: res.data.items,
-      nextCursor: res.data.nextCursor,
-      total: res.data.total,
-    };
-  }
-  return { data: [], nextCursor: null, total: 0 };
+  const result = await fetchJSON<Offense[]>(
+    `/offenses/search?${params}`,
+    signal,
+  );
+  if (!Array.isArray(result.data) || !result.pagination)
+    throw new ApiError("The service returned an unexpected response.", 502);
+  return {
+    data: result.data,
+    nextCursor: result.pagination.has_more
+      ? String(result.pagination.cursor)
+      : null,
+    total: result.pagination.total ?? 0,
+  };
 }
-
-/** Fetch the list of offense categories with their counts. */
-export async function getCategories(): Promise<OffenseCategory[]> {
-  const res = await fetchJSON<unknown>("/offenses/categories");
-  if (hasDataField<OffenseCategory[]>(res)) return res.data;
-  if (Array.isArray(res)) return res as OffenseCategory[];
-  return [];
+export async function getCategories(
+  signal?: AbortSignal,
+): Promise<OffenseCategory[]> {
+  return (await fetchJSON<OffenseCategory[]>("/offenses/categories", signal))
+    .data;
 }
-
-/** Fetch all offenses belonging to a specific category. */
-export async function getOffensesByCategory(category: string): Promise<Offense[]> {
-  const res = await fetchJSON<unknown>(`/offenses?category=${encodeURIComponent(category)}`);
-  if (hasDataField<Offense[]>(res)) return res.data;
-  if (Array.isArray(res)) return res as Offense[];
-  return [];
+export async function getOffensesByCategory(
+  category: string,
+  signal?: AbortSignal,
+): Promise<Offense[]> {
+  return (
+    await fetchJSON<Offense[]>(
+      `/offenses?category=${encodeURIComponent(category)}`,
+      signal,
+    )
+  ).data;
 }
-
-/** Fetch a single offense by its unique ID, returning null if not found. */
-export async function getOffenseById(id: string): Promise<Offense | null> {
-  if (!id) return null;
-  try {
-    const res = await fetchJSON<unknown>(`/offenses/${encodeURIComponent(id)}`);
-    if (hasDataField<Offense>(res)) return res.data;
-    if (typeof res === "object" && res !== null && "id" in res) return res as Offense;
-    return null;
-  } catch {
-    return null;
-  }
+export async function getOffenseById(
+  id: string,
+  signal?: AbortSignal,
+): Promise<Offense> {
+  return (
+    await fetchJSON<Offense>(`/offenses/${encodeURIComponent(id)}`, signal)
+  ).data;
 }
-
-/** Submit an anonymous corruption report to the server. */
-export async function submitReport(payload: ReportPayload): Promise<boolean> {
-  const res = await fetchJSON<{ ok?: boolean; error?: string }>("/reports", {
-    method: "POST",
-    body: JSON.stringify(payload),
-  });
-  if (res.ok === true) return true;
-  throw new Error(res.error || "Report submission failed");
-}
-
-/** Fetch API status including data version and total offense count. */
-export async function getStatus(): Promise<ApiStatus | null> {
-  try {
-    const res = await fetchJSON<unknown>("/status");
-    if (hasDataField<ApiStatus>(res)) return res.data;
-    if (typeof res === "object" && res !== null && "data_version" in res) return res as ApiStatus;
-    return null;
-  } catch {
-    return null;
-  }
-}
-
-/** Fetch anonymized, aggregated incident insights from the server. */
-export async function getIncidentInsights(): Promise<IncidentInsight[]> {
-  const res = await fetchJSON<unknown>("/reports/insights");
-  if (hasDataField<IncidentInsight[]>(res)) return res.data;
-  if (Array.isArray(res)) return res as IncidentInsight[];
-  return [];
+export async function getStatus(signal?: AbortSignal): Promise<ApiStatus> {
+  return (await fetchJSON<ApiStatus>("/status", signal)).data;
 }

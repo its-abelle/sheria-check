@@ -1,9 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    "./app/**/*.{js,jsx,ts,tsx}",
-    "./src/**/*.{js,jsx,ts,tsx}",
-  ],
+  content: ["./app/**/*.{js,jsx,ts,tsx}", "./src/**/*.{js,jsx,ts,tsx}"],
   presets: [require("nativewind/preset")],
   theme: {
     extend: {
@@ -33,8 +30,8 @@ module.exports = {
         surface: "#FAFAF8",
       },
       fontFamily: {
-        display: ["Fraunces", "Georgia", "serif"],
-        body: ["Source Sans 3", "system-ui", "sans-serif"],
+        display: ["serif"],
+        body: ["system-ui", "sans-serif"],
       },
     },
   },

@@ -1,115 +1,25 @@
-import { useState, useEffect } from "react";
-import { getStatus } from "../services/api";
-import type { OffenseCategory, ApiStatus } from "../types";
-import { offenseRepository } from "../repositories/OffenseRepository";
-
-/** Hook that loads offense categories from the local repository with loading/error state. */
-export function useCategories() {
-  const [categories, setCategories] = useState<OffenseCategory[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    async function load() {
-      try {
-        await offenseRepository.hydrate();
-        if (cancelled) return;
-        setCategories(offenseRepository.getCategories());
-      } catch (e) {
-        if (!cancelled) setError(e instanceof Error ? e.message : "Failed to load categories.");
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    }
-
-    load();
-    return () => { cancelled = true; };
-  }, []);
-
-  return { categories, loading, error };
+import { useResource, type Resource } from "./useResource";
+import type { OffenseCategory, ApiStatus, Offense } from "../types";
+export function useCategories(): Resource<OffenseCategory[]> & {
+  categories: OffenseCategory[];
+} {
+  const resource = useResource<OffenseCategory[]>("/offenses/categories");
+  return { ...resource, categories: resource.data ?? [] };
 }
-
-/** Hook that loads offenses filtered by category from the local repository. */
-export function useOffensesByCategory(categoryId: string) {
-  const [offenses, setOffenses] = useState<import("../types").Offense[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    async function load() {
-      setLoading(true);
-      setError(null);
-      try {
-        await offenseRepository.hydrate();
-        const results = offenseRepository.getByCategory(categoryId);
-        if (!cancelled) setOffenses(results);
-      } catch (e) {
-        if (!cancelled) setError(e instanceof Error ? e.message : "Failed to load offenses.");
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    }
-
-    if (categoryId) load();
-    return () => { cancelled = true; };
-  }, [categoryId]);
-
-  return { offenses, loading, error };
+export function useOffensesByCategory(
+  categoryId: string,
+): Resource<Offense[]> & { offenses: Offense[] } {
+  const resource = useResource<Offense[]>(
+    `/offenses?category=${encodeURIComponent(categoryId)}`,
+  );
+  return { ...resource, offenses: resource.data ?? [] };
 }
-
-/** Hook that loads a single offense by ID from the local repository. */
-export function useOffenseDetail(id: string) {
-  const [offense, setOffense] = useState<import("../types").Offense | undefined>();
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    async function load() {
-      setLoading(true);
-      setError(null);
-      try {
-        await offenseRepository.hydrate();
-        const found = offenseRepository.getById(id);
-        if (!cancelled) {
-          if (found) {
-            setOffense(found);
-          } else {
-            setError("Offense not found.");
-          }
-        }
-      } catch (e) {
-        if (!cancelled) setError(e instanceof Error ? e.message : "Failed to load offense.");
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    }
-
-    if (id) load();
-    return () => { cancelled = true; };
-  }, [id]);
-
-  return { offense, loading, error };
+export function useOffenseDetail(
+  id: string,
+): Resource<Offense> & { offense: Offense | undefined } {
+  const resource = useResource<Offense>(`/offenses/${encodeURIComponent(id)}`);
+  return { ...resource, offense: resource.data };
 }
-
-/** Hook that fetches API status (data version, total offenses) from the server. */
-export function useApiStatus() {
-  const [status, setStatus] = useState<ApiStatus | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    getStatus().then((s) => {
-      if (!cancelled) setStatus(s);
-    }).catch(() => {});
-
-    return () => { cancelled = true; };
-  }, []);
-
-  return status;
+export function useApiStatus(): ApiStatus | null {
+  return useResource<ApiStatus>("/status").data ?? null;
 }

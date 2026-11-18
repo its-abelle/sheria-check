@@ -8,20 +8,25 @@ interface SearchBarProps {
   placeholder?: string;
 }
 
-export function SearchBar({ value, onChangeText, placeholder = "Search offenses..." }: SearchBarProps) {
+export function SearchBar({
+  value,
+  onChangeText,
+  placeholder = "Search offenses...",
+}: SearchBarProps) {
   return (
-    <View className="flex-row items-center rounded-2xl border border-primary-200 bg-white px-4 py-3">
+    <View className="flex-row items-center rounded-xl border border-primary-200 bg-white px-4 py-3">
       <Search size={20} color="#6B3A2A" />
       <TextInput
         className="ml-3 flex-1 text-base text-primary-900"
         value={value}
         onChangeText={onChangeText}
         placeholder={placeholder}
-        placeholderTextColor="#A87A5E"
+        placeholderTextColor="#562F22"
+        maxLength={200}
         autoCapitalize="none"
         autoCorrect={false}
         returnKeyType="search"
-        accessibilityLabel="Search traffic offenses"
+        accessibilityLabel="Search legal information"
       />
       {value.length > 0 && (
         <Pressable

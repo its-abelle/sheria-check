@@ -1,13 +1,10 @@
 import { View, Text } from "react-native";
-import { AlertTriangle } from "lucide-react-native";
-
-export function DisclaimerBanner() {
+import { en } from "../i18n/en";
+export function DisclaimerBanner(): React.JSX.Element {
   return (
-    <View className="flex-row items-start gap-2 rounded-xl bg-caution-50 px-4 py-3">
-      <AlertTriangle size={18} color="#B8860B" style={{ marginTop: 1 }} />
-      <Text className="flex-1 text-xs leading-5 text-caution-700">
-        Sheria Check is an informational tool based on publicly available legal texts. It does not
-        constitute legal advice. Always verify with official sources.
+    <View className="border-t border-primary-100 bg-caution-50 px-4 py-2">
+      <Text className="mx-auto w-full max-w-3xl text-xs leading-5 text-primary-800">
+        {en.disclaimer}
       </Text>
     </View>
   );
