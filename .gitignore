@@ -41,3 +41,12 @@ Traffic_Act.pdf
 
 # Reports
 lighthouse-report.json
+
+# Signing credentials and private operational artifacts
+*.jks
+*.keystore
+*.p8
+*.p12
+*.mobileprovision
+google-service-account.json
+*.dump
