@@ -41,6 +41,8 @@ Without `EXPO_PUBLIC_API_URL`, web uses same-origin `/api/v1` (appropriate behin
 
 Open `/admin` on the API host to import and publish reviewed content. The admin token is held only in memory. See [content workflow](docs/CONTENT.md), [architecture/API](docs/ARCHITECTURE.md), [deployment](docs/DEPLOY.md), and [roadmap](docs/ROADMAP.md).
 
+For populated visual previews without publishing unverified law, use the isolated [visual testing guide](docs/VISUAL_TESTING.md).
+
 ## Checks
 
 ```sh

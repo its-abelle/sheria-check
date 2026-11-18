@@ -20,6 +20,9 @@ const schema = z.object({
 });
 export const config = schema.parse(process.env);
 if (config.NODE_ENV === "production") {
+  if (new URL(config.DATABASE_URL).pathname.endsWith("_demo")) {
+    throw new Error("Production cannot use a fictional demo database");
+  }
   if (
     !process.env.DATABASE_URL ||
     config.ADMIN_PASSWORD === "admin123" ||

@@ -1,3 +1,4 @@
+import { assertDemoDatabase } from "../db/seeds/demoGuard.js";
 import { readFile } from "node:fs/promises";
 import { describe, it, expect } from "vitest";
 import request from "supertest";
@@ -309,5 +310,33 @@ describe("HTTP privacy and health", (): void => {
     expect(result.headers["set-cookie"]).toBeUndefined();
     expect(result.headers["x-request-id"]).toBeDefined();
     expect(result.headers["access-control-allow-credentials"]).toBeUndefined();
+  });
+});
+
+describe("Visual demo isolation", (): void => {
+  it("allows a local dedicated demo database", (): void => {
+    expect((): void =>
+      assertDemoDatabase(
+        "postgres://user:password@localhost:5432/sheria_check_demo",
+        "development",
+      ),
+    ).not.toThrow();
+  });
+  it("rejects ordinary, remote and production targets", (): void => {
+    for (const url of [
+      "postgres://localhost/sheria_check",
+      "postgres://localhost/sheria_check_test",
+      "postgres://remote.example/sheria_check_demo",
+    ]) {
+      expect((): void => assertDemoDatabase(url, "development")).toThrow(
+        "local database",
+      );
+    }
+    expect((): void =>
+      assertDemoDatabase(
+        "postgres://localhost/sheria_check_demo",
+        "production",
+      ),
+    ).toThrow();
   });
 });
