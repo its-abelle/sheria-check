@@ -1,140 +1,68 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
+import { z } from "zod";
+import type { OffenseRow } from "../models/offense.js";
 import { query } from "../db/index.js";
-import { OffenseRow } from "../models/offense.js";
-
-/** Full-text and ILIKE search across offenses with offset-based pagination (cursor = SQL OFFSET). */
-export async function searchOffenses(req: Request, res: Response) {
-  const q = (req.query.q as string || "").trim();
-  const cursor = Math.max(0, parseInt(req.query.cursor as string || "0", 10));
-  const limit = Math.min(50, Math.max(1, parseInt(req.query.limit as string || "20", 10)));
-
-  if (!q) {
-    return res.json({
-      data: [],
-      pagination: { cursor: 0, limit, has_more: false, total: 0 },
-    });
-  }
-
-  const { rows } = await query(
-    `SELECT * FROM offenses
-     WHERE to_tsvector('english', name || ' ' || description || ' ' || array_to_string(aliases, ' '))
-           @@ plainto_tsquery('english', $1)
-     OR name ILIKE '%' || $1 || '%'
-     OR description ILIKE '%' || $1 || '%'
-     OR $1 = ANY(aliases)
-     ORDER BY
-       CASE WHEN name ILIKE $1 THEN 0
-            WHEN name ILIKE $1 || '%' THEN 1
-            ELSE 2
-       END,
-       min_fine ASC
-     OFFSET $2
-     LIMIT $3`,
-    [q, cursor, limit + 1]
+export const paginationSchema = z.object({
+  q: z.string().trim().max(200).default(""),
+  cursor: z.coerce.number().int().min(0).default(0),
+  limit: z.coerce.number().int().min(1).max(50).default(20),
+});
+/** Cursor remains a documented numeric offset, with deterministic ordering. */
+export async function searchOffenses(
+  req: Request,
+  res: Response,
+): Promise<void> {
+  const { q, cursor, limit } = paginationSchema.parse(req.query);
+  const filter = `($1 = '' OR to_tsvector('english', name || ' ' || description || ' ' || array_to_string(aliases, ' ')) @@ plainto_tsquery('english', $1) OR name ILIKE '%' || $1 || '%' OR act ILIKE '%' || $1 || '%' OR section ILIKE '%' || $1 || '%' OR $1 = ANY(aliases))`;
+  const { rows } = await query<OffenseRow>(
+    `SELECT * FROM public_offenses WHERE ${filter} ORDER BY name, id OFFSET $2 LIMIT $3`,
+    [q, cursor, limit + 1],
   );
-
+  const count = await query<{ total: number }>(
+    `SELECT COUNT(*)::int AS total FROM public_offenses WHERE ${filter}`,
+    [q],
+  );
   const hasMore = rows.length > limit;
-  if (hasMore) rows.pop();
-
-  const { rows: countRows } = await query(
-    `SELECT COUNT(*)::int AS total FROM offenses
-     WHERE to_tsvector('english', name || ' ' || description || ' ' || array_to_string(aliases, ' '))
-           @@ plainto_tsquery('english', $1)
-     OR name ILIKE '%' || $1 || '%'
-     OR description ILIKE '%' || $1 || '%'
-     OR $1 = ANY(aliases)`,
-    [q]
-  );
-
   res.json({
-    data: rows,
+    data: rows.slice(0, limit),
     pagination: {
-      cursor: cursor + rows.length,
+      cursor: cursor + Math.min(rows.length, limit),
       limit,
       has_more: hasMore,
-      total: countRows[0]?.total || 0,
+      total: count.rows[0].total,
     },
   });
 }
-
-/** Fetch a single offense by its ID, returning 404 if not found. */
-export async function getOffenseById(req: Request, res: Response) {
-  const { id } = req.params;
-  const { rows } = await query("SELECT * FROM offenses WHERE id = $1", [id]);
-
-  if (rows.length === 0) {
-    return res.status(404).json({ error: "Offense not found" });
+export async function getOffenseById(
+  req: Request,
+  res: Response,
+): Promise<void> {
+  const { rows } = await query<OffenseRow>("SELECT * FROM public_offenses WHERE id = $1", [
+    req.params.id,
+  ]);
+  if (!rows.length) {
+    res.status(404).json({ error: "Offense not found" });
+    return;
   }
   res.json({ data: rows[0] });
 }
-
-/** Fetch offenses filtered by category, or all offenses if no category is provided. */
-export async function getOffensesByCategory(req: Request, res: Response) {
-  const category = req.query.category as string;
-  if (!category) {
-    const { rows } = await query("SELECT * FROM offenses ORDER BY category, name");
-    return res.json({ data: rows });
-  }
-
-  const { rows } = await query(
-    "SELECT * FROM offenses WHERE category = $1 ORDER BY name",
-    [category]
+export async function getOffensesByCategory(
+  req: Request,
+  res: Response,
+): Promise<void> {
+  const category = z.string().max(80).optional().parse(req.query.category);
+  const { rows } = await query<OffenseRow>(
+    "SELECT * FROM public_offenses WHERE ($1::text IS NULL OR category = $1) ORDER BY name, id",
+    [category ?? null],
   );
   res.json({ data: rows });
 }
-
-/** Return the list of offense categories with their offense counts and display metadata. */
-export async function getCategories(_req: Request, res: Response) {
+export async function getCategories(
+  _req: Request,
+  res: Response,
+): Promise<void> {
   const { rows } = await query(
-    `SELECT category AS id,
-            COUNT(*)::int AS count
-     FROM offenses
-     GROUP BY category
-     ORDER BY category`
+    "SELECT category AS id, initcap(replace(category, '-', ' ')) AS name, 'Read verified offense and penalty provisions' AS description, 'scale' AS icon, COUNT(*)::int AS count FROM public_offenses GROUP BY category ORDER BY category",
   );
-
-  const categoryNames: Record<string, { name: string; description: string; icon: string }> = {
-    "speeding-reckless": {
-      name: "Speeding & Reckless Driving",
-      description: "Speeding, dangerous driving, racing, and careless driving offenses",
-      icon: "gauge",
-    },
-    "license-documents": {
-      name: "License & Documents",
-      description: "No license, expired license, no insurance, and document-related offenses",
-      icon: "file-text",
-    },
-    "vehicle-condition": {
-      name: "Vehicle Condition",
-      description: "Bald tires, broken lights, no reflectors, expired inspection",
-      icon: "wrench",
-    },
-    "traffic-rules": {
-      name: "Traffic Rules",
-      description: "Overtaking on yellow line, ignoring traffic lights, wrong lane",
-      icon: "traffic-cone",
-    },
-    "parking-loading": {
-      name: "Parking & Loading",
-      description: "Illegal parking, overloading goods or passengers",
-      icon: "truck",
-    },
-    "alcohol-drugs": {
-      name: "Alcohol & Drugs",
-      description: "Driving under the influence of alcohol or drugs",
-      icon: "beer",
-    },
-  };
-
-  const categories = rows.map((r) => ({
-    id: r.id,
-    ...categoryNames[r.id as string] || {
-      name: r.id,
-      description: "Other offenses",
-      icon: "file-text",
-    },
-    count: r.count,
-  }));
-
-  res.json({ data: categories });
+  res.json({ data: rows });
 }

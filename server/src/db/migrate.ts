@@ -1,15 +1,10 @@
-import { initDb, query } from "./index.js";
-
-async function migrate() {
-  console.log("Running migrations...");
+import { initDb, closeDb } from "./index.js";
+try {
   await initDb();
-
-  const { rows } = await query("SELECT data_version, total_offenses FROM status WHERE id = 1");
-  console.log("Migration complete. Status:", rows[0]);
-  process.exit(0);
+  console.log("Migrations applied");
+} catch {
+  console.error("Migration failed");
+  process.exitCode = 1;
+} finally {
+  await closeDb();
 }
-
-migrate().catch((err) => {
-  console.error("Migration failed:", err);
-  process.exit(1);
-});

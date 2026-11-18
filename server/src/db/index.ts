@@ -1,71 +1,65 @@
 import pg from "pg";
+import { readFile, readdir } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
+import { config } from "../config.js";
 
 const pool = new pg.Pool({
-  connectionString: process.env.DATABASE_URL || "postgres://sheria:sheria_dev@localhost:5432/sheria_check",
-  max: parseInt(process.env.PG_POOL_SIZE || "20", 10),
+  connectionString: config.DATABASE_URL,
+  max: config.PG_POOL_SIZE,
+  connectionTimeoutMillis: 5000,
+  statement_timeout: 15000,
 });
-
-pool.on("error", (err) => {
-  console.error("Unexpected pool error:", err);
+pool.on("error", (): void => {
+  console.error("Unexpected database connection error");
 });
-
-/** Execute a parameterized SQL query against the PostgreSQL connection pool. */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- pg.QueryResultRow default must be broad enough for untyped callers
-export function query<R extends pg.QueryResultRow = Record<string, any>>(text: string, params?: unknown[]) {
-  return pool.query<R>(text, params);
+export function query<T extends pg.QueryResultRow = pg.QueryResultRow>(
+  text: string,
+  params?: unknown[],
+): Promise<pg.QueryResult<T>> {
+  return pool.query<T>(text, params);
 }
-
-/** Check out a dedicated client from the pool for transactions or long-running operations. */
-export function getClient() {
+export function getClient(): Promise<pg.PoolClient> {
   return pool.connect();
 }
-
-/** Initialize the database schema by creating all required tables and indexes. */
-export async function initDb() {
-  await query(`
-    CREATE TABLE IF NOT EXISTS offenses (
-      id            TEXT PRIMARY KEY,
-      name          TEXT NOT NULL,
-      aliases       TEXT[] NOT NULL DEFAULT '{}',
-      description   TEXT NOT NULL,
-      category      TEXT NOT NULL,
-      severity      TEXT NOT NULL CHECK (severity IN ('minor', 'serious', 'felony')),
-      citation      TEXT NOT NULL,
-      act           TEXT NOT NULL,
-      section       TEXT NOT NULL,
-      min_fine      INTEGER NOT NULL,
-      max_fine      INTEGER NOT NULL,
-      max_imprisonment TEXT,
-      course_of_action TEXT NOT NULL,
-      law_version   TEXT NOT NULL DEFAULT '2024',
-      created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-      updated_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
+export function closeDb(): Promise<void> {
+  return pool.end();
+}
+/** Apply each committed migration once, atomically, including on existing installations. */
+export async function initDb(): Promise<void> {
+  const client = await pool.connect();
+  try {
+    await client.query("SELECT pg_advisory_lock(573910)");
+    await client.query(
+      "CREATE TABLE IF NOT EXISTS _migrations (name TEXT PRIMARY KEY, applied_at TIMESTAMPTZ NOT NULL DEFAULT NOW())",
     );
-
-    CREATE INDEX IF NOT EXISTS idx_offenses_category ON offenses(category);
-    CREATE INDEX IF NOT EXISTS idx_offenses_severity ON offenses(severity);
-
-    CREATE TABLE IF NOT EXISTS reports (
-      id            SERIAL PRIMARY KEY,
-      offense_id    TEXT REFERENCES offenses(id),
-      officer_name  TEXT,
-      officer_badge TEXT,
-      location      TEXT,
-      amount_demanded INTEGER,
-      description   TEXT NOT NULL,
-      created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    const directory = fileURLToPath(new URL("./migrations/", import.meta.url));
+    const files = (await readdir(directory))
+      .filter((name: string): boolean => name.endsWith(".sql"))
+      .sort();
+    for (const name of files) {
+      const applied = await client.query(
+        "SELECT 1 FROM _migrations WHERE name = $1",
+        [name],
+      );
+      if (applied.rowCount) continue;
+      await client.query("BEGIN");
+      try {
+        await client.query(await readFile(`${directory}/${name}`, "utf8"));
+        await client.query("INSERT INTO _migrations(name) VALUES ($1)", [name]);
+        await client.query("COMMIT");
+      } catch (error) {
+        await client.query("ROLLBACK");
+        throw error;
+      }
+    }
+    await client.query(
+      "INSERT INTO status(id) VALUES (1) ON CONFLICT DO NOTHING",
     );
-
-    CREATE TABLE IF NOT EXISTS status (
-      id              INTEGER PRIMARY KEY DEFAULT 1,
-      data_version    TEXT NOT NULL DEFAULT '2024.1',
-      statutes_covered TEXT[] NOT NULL DEFAULT '{"Traffic Act Cap 403"}',
-      total_offenses  INTEGER NOT NULL DEFAULT 0,
-      last_updated    TIMESTAMPTZ NOT NULL DEFAULT NOW()
-    );
-
-    INSERT INTO status (id, data_version, total_offenses)
-    VALUES (1, '2024.1', 0)
-    ON CONFLICT (id) DO NOTHING;
-  `);
+  } finally {
+    try {
+      await client.query("SELECT pg_advisory_unlock(573910)");
+    } finally {
+      client.release();
+    }
+  }
 }

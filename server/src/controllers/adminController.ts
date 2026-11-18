@@ -1,92 +1,145 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import { z } from "zod";
-import { query } from "../db/index.js";
+import { getClient, query } from "../db/index.js";
+import { importContent } from "../utils/contentStore.js";
+import {
+  contentKind,
+  contentTables,
+  offenseSchema,
+} from "../utils/contentSchema.js";
 
-const offenseSchema = z.object({
-  id: z.string().min(1).max(50),
-  name: z.string().min(1).max(300),
-  aliases: z.array(z.string()).default([]),
-  description: z.string().min(1).max(1000),
-  category: z.string().min(1),
-  severity: z.enum(["minor", "serious", "felony"]),
-  citation: z.string().min(1),
-  act: z.string().min(1),
-  section: z.string().min(1),
-  min_fine: z.number().int().min(0),
-  max_fine: z.number().int().min(0),
-  max_imprisonment: z.string().nullable().default(null),
-  course_of_action: z.string().min(1),
-  law_version: z.string().default("2024"),
-});
-
-/** Upsert a single offense record (admin-only endpoint, requires Bearer auth). */
-export async function createOffense(req: Request, res: Response) {
-  const parsed = offenseSchema.safeParse(req.body);
-  if (!parsed.success) {
-    return res.status(400).json({ error: "Invalid offense data", details: parsed.error.flatten() });
-  }
-
-  const o = parsed.data;
-  await query(
-    `INSERT INTO offenses (id, name, aliases, description, category, severity, citation, act, section, min_fine, max_fine, max_imprisonment, course_of_action, law_version)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
-     ON CONFLICT (id) DO UPDATE SET
-       name = EXCLUDED.name,
-       aliases = EXCLUDED.aliases,
-       description = EXCLUDED.description,
-       category = EXCLUDED.category,
-       severity = EXCLUDED.severity,
-       citation = EXCLUDED.citation,
-       act = EXCLUDED.act,
-       section = EXCLUDED.section,
-       min_fine = EXCLUDED.min_fine,
-       max_fine = EXCLUDED.max_fine,
-       max_imprisonment = EXCLUDED.max_imprisonment,
-       course_of_action = EXCLUDED.course_of_action,
-       law_version = EXCLUDED.law_version,
-       updated_at = NOW()`,
-    [o.id, o.name, o.aliases, o.description, o.category, o.severity, o.citation, o.act, o.section, o.min_fine, o.max_fine, o.max_imprisonment, o.course_of_action, o.law_version]
+export async function importBundle(req: Request, res: Response): Promise<void> {
+  const bundle = await importContent(req.body);
+  res
+    .status(201)
+    .json({
+      data: {
+        instruments: bundle.instruments.length,
+        provisions: bundle.provisions.length,
+        offenses: bundle.offenses.length,
+        judgments: bundle.judgments.length,
+        publication_status: "draft",
+      },
+    });
+}
+export async function createOffense(
+  req: Request,
+  res: Response,
+): Promise<void> {
+  const offense = offenseSchema.parse(req.body);
+  await importContent({ offenses: [offense] });
+  res
+    .status(201)
+    .json({ data: { id: offense.id, publication_status: "draft" } });
+}
+export async function bulkUpload(req: Request, res: Response): Promise<void> {
+  const offenses = z.array(offenseSchema).max(500).parse(req.body);
+  await importContent({ offenses });
+  res
+    .status(201)
+    .json({ data: { count: offenses.length, publication_status: "draft" } });
+}
+export async function listContent(req: Request, res: Response): Promise<void> {
+  const kind = contentKind.parse(req.params.kind);
+  const offset = z.coerce
+    .number()
+    .int()
+    .min(0)
+    .default(0)
+    .parse(req.query.cursor);
+  const { rows } = await query(
+    `SELECT * FROM ${contentTables[kind]} ORDER BY id OFFSET $1 LIMIT 51`,
+    [offset],
   );
-
-  await updateStatusCount();
-  res.status(201).json({ ok: true });
+  res.json({
+    data: rows.slice(0, 50),
+    pagination: {
+      cursor: offset + Math.min(rows.length, 50),
+      has_more: rows.length > 50,
+    },
+  });
 }
-
-/** Delete an offense by its ID and update the status count (admin-only endpoint). */
-export async function deleteOffense(req: Request, res: Response) {
-  const { id } = req.params;
-  await query("DELETE FROM offenses WHERE id = $1", [id]);
-  await updateStatusCount();
-  res.json({ ok: true });
-}
-
-async function updateStatusCount() {
-  const { rows } = await query("SELECT COUNT(*)::int AS count FROM offenses");
-  await query("UPDATE status SET total_offenses = $1, last_updated = NOW() WHERE id = 1", [rows[0].count]);
-}
-
-/** Upsert an array of offenses in bulk, then update the status count (admin-only endpoint). */
-export async function bulkUpload(req: Request, res: Response) {
-  const offenses = z.array(offenseSchema).safeParse(req.body);
-  if (!offenses.success) {
-    return res.status(400).json({ error: "Invalid offenses array", details: offenses.error.flatten() });
-  }
-
-  for (const o of offenses.data) {
-    await query(
-      `INSERT INTO offenses (id, name, aliases, description, category, severity, citation, act, section, min_fine, max_fine, max_imprisonment, course_of_action, law_version)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
-       ON CONFLICT (id) DO UPDATE SET
-         name = EXCLUDED.name, aliases = EXCLUDED.aliases, description = EXCLUDED.description,
-         category = EXCLUDED.category, severity = EXCLUDED.severity, citation = EXCLUDED.citation,
-         act = EXCLUDED.act, section = EXCLUDED.section, min_fine = EXCLUDED.min_fine,
-         max_fine = EXCLUDED.max_fine, max_imprisonment = EXCLUDED.max_imprisonment,
-         course_of_action = EXCLUDED.course_of_action, law_version = EXCLUDED.law_version,
-         updated_at = NOW()`,
-      [o.id, o.name, o.aliases, o.description, o.category, o.severity, o.citation, o.act, o.section, o.min_fine, o.max_fine, o.max_imprisonment, o.course_of_action, o.law_version]
+export async function publishContent(
+  req: Request,
+  res: Response,
+): Promise<void> {
+  const kind = contentKind.parse(req.params.kind);
+  const action = z.enum(["publish", "unpublish"]).parse(req.params.action);
+  const table = contentTables[kind];
+  const client = await getClient();
+  try {
+    await client.query("BEGIN");
+    await client.query("SELECT pg_advisory_xact_lock(573911)");
+    const { rows } = await client.query(
+      `SELECT * FROM ${table} WHERE id = $1 FOR UPDATE`,
+      [req.params.id],
     );
+    if (!rows.length) {
+      await client.query("ROLLBACK");
+      res.status(404).json({ error: "Record not found" });
+      return;
+    }
+    const row = rows[0];
+    if (action === "publish") {
+      let valid = Boolean(row.verified_at);
+      if (kind === "instruments")
+        valid = valid && row.rights_basis.trim().length > 0;
+      if (kind === "provisions") {
+        const parent = await client.query(
+          "SELECT 1 FROM legal_instruments WHERE id = $1 AND publication_status = 'published'",
+          [row.instrument_id],
+        );
+        valid = valid && parent.rows.length === 1;
+      }
+      if (kind === "offenses") {
+        const provisions = await client.query(
+          `SELECT p.id FROM legal_provisions p JOIN legal_instruments i ON i.id = p.instrument_id WHERE p.id = ANY($1::text[]) AND p.publication_status = 'published' AND i.publication_status = 'published'`,
+          [[row.defining_provision_id, row.penalty_provision_id]],
+        );
+        valid =
+          valid &&
+          Boolean(row.defining_provision_id && row.penalty_provision_id) &&
+          provisions.rows.length ===
+            new Set([row.defining_provision_id, row.penalty_provision_id]).size;
+      }
+      if (!valid) {
+        await client.query("ROLLBACK");
+        res
+          .status(409)
+          .json({
+            error:
+              "Verify sources and permissions, then publish parent laws and referenced provisions first",
+          });
+        return;
+      }
+    }
+    const status = action === "publish" ? "published" : "draft";
+    await client.query(
+      `UPDATE ${table} SET publication_status = $1, updated_at = NOW() WHERE id = $2`,
+      [status, req.params.id],
+    );
+    await client.query(
+      "INSERT INTO content_history(kind, record_id, action, snapshot) VALUES ($1, $2, $3, $4::jsonb)",
+      [table, req.params.id, action, JSON.stringify(row)],
+    );
+    await client.query(
+      "UPDATE status SET data_version = gen_random_uuid()::text, last_updated = NOW() WHERE id = 1",
+    );
+    await client.query("COMMIT");
+    res.json({ data: { id: req.params.id, publication_status: status } });
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  } finally {
+    client.release();
   }
-
-  await updateStatusCount();
-  res.json({ ok: true, count: offenses.data.length });
+}
+export async function deleteOffense(
+  req: Request,
+  res: Response,
+): Promise<void> {
+  // Retain the source audit trail; removal from publication is reversible.
+  req.params.kind = "offenses";
+  req.params.action = "unpublish";
+  await publishContent(req, res);
 }
