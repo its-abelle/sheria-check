@@ -4,7 +4,7 @@ services:
     restart: unless-stopped
     environment:
       POSTGRES_USER: sheria
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-sheria_prod}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD}
       POSTGRES_DB: sheria_check
     volumes:
       - pgdata:/var/lib/postgresql/data
@@ -13,29 +13,28 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    ports:
-      - "127.0.0.1:5432:5432"
-
   server:
     build: ./server
     restart: unless-stopped
     environment:
-      DATABASE_URL: postgres://sheria:${DB_PASSWORD:-sheria_prod}@db:5432/sheria_check
-      PORT: "4000"
-      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin123}
+      DATABASE_URL: postgres://sheria:${DB_PASSWORD:?Set DB_PASSWORD}@db:5432/sheria_check
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?Set a long ADMIN_PASSWORD}
+      CORS_ORIGIN: ${CORS_ORIGIN:?Set the HTTPS web origin}
       NODE_ENV: production
+      PORT: "4000"
       LOG_LEVEL: ${LOG_LEVEL:-info}
-      CORS_ORIGIN: ${CORS_ORIGIN:-*}
       PG_POOL_SIZE: ${PG_POOL_SIZE:-20}
+      TRUST_PROXY: "1"
     depends_on:
       db:
         condition: service_healthy
-    healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:4000/api/v1/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 15s
-
+  client:
+    build: ./client
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${CLIENT_PORT:-8080}:80"
+    depends_on:
+      server:
+        condition: service_healthy
 volumes:
   pgdata:
