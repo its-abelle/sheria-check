@@ -1,279 +1,62 @@
-# Sheria Check — Architecture
+# Sheria Check architecture
 
-## Design Philosophy
+## Product boundaries
 
-1. **Transparency is the product.** Every decision — from showing the exact legal citation to listing the course of action — exists to give motorists information symmetry with law enforcement.
-2. **Mobile-first, offline-capable.** Most searches happen roadside on a phone with patchy connectivity. The PWA must load, search, and render offense data even on 2G or offline.
-3. **Zero friction for the vulnerable user.** No login, no paywall, no data tracking. The app works for anyone with a browser.
-4. **Data accuracy is a safety concern.** Wrong fine amounts or outdated penalties could cause real harm. Versioning, audit trails, and a clear disclaimer are non-negotiable.
+Kenyan legal information for everyone, online, English first. Motorists remain one audience. Public pages present approved original source text and curated judgment references; they do not diagnose crimes, determine guilt, calculate a personal amount owed, predict sentencing or provide individualized legal advice.
 
-## User Personas
+The Constitution anchors rights; offense definitions and penalty provisions are linked from the appropriate Acts/regulations. Bail/bond is distinct from a fine. Judgment links do not imply similar outcomes or current precedential status. The persistent legal-information notice appears across every screen.
 
-| Persona | Goal | Pain Point | Device |
-|---|---|---|---|
-| **Ruth (Matatu passenger, 34)** | Check if the fine the officer quoted for her driver is real | Illiterate in legal jargon, intimidated by officers | Low-end Android, Chrome |
-| **James (Private driver, 28)** | Know what he actually owes before the officer names a price | In a hurry, stressed, roadside | Mid-range Android, PWA installed |
-| **Grace (Fleet manager, 45)** | Track all offenses across 12 matatus at scale | Needs offline access, bulk lookup | Desktop + iOS PWA |
-| **Kip (Boda boda rider, 22)** | Quick voice/visual search, can't read long text | Low literacy, speaks Swahili primarily | Basic smartphone, small screen |
+## System
 
-## User Journey Maps
+Expo Router serves the shared web/Android/iOS interface. Web exports as a client-rendered SPA so published records and deep links do not require rebuilding static routes. An Nginx proxy serves web assets and forwards `/api/v1` and `/admin` to Express. PostgreSQL holds source versions, provisions, offenses and judgment references.
 
-### Primary Flow: Search → View → Act
+There is no Redis dependency, service worker, bundled legal snapshot, persistent query store, chatbot, motorist authentication or reporting API. API GETs require connectivity and use cancellation, a 15-second timeout, no-store responses and explicit retry controls. Public library/provision/offense lists have clear empty states.
 
-```
-Pull over / incident
-        │
-        ▼
-  Open Sheria Check
-        │
-        ▼
-  Search offense (text or browse category)
-        │
-        ▼
-  View offense detail
-   ├── Fine range (min – max KES)
-   ├── Legal citation (Act, Section)
-   ├── Severity tag
-   ├── Course of action (what to say/do)
-   └── Share / Print summary
-        │
-        ▼
-  [Optional] Report corrupt incident
-   ├── Officer name & badge
-   ├── Location
-   ├── Amount demanded vs legal amount
-   └── Submit (anonymous)
-```
+## Data and publication
 
-### Secondary Flow: Browse by Category
+- `legal_instruments`: immutable version identity, official URL, retrieval/verification dates, rights basis, draft/publication state.
+- `legal_provisions`: original wording, heading/number, instrument reference, rights topic tags, official anchor, verification date and publication state. New versions use new IDs.
+- `offenses`: public display name/aliases/category and links to defining and penalty provisions. Historical scraper fields remain private for migration compatibility and are excluded from the public view.
+- `judgment_references` and `offense_judgments`: original citation, court, decision date, official link and verification/publication state. No generated summaries or findings about precedent.
+- `content_history`: import snapshots and publication actions. Revisions remain available for audit.
+- `_migrations`: applied SQL files, serialized with a database advisory lock. Startup finishes migrations before accepting requests.
 
-```
-Home → Browse Categories → Select Category
-        │
-        ▼
-  List of offenses in category
-        │
-        ▼
-  Tap offense → Offense detail (same as above)
-```
+All imported content is draft. Importing changes to a published record withdraws that record until republished. Publication requires a verification date, an instrument rights basis, and published parents/referenced provisions. Withdrawing a law hides its provisions and offenses immediately through shared query gates. Admin content writes are transactional and serialized. A content revision UUID changes after imports/publication actions.
 
-## System Architecture
+Original source and version dates are displayed. A verification timestamp is not a claim that no later legislation or court decisions exist. Structural validation is not legal verification. See [CONTENT.md](CONTENT.md).
 
-```
-┌─────────────────────────────────────────────────────────┐
-│                      User                                │
-│  (Android phone / iOS phone)                             │
-└────────────────────────┬────────────────────────────────┘
-                         │ HTTPS
-                         ▼
-┌─────────────────────────────────────────┐
-│         Cloudflare / DO App Platform     │
-│  (CDN, SSL termination, DDoS protection) │
-└────────────────────┬────────────────────┘
-                     │
-            ┌────────┴────────┐
-            ▼                  ▼
-┌───────────────────┐  ┌──────────────────┐
-│  Client (Expo)    │  │  Server (Node)   │
-│  React Native 0.86│──│  Express         │
-│  NativeWind v4    │  │  API v1          │
-│  Expo Router v4   │  │  Zod validation  │
-│  Offline-first    │  │  Rate-limited    │
-└───────────────────┘  └────────┬─────────┘
-                                │
-                    ┌───────────┴───────────┐
-                    ▼                       ▼
-            ┌──────────────┐       ┌──────────────┐
-            │  Redis        │       │  PostgreSQL  │
-            │  (cache)      │       │  (primary DB)│
-            │  - query TTL  │       │  - offenses  │
-            │  - 5 min      │       │  - reports   │
-            └──────────────┘       │  - status    │
-                                   └──────────────┘
-```
+## API contract
 
-## Data Flow (Search)
+All paths are under `/api/v1`. Success is `{ data: T, pagination?: { cursor, limit, has_more, total? } }`; errors are `{ error: string, details?: object }`. Cursors are numeric offsets with deterministic ordering, not opaque/keyset cursors. Invalid inputs return 400. Missing/unpublished records return 404. Draft access requires admin authentication. The health endpoint is intentionally flat.
 
-```
-1. User types "speeding" in SearchBar
-2. Input debounced (300ms) → GET /api/v1/offenses/search?q=speeding&cursor=0&limit=20
-3. Server checks Redis cache for key "search:speeding:0:20"
-   ├── Cache HIT → return cached results
-   └── Cache MISS → PostgreSQL full-text search:
-        SELECT * FROM offenses
-        WHERE to_tsvector('english', name || ' ' || description || ' ' || array_to_string(aliases, ' '))
-              @@ plainto_tsquery('english', 'speeding')
-        ORDER BY similarity, min_fine ASC
-        LIMIT 21
-       → Store results in Redis with TTL 300s
-       → Return response
-4. Client renders OffenseCard list with skeleton loader
-```
+| Method/path                                 | Behavior                                                                       |
+| ------------------------------------------- | ------------------------------------------------------------------------------ |
+| `GET /offenses/search?q=&cursor=0&limit=20` | Published offense search; empty query lists approved records; limit 1–50       |
+| `GET /offenses/categories`                  | Published categories and counts                                                |
+| `GET /offenses?category=...`                | Published category browse                                                      |
+| `GET /offenses/:id`                         | Exact defining/penalty wording and provenance; no inferred fine range/severity |
+| `GET /legislation?q=`                       | Published law/version catalog, published provision counts                      |
+| `GET /legislation/:id`                      | Published law metadata and its published provisions                            |
+| `GET /provisions?q=&topic=&cursor=0`        | Text search or rights-topic filter; pages of 20                                |
+| `GET /provisions/:id`                       | Original provision and source metadata                                         |
+| `GET /judgments?offense_id=`                | Published curated references for a published offense                           |
+| `GET /status`                               | Content revision, published offense count, covered published statutes          |
+| `GET /health`                               | Database readiness                                                             |
+| `POST /admin/content/import`                | Atomic source-bundle import; always drafts                                     |
+| `GET /admin/content/:kind?cursor=0`         | Protected review list, 50 per page                                             |
+| `POST /admin/content/:kind/:id/publish`     | Enforce source/publication requirements                                        |
+| `POST /admin/content/:kind/:id/unpublish`   | Withdraw content while retaining audit history                                 |
+| `POST /admin/offenses` / `/bulk`            | Import new-contract offense records as drafts                                  |
+| `DELETE /admin/offenses/:id`                | Withdraw offense; preserve source history                                      |
 
-## Database Schema
+Kinds: `instruments`, `provisions`, `offenses`, `judgments`. Import bundle arrays: `instruments`, `provisions`, `offenses`, `judgments`, `links`. Payload schemas live in `server/src/utils/contentSchema.ts`. Source URLs must use approved official HTTPS hosts. No server-side fetching of arbitrary admin URLs occurs.
 
-### `offenses`
+## Privacy and operations
 
-| Column | Type | Notes |
-|---|---|---|
-| `id` | `TEXT PK` | Stable slug (e.g. `speeding-excess`) |
-| `name` | `TEXT NOT NULL` | Offense name |
-| `aliases` | `TEXT[]` | Alternative names for fuzzy search |
-| `description` | `TEXT NOT NULL` | Plain English explanation |
-| `category` | `TEXT NOT NULL` | FK-like to category enum |
-| `severity` | `TEXT CHECK(minor,serious,felony)` | Determines course of action style |
-| `citation` | `TEXT NOT NULL` | Full legal citation |
-| `act` | `TEXT NOT NULL` | Act name |
-| `section` | `TEXT NOT NULL` | Section number |
-| `min_fine` | `INTEGER NOT NULL` | Minimum penalty in KES |
-| `max_fine` | `INTEGER NOT NULL` | Maximum penalty in KES |
-| `max_imprisonment` | `TEXT NULLABLE` | e.g. "3 years" |
-| `course_of_action` | `TEXT NOT NULL` | What the motorist should do |
-| `law_version` | `TEXT DEFAULT '2024'` | Version of the law |
-| `created_at` | `TIMESTAMPTZ` | Auto |
-| `updated_at` | `TIMESTAMPTZ` | Auto |
+No search, URL, IP, user-agent, request-body or authorization-header logging. Request IDs are generated locally rather than trusting user-supplied trace text. Errors log a generic event plus request ID. Rate limiting uses transient in-memory network keys for one minute; these are not analytics and are never persisted. Hosting/CDN/proxy logs require equivalent operator configuration.
 
-### `reports`
+Production validates secrets/origins, disallows default admin credentials, limits pool/request sizes, applies SQL statement/connect timeouts and forwards rejected Express 4 handlers to the error middleware. Docker health checks and graceful HTTP/database shutdown are provided. TLS, uptime checks, backup storage/access and store credentials are operational responsibilities documented in DEPLOY.md.
 
-| Column | Type | Notes |
-|---|---|---|
-| `id` | `SERIAL PK` | |
-| `offense_id` | `TEXT FK → offenses.id` | Nullable |
-| `officer_name` | `TEXT` | Optional |
-| `officer_badge` | `TEXT` | Optional |
-| `location` | `TEXT` | Free text |
-| `amount_demanded` | `INTEGER` | KES |
-| `description` | `TEXT NOT NULL` | Required |
-| `created_at` | `TIMESTAMPTZ` | Auto |
+## Repository tooling
 
-### `status`
-
-| Column | Type | Notes |
-|---|---|---|
-| `id` | `INTEGER PK DEFAULT 1` | Singleton row |
-| `data_version` | `TEXT` | e.g. "2024.1" |
-| `statutes_covered` | `TEXT[]` | e.g. `{Traffic Act Cap 403}` |
-| `total_offenses` | `INTEGER` | Count |
-| `last_updated` | `TIMESTAMPTZ` | |
-
-## API Contract
-
-All endpoints prefixed with `/api/v1`.
-
-### `GET /offenses/search?q=<query>&cursor=<int>&limit=<int>`
-
-```json
-{
-  "data": [
-    {
-      "id": "speeding-excess",
-      "name": "Exceeding Speed Limit",
-      "description": "Driving a motor vehicle at a speed exceeding...",
-      "category": "speeding-reckless",
-      "severity": "minor",
-      "citation": "Traffic Act Cap 403, Section 44",
-      "min_fine": 500,
-      "max_fine": 5000,
-      "max_imprisonment": null,
-      "course_of_action": "The officer may issue a charge sheet..."
-    }
-  ],
-  "pagination": {
-    "cursor": 20,
-    "limit": 20,
-    "has_more": true,
-    "total": 47
-  }
-}
-```
-
-### `GET /offenses/categories`
-### `GET /offenses/:id`
-### `GET /offenses?category=<slug>`
-### `GET /status`
-### `POST /reports`
-
-```json
-{
-  "officer_name": "optional",
-  "officer_badge": "optional",
-  "location": "optional",
-  "amount_demanded": 2000,
-  "description": "Officer demanded KES 2000 for a KES 500 fine"
-}
-```
-
-### Admin endpoints (Bearer token required)
-- `POST /admin/offenses` — create/update single
-- `POST /admin/offenses/bulk` — bulk upsert
-- `DELETE /admin/offenses/:id`
-
-## Frontend Component Tree
-
-```
-<App>
-  <ErrorBoundary>                  ← Catches rendering errors
-    <ToastProvider>                ← Global toast notifications
-      <Stack.Navigator>
-        <(tabs)/>
-          ├── Home                 ← Hero search + categories grid + API status
-          ├── Insights            ← Anonymized incident statistics
-          └── Disclaimer          ← Legal disclaimer page
-        <category/[id] />         ← Category browse screen
-        <offense/[id] />          ← Offense detail + report modal
-        <NotFound />              ← 404
-      </Stack.Navigator>
-    </ToastProvider>
-  </ErrorBoundary>
-</App>
-```
-
-### State Management
-- No global state library. Each page uses custom hooks (`useSearch`, `useOffenses`) that wrap the API client.
-- Expo Router handles URL state via file-based routing and `useLocalSearchParams`.
-- Offline-first: `OffenseRepository` singleton manages local data with Fuse.js fuzzy search.
-- Modal open/close managed by local `useState`.
-
-### Key Components
-| Component | Responsibility |
-|---|---|
-| `SearchBar` | Debounced input, emits query changes |
-| `OffenseCard` | Summary card (fine range, severity badge, citation) |
-| `CategoryCard` | Category card with icon + count |
-| `DisclaimerBanner` | Persistent legal disclaimer banner |
-| `ReportModal` | Anonymous incident form, bottom sheet with confirmation |
-| `LoadingSkeleton` | Skeleton placeholders for loading states |
-| `Toast` | Slide-up notifications (success/error/info) |
-| `ErrorBoundary` | Catches rendering errors, shows recovery UI |
-| `EmptyState` | Contextual empty/error state illustrations |
-
-## Performance Targets
-
-| Metric | Target | How |
-|---|---|---|
-| App launch (cold) | < 3.0s | Splash screen, font preloading, bundled offense data |
-| Search latency | < 200ms | Local Fuse.js search (offline-first) |
-| API search | < 500ms | PostgreSQL full-text search with ranking |
-| Offline | Full offense browse | Bundled offenses.json snapshot in app binary |
-| Background refresh | Transparent | AsyncStorage cache + server data_version check |
-
-## Security Model
-
-1. **No user authentication.** Anonymous access by design. No sessions, tokens, or cookies for motorists.
-2. **Admin auth.** Bearer token (env var `ADMIN_PASSWORD`) for admin endpoints. Plain password is intentional — this is a single-admin tool. Upgrade to OAuth if multi-admin needed.
-3. **Rate limiting.** 100 req/min per IP on search, 10 req/min on report submission.
-4. **Input validation.** All inputs validated with Zod on the server. SQL injection prevented by parameterized queries.
-5. **CORS.** Restricted to known origins in production.
-6. **Headers.** Helmet.js for security headers (XSS, content-type sniffing, referrer policy).
-7. **No secrets in client.** API keys, tokens, and DB credentials are server-side only. Client only holds `EXPO_PUBLIC_API_URL`.
-
-## Caching Strategy
-
-| Layer | What | TTL | Invalidation |
-|---|---|---|---|
-| **App (bundled)** | Offenses snapshot | Permanent (app binary) | New app release |
-| **App (AsyncStorage)** | Server-synced offenses | Until next refresh | `data_version` change from `/status` |
-| **App (Fuse.js)** | In-memory search index | Session lifetime | On data refresh |
-| **Server (Redis)** | Search results | 300s | On offense data update |
-| **Server (Redis)** | Category lists | 600s | On offense data update |
-| **CDN (DigitalOcean)** | Static assets | 1y (fingerprinted) | On deploy |
+The root package provides Prettier through `npm run format` and `npm run format:check`. The server provides TypeScript-aware ESLint through `npm run lint`; these tools are retained from main alongside the legal-library implementation.

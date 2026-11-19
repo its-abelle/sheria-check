@@ -15,11 +15,3 @@ export const searchLimiter = rateLimit({
   legacyHeaders: false,
   message: { error: "Search rate limit exceeded. Please slow down." },
 });
-
-export const reportLimiter = rateLimit({
-  windowMs: 60 * 1000,
-  max: 10,
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: { error: "Too many reports submitted. Please try again in a minute." },
-});

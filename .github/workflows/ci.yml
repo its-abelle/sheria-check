@@ -1,36 +1,36 @@
 name: CI
-
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
-
 jobs:
   client:
-    name: Client — TypeScript + Build + Test
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: client
-
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
-
-      - run: npm install --no-audit --no-fund
-      - run: npx tsc --noEmit
-      - run: npm test
-
+          node-version: 22
+          cache: npm
+          cache-dependency-path: client/package-lock.json
+      - run: npm ci --no-audit --no-fund
+      - run: npm run typecheck
+      - run: npm test -- --runInBand
+      - run: npm run export:web
+        env:
+          EXPO_NO_TELEMETRY: 1
+      - run: npm run export:mobile
+        env:
+          EXPO_NO_TELEMETRY: 1
   server:
-    name: Server — TypeScript + Build + Test
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: server
-
     services:
       postgres:
         image: postgres:16-alpine
@@ -38,23 +38,29 @@ jobs:
           POSTGRES_USER: sheria
           POSTGRES_PASSWORD: sheria_test
           POSTGRES_DB: sheria_check_test
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
         ports:
           - 5432:5432
-
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
-
-      - run: npm install --no-audit --no-fund
+          node-version: 22
+          cache: npm
+          cache-dependency-path: server/package-lock.json
+      - run: npm ci --no-audit --no-fund
       - run: npx tsc --noEmit
+      - run: python3 -m unittest discover -s ../scripts -p 'test_*.py'
+      - run: python3 ../scripts/verify_data.py
+      - run: npm run validate:data
+      - run: npm run build
       - run: npm test
         env:
           DATABASE_URL: postgres://sheria:sheria_test@localhost:5432/sheria_check_test
           ADMIN_PASSWORD: test_admin
+  images:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t sheria-api ./server
+      - run: docker build -t sheria-web ./client

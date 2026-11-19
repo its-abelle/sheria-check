@@ -1,106 +1,81 @@
-import { useState, useEffect } from "react";
-import { View, Text, ScrollView, Pressable } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { View, Text, Pressable } from "react-native";
+import { Link } from "expo-router";
+import { Page } from "../../src/components/Page";
 import { SearchBar } from "../../src/components/SearchBar";
-import { CategoryCard } from "../../src/components/CategoryCard";
-import { DisclaimerBanner } from "../../src/components/DisclaimerBanner";
-import { BalanceScale } from "../../src/components/BalanceScale";
 import { OffenseCard } from "../../src/components/OffenseCard";
-import { EmptyState } from "../../src/components/EmptyState";
-import { SearchSkeleton, CategorySkeleton } from "../../src/components/LoadingSkeleton";
+import { RequestState } from "../../src/components/RequestState";
 import { useSearch } from "../../src/hooks/useSearch";
-import { useCategories, useApiStatus } from "../../src/hooks/useOffenses";
-
-export default function HomeScreen() {
-  const { query, setQuery, results, loading, error, total } = useSearch();
-  const { categories, loading: catLoading } = useCategories();
-  const status = useApiStatus();
-  const insets = useSafeAreaInsets();
-  const [showResults, setShowResults] = useState(false);
-
-  useEffect(() => {
-    setShowResults(query.trim().length > 0);
-  }, [query]);
-
+import { useCategories } from "../../src/hooks/useOffenses";
+import { en } from "../../src/i18n/en";
+export default function HomeScreen(): React.JSX.Element {
+  const search = useSearch();
+  const categories = useCategories();
   return (
-    <ScrollView
-      className="flex-1 bg-surface"
-      contentContainerStyle={{ paddingBottom: insets.bottom + 20 }}
-      showsVerticalScrollIndicator={false}
-    >
-      {/* Hero Section */}
-      <View className="bg-primary-500 px-6 pb-10 pt-12">
-        <View className="items-center">
-          <BalanceScale size={72} />
-          <Text className="mt-4 text-center text-2xl font-bold text-white" style={{ fontFamily: "Fraunces" }}>
-            Know Your Fine.{"\n"}Stand Your Ground.
-          </Text>
-          <Text className="mt-3 text-center text-sm text-white/80">
-            Look up traffic offense fines under Kenyan law.{"\n"}Don't let anyone overcharge you.
-          </Text>
-        </View>
-        <View className="mt-8">
-          <SearchBar value={query} onChangeText={setQuery} />
-        </View>
-        {status && (
-          <Text className="mt-3 text-center text-xs text-white/50">
-            {status.total_offenses} offenses · updated {new Date(status.last_updated).toLocaleDateString("en-KE")}
-          </Text>
-        )}
-      </View>
-
-      {/* Search Results */}
-      {showResults && (
-        <View className="border-b border-gray-100 bg-white px-4 py-6">
-          <View className="mx-auto max-w-3xl">
-            {loading && results.length === 0 && <SearchSkeleton />}
-            {error && (
-              <View className="rounded-xl border border-red-200 bg-red-50 p-4">
-                <Text className="text-sm text-red-600">{error}</Text>
-              </View>
-            )}
-            {!loading && !error && results.length === 0 && query.trim() && (
-              <EmptyState variant="no-results" query={query} />
-            )}
-            {!loading && results.length > 0 && (
-              <>
-                <Text className="mb-3 text-sm text-gray-500">
-                  {total} result{total !== 1 ? "s" : ""}
-                </Text>
-                <View className="gap-3">
-                  {results.map((offense) => (
-                    <OffenseCard
-                      key={offense.id}
-                      id={offense.id}
-                      name={offense.name}
-                      category={offense.category}
-                      severity={offense.severity}
-                      min_fine={offense.min_fine}
-                      max_fine={offense.max_fine}
-                    />
-                  ))}
-                </View>
-              </>
-            )}
-          </View>
+    <Page>
+      <Text
+        accessibilityRole="header"
+        className="text-3xl font-bold leading-10 text-primary-900"
+      >
+        {en.heading}
+      </Text>
+      <Text className="text-lg leading-7 text-gray-700">{en.introduction}</Text>
+      <SearchBar
+        value={search.query}
+        onChangeText={search.setQuery}
+        placeholder="Search an offense or legal term"
+      />
+      <Text className="text-sm leading-6 text-primary-700">{en.coverage}</Text>
+      {!search.query && (
+        <View className="flex-row flex-wrap gap-3">
+          {categories.categories.map((category): React.JSX.Element => (
+            <Link
+              key={category.id}
+              href={{ pathname: "/category/[id]", params: { id: category.id } }}
+              className="rounded-lg border border-primary-200 px-4 py-3 text-primary-700"
+            >
+              {category.name} ({category.count})
+            </Link>
+          ))}
         </View>
       )}
-
-      {/* Categories */}
-      {!showResults && (
-        <View className="px-4 py-6">
-          <View className="mx-auto max-w-3xl gap-3">
-            <DisclaimerBanner />
-            {catLoading ? (
-              <CategorySkeleton />
-            ) : (
-              categories.map((cat) => (
-                <CategoryCard key={cat.id} category={cat} />
-              ))
-            )}
-          </View>
+      <RequestState
+        loading={search.loading}
+        error={search.error}
+        retry={search.retry}
+      />
+      {!search.loading && !search.error && (
+        <Text className="text-sm text-gray-700">
+          {search.total} published result{search.total === 1 ? "" : "s"}
+        </Text>
+      )}
+      {search.results.map((offense): React.JSX.Element => (
+        <OffenseCard key={offense.id} offense={offense} />
+      ))}
+      {!search.loading && !search.error && !search.results.length && (
+        <View className="gap-3 py-6">
+          <Text className="text-base leading-7 text-primary-900">
+            {en.noOffenses}
+          </Text>
+          <Link
+            href="/library"
+            className="py-3 font-semibold text-primary-600 underline"
+          >
+            Browse the law library →
+          </Link>
         </View>
       )}
-    </ScrollView>
+      {search.hasMore && (
+        <Pressable
+          accessibilityRole="button"
+          disabled={search.loading}
+          onPress={search.loadMore}
+          className="min-h-12 justify-center rounded-lg bg-primary-500 px-5"
+        >
+          <Text className="text-center font-semibold text-white">
+            Load more offenses
+          </Text>
+        </Pressable>
+      )}
+    </Page>
   );
 }

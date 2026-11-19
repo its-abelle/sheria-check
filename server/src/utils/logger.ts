@@ -1,10 +1,5 @@
 import pino from "pino";
-
 export const logger = pino({
   level: process.env.LOG_LEVEL || "info",
-  transport:
-    process.env.NODE_ENV === "development"
-      ? { target: "pino/file", options: { destination: 1 } }
-      : undefined,
-  redact: ["req.headers.authorization", "req.headers.cookie"],
+  redact: ["req", "res", "headers", "body", "query", "ip"],
 });

@@ -1,24 +1,25 @@
-export type Severity = "minor" | "serious" | "felony";
-
 export interface Offense {
   id: string;
   name: string;
   aliases: string[];
-  description: string;
   category: string;
-  severity: Severity;
   citation: string;
   act: string;
   section: string;
-  min_fine: number;
-  max_fine: number;
-  max_imprisonment: string | null;
-  course_of_action: string;
   law_version: string;
-  created_at: string;
+  defining_provision_id: string;
+  penalty_provision_id: string;
+  defining_text: string;
+  penalty_text: string;
+  source_url: string;
+  penalty_source_url: string;
+  penalty_act: string;
+  penalty_section: string;
+  penalty_source_version: string;
+  source_version: string;
+  verified_at: string;
   updated_at: string;
 }
-
 export interface OffenseCategory {
   id: string;
   name: string;
@@ -26,30 +27,51 @@ export interface OffenseCategory {
   icon: string;
   count: number;
 }
-
-export interface ReportPayload {
-  offense_id?: string;
-  officer_name?: string;
-  officer_badge?: string;
-  location?: string;
-  amount_demanded?: number;
-  amount_legal?: number;
-  description: string;
-}
-
 export interface ApiStatus {
   data_version: string;
   statutes_covered: string[];
-  last_updated: string;
+  last_updated: string | null;
   total_offenses: number;
 }
-
-export interface IncidentInsight {
-  period: string;
-  area: string;
-  report_count: number;
-  median_amount_demanded: number | null;
-  median_amount_legal: number | null;
-  top_offense_id: string | null;
-  top_offense_name: string | null;
+export interface LegalInstrument {
+  id: string;
+  title: string;
+  source_url: string;
+  version: string;
+  retrieved_at: string;
+  verified_at: string;
+  provision_count: number;
+}
+export interface LegalProvision {
+  id: string;
+  instrument_id: string;
+  number: string;
+  heading: string;
+  text: string;
+  topics: string[];
+  source_url: string;
+  verified_at: string;
+  instrument_title?: string;
+  source_version?: string;
+}
+export interface InstrumentDetail extends LegalInstrument {
+  provisions: LegalProvision[];
+}
+export interface JudgmentReference {
+  id: string;
+  citation: string;
+  court: string;
+  decision_date: string;
+  source_url: string;
+  verified_at: string;
+}
+export interface Pagination {
+  cursor: number;
+  limit: number;
+  has_more: boolean;
+  total?: number;
+}
+export interface ApiResponse<T> {
+  data: T;
+  pagination?: Pagination;
 }

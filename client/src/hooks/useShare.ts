@@ -1,32 +1,48 @@
-import { useCallback } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Share, Platform } from "react-native";
-
 interface SharePayload {
   title: string;
   message: string;
   url?: string;
 }
-
-/** Hook that wraps the React Native Share API for sharing offense details. */
-export function useShare() {
-  const share = useCallback(async (payload: SharePayload): Promise<"shared" | "copied" | null> => {
+interface ShareState {
+  message: string | null;
+  share: (payload: SharePayload) => Promise<void>;
+}
+/** Native share sheet, browser sharing, and a real clipboard fallback. */
+export function useShare(): ShareState {
+  const [message, setMessage] = useState<string | null>(null);
+  const mounted = useRef(true);
+  useEffect((): (() => void) => {
+    mounted.current = true;
+    return (): void => {
+      mounted.current = false;
+    };
+  }, []);
+  const share = useCallback(async (payload: SharePayload): Promise<void> => {
+    const text = `${payload.message}${payload.url ? `\n\n${payload.url}` : ""}`;
     try {
-      const result = await Share.share({
-        title: payload.title,
-        message: payload.url
-          ? `${payload.message}\n\n${payload.url}`
-          : payload.message,
-        ...(Platform.OS === "ios" ? { url: payload.url } : {}),
-      });
-
-      if (result.action === Share.sharedAction) {
-        return "shared";
+      if (Platform.OS === "web") {
+        if (typeof navigator !== "undefined" && navigator.share)
+          await navigator.share({ title: payload.title, text });
+        else if (
+          typeof navigator !== "undefined" &&
+          navigator.clipboard?.writeText
+        ) {
+          await navigator.clipboard.writeText(text);
+          if (mounted.current) setMessage("Reference copied to clipboard.");
+        } else if (mounted.current)
+          setMessage(
+            "Sharing is unavailable in this browser. Use the official source link.",
+          );
+      } else {
+        await Share.share({ title: payload.title, message: text });
       }
-      return null;
-    } catch {
-      return null;
+    } catch (error) {
+      if (error instanceof Error && error.name === "AbortError") return;
+      if (mounted.current)
+        setMessage("Unable to share. Please use the official source link.");
     }
   }, []);
-
-  return { share, canShare: true };
+  return { share, message };
 }

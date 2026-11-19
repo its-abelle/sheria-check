@@ -1,67 +1,94 @@
-import { useState, useCallback, useRef, useEffect } from "react";
-import { searchOffenses as apiSearch } from "../services/api";
-import { offenseRepository } from "../repositories/OffenseRepository";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { searchOffenses } from "../services/api";
 import type { Offense } from "../types";
-
-/** Hook that manages local fuzzy search state with debounced input and pagination. */
-export function useSearch() {
-  const [query, setQuery] = useState("");
-  const [results, setResults] = useState<Offense[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [hasMore, setHasMore] = useState(false);
-  const [total, setTotal] = useState(0);
-  const nextCursorRef = useRef<string | null>(null);
-  const searchTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    return () => {
-      if (searchTimer.current) clearTimeout(searchTimer.current);
-    };
-  }, []);
-
-  const doLocalSearch = useCallback((q: string) => {
-    const repoResults = offenseRepository.search(q);
-    setResults(repoResults);
-    setTotal(repoResults.length);
-    setHasMore(false);
-    setError(null);
-  }, []);
-
-  const search = useCallback(
-    (value: string) => {
-      setQuery(value);
-      if (searchTimer.current) clearTimeout(searchTimer.current);
-
-      if (!value.trim()) {
-        setResults([]);
-        setTotal(0);
-        setHasMore(false);
-        nextCursorRef.current = null;
-        return;
-      }
-
-      searchTimer.current = setTimeout(() => {
-        doLocalSearch(value.trim());
-      }, 200);
-    },
-    [doLocalSearch]
-  );
-
-  const loadMore = useCallback(async () => {
-    if (loading || !hasMore || !nextCursorRef.current) return;
-    setLoading(true);
+interface SearchState {
+  results: Offense[];
+  loading: boolean;
+  error: string | null;
+  total: number;
+  next: string | null;
+}
+export interface SearchResult extends SearchState {
+  query: string;
+  setQuery: (value: string) => void;
+  hasMore: boolean;
+  loadMore: () => void;
+  retry: () => void;
+}
+export function useSearch(): SearchResult {
+  const [query, updateQuery] = useState("");
+  const [revision, setRevision] = useState(0);
+  const [state, setState] = useState<SearchState>({
+    results: [],
+    loading: true,
+    error: null,
+    total: 0,
+    next: null,
+  });
+  const controller = useRef<AbortController | null>(null);
+  const busy = useRef(false);
+  const activeQuery = useRef("");
+  const run = useCallback(async (q: string, cursor?: string): Promise<void> => {
+    if (q !== activeQuery.current.trim()) return;
+    controller.current?.abort();
+    const request = new AbortController();
+    controller.current = request;
+    busy.current = true;
+    setState((old: SearchState): SearchState => ({
+      ...(cursor ? old : { results: [], total: 0, next: null }),
+      loading: true,
+      error: null,
+    }));
     try {
-      const result = await apiSearch(query, nextCursorRef.current);
-      setResults((prev) => [...prev, ...result.data]);
-      nextCursorRef.current = result.nextCursor;
-      setHasMore(result.nextCursor !== null);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Failed to load more results.");
+      const result = await searchOffenses(q, cursor, 20, request.signal);
+      if (!request.signal.aborted)
+        setState((old: SearchState): SearchState => ({
+          results: cursor ? [...old.results, ...result.data] : result.data,
+          total: result.total,
+          next: result.nextCursor,
+          loading: false,
+          error: null,
+        }));
+    } catch (error) {
+      if (!request.signal.aborted)
+        setState((old: SearchState): SearchState => ({
+          ...old,
+          loading: false,
+          error:
+            error instanceof Error
+              ? error.message
+              : "Search failed. Please try again.",
+        }));
     } finally {
-      setLoading(false);
+      if (controller.current === request) busy.current = false;
     }
-  }, [loading, hasMore, query]);
-
-  return { query, setQuery: search, results, loading, error, hasMore, total, loadMore };
+  }, []);
+  useEffect((): (() => void) => {
+    const timer = setTimeout((): void => {
+      void run(query.trim());
+    }, 250);
+    return (): void => {
+      clearTimeout(timer);
+      controller.current?.abort();
+    };
+  }, [query, revision, run]);
+  const setQuery = useCallback((value: string): void => {
+    if (value === activeQuery.current) return;
+    activeQuery.current = value;
+    controller.current?.abort();
+    busy.current = false;
+    setState({ results: [], loading: true, error: null, total: 0, next: null });
+    updateQuery(value);
+  }, []);
+  const loadMore = (): void => {
+    if (state.next && !busy.current) void run(query.trim(), state.next);
+  };
+  return {
+    ...state,
+    query,
+    setQuery,
+    hasMore: state.next !== null,
+    loadMore,
+    retry: (): void => setRevision((old: number): number => old + 1),
+  };
 }

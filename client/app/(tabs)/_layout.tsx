@@ -1,44 +1,52 @@
 import { Tabs } from "expo-router";
-import { Text } from "react-native";
-import { Scale, Info, BarChart3 } from "lucide-react-native";
-
-export default function TabsLayout() {
+import { Scale, BookOpen, Shield, Info } from "lucide-react-native";
+export default function TabsLayout(): React.JSX.Element {
   return (
     <Tabs
       screenOptions={{
-        headerStyle: { backgroundColor: "#FFFFFF" },
         headerTintColor: "#6B3A2A",
-        headerTitleStyle: { fontFamily: "Fraunces", fontWeight: "600" },
         tabBarActiveTintColor: "#6B3A2A",
-        tabBarInactiveTintColor: "#A87A5E",
-        tabBarStyle: {
-          backgroundColor: "#FFFFFF",
-          borderTopColor: "#E2CBB8",
-        },
+        tabBarInactiveTintColor: "#562F22",
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
           title: "Sheria Check",
-          tabBarLabel: "Home",
-          tabBarIcon: ({ color, size }) => <Scale size={size} color={color} />,
+          tabBarLabel: "Offenses",
+          tabBarIcon: ({ color, size }): React.JSX.Element => (
+            <Scale color={color} size={size} />
+          ),
         }}
       />
       <Tabs.Screen
-        name="insights"
+        name="library"
         options={{
-          title: "Insights",
-          tabBarLabel: "Insights",
-          tabBarIcon: ({ color, size }) => <BarChart3 size={size} color={color} />,
+          title: "Law library",
+          tabBarLabel: "Laws",
+          tabBarIcon: ({ color, size }): React.JSX.Element => (
+            <BookOpen color={color} size={size} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="rights"
+        options={{
+          title: "Rights references",
+          tabBarLabel: "Rights",
+          tabBarIcon: ({ color, size }): React.JSX.Element => (
+            <Shield color={color} size={size} />
+          ),
         }}
       />
       <Tabs.Screen
         name="disclaimer"
         options={{
-          title: "Disclaimer",
-          tabBarLabel: "Info",
-          tabBarIcon: ({ color, size }) => <Info size={size} color={color} />,
+          title: "About & limitations",
+          tabBarLabel: "About",
+          tabBarIcon: ({ color, size }): React.JSX.Element => (
+            <Info color={color} size={size} />
+          ),
         }}
       />
     </Tabs>

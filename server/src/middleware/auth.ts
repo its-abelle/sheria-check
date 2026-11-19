@@ -1,19 +1,20 @@
-import { Request, Response, NextFunction } from "express";
-
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin123";
-
-/** Middleware that rejects requests without a valid Bearer token in the Authorization header. */
-export function requireAdmin(req: Request, res: Response, next: NextFunction) {
-  const auth = req.headers.authorization;
-
-  if (!auth || !auth.startsWith("Bearer ")) {
-    return res.status(401).json({ error: "Unauthorized" });
+import { timingSafeEqual, createHash } from "node:crypto";
+import type { Request, Response, NextFunction } from "express";
+import { config } from "../config.js";
+export function requireAdmin(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): void {
+  const auth = req.headers.authorization || "";
+  const digest = (value: string): Buffer =>
+    createHash("sha256").update(value).digest();
+  if (
+    !auth.startsWith("Bearer ") ||
+    !timingSafeEqual(digest(auth.slice(7)), digest(config.ADMIN_PASSWORD))
+  ) {
+    res.status(401).json({ error: "Unauthorized" });
+    return;
   }
-
-  const token = auth.slice(7);
-  if (token !== ADMIN_PASSWORD) {
-    return res.status(401).json({ error: "Invalid credentials" });
-  }
-
   next();
 }
