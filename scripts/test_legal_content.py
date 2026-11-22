@@ -1,5 +1,10 @@
 """Data-tool regression tests; fixtures are synthetic and never production content."""
 import tempfile
+from io import BytesIO
+import json
+import fetch_legal_source
+from audit_traffic_snapshot import content_digest
+from verify_data import verify_review
 import unittest
 from pathlib import Path
 from unittest.mock import patch
@@ -102,6 +107,37 @@ TEST ending.
             parse_snapshot(raw)
 
 
+    def test_fetch_requires_permission_before_network_access(self):
+        with tempfile.TemporaryDirectory() as directory, patch.object(fetch_legal_source, 'urlopen') as request:
+            with self.assertRaisesRegex(ValueError, 'permission reference'):
+                fetch_legal_source.download('https://new.kenyalaw.org/source.pdf', Path(directory) / 'source.pdf', '')
+            request.assert_not_called()
+
+    def test_source_provenance_is_saved_and_challenges_are_rejected(self):
+        class Response(BytesIO):
+            headers = {'Content-Type': 'application/pdf'}
+            def geturl(self):
+                return 'https://new.kenyalaw.org/source.pdf'
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / 'source.pdf'
+            with patch.object(fetch_legal_source, 'urlopen', return_value=Response(b'%PDF-synthetic-fixture')):
+                fetch_legal_source.download('https://new.kenyalaw.org/source.pdf', output, 'TEST ONLY permission reference')
+            evidence = json.loads(output.with_suffix('.pdf.provenance.json').read_text())
+            self.assertEqual(evidence['legal_verification'], 'not_performed')
+            self.assertEqual(evidence['permission_reference'], 'TEST ONLY permission reference')
+            challenge = Response(b'<html>Verification required</html>')
+            challenge.headers = {'Content-Type': 'text/html'}
+            with patch.object(fetch_legal_source, 'urlopen', return_value=challenge):
+                with self.assertRaisesRegex(ValueError, 'challenge'):
+                    fetch_legal_source.download('https://new.kenyalaw.org/source.pdf', Path(directory) / 'challenge.pdf', 'TEST ONLY')
+            self.assertFalse((Path(directory) / 'challenge.pdf').exists())
+
+    def test_audit_binding_detects_changed_legal_text(self):
+        data = {'provisions': [{'id': 'test-section', 'instrument_id': 'test-law', 'heading': 'TEST ONLY heading', 'text': 'TEST original conditional wording'}]}
+        evidence = {'scope': 'local_snapshot_text_alignment_only', 'publication_ready': False, 'instrument_id': 'test-law', 'provisions': [{'id': 'test-section', 'content_sha256': content_digest('TEST ONLY heading', 'TEST original conditional wording'), 'layout_raw_alignment': True, 'draft_alignment': True}]}
+        self.assertEqual(verify_review(data, evidence), [])
+        data['provisions'][0]['text'] = 'TEST altered penalty'
+        self.assertTrue(any('stale' in error for error in verify_review(data, evidence)))
 
 if __name__ == '__main__':
     unittest.main()

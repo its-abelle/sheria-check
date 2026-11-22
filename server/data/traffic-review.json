@@ -1,0 +1,1246 @@
+{
+  "scope": "local_snapshot_text_alignment_only",
+  "checked_at": "2026-11-22T08:54:07.829083Z",
+  "source_file": "Traffic Act.pdf",
+  "source_sha256": "635fe5293117085eacddc74906bac815154e9a45f342498a68a6c3fe716c7855",
+  "instrument_id": "traffic-act-2024-04-26",
+  "source_version": "2024-04-26",
+  "method": "Compare NFKC/whitespace-normalized headings and bodies from pdftotext layout and raw modes against drafts; TOC cross-check; PDF page references.",
+  "provision_count": 153,
+  "all_text_aligned": true,
+  "current_law_review": "not_established",
+  "source_access_permission": "not_recorded",
+  "publication_ready": false,
+  "limitations": [
+    "Two text extractions agreeing does not establish current law or legal interpretation.",
+    "The supplied document is the 26 April 2024 historical snapshot, not a verified current consolidation.",
+    "Visual inspection, acquisition/reuse basis, amendments, commencement, subsidiary instruments and applicable judgments still require review.",
+    "No verified_at values or publication states are set by this command."
+  ],
+  "provisions": [
+    {
+      "id": "traffic-act-2024-04-26-s1",
+      "number": "Section 1",
+      "pdf_pages": [9],
+      "content_sha256": "bf8188a6fa24510deaa99eadf5b2497ce4e01077b374c092eb2950f8dffa282b",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s2",
+      "number": "Section 2",
+      "pdf_pages": [9, 10, 11],
+      "content_sha256": "df11a18a558abc30455e55ef9fe41ab754dd89de994711e57078dac755439588",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s3",
+      "number": "Section 3",
+      "pdf_pages": [11, 12],
+      "content_sha256": "d02a7a8935c0596ab241ff2a3dd6d1d8b09c720df522c66131a4770c0953959f",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s4",
+      "number": "Section 4",
+      "pdf_pages": [12],
+      "content_sha256": "c5db7b70d2bd36d995e91495c5b9386c31eddcbaea3e1ef60ab345692f04ec77",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s5",
+      "number": "Section 5",
+      "pdf_pages": [12],
+      "content_sha256": "1f04ea4e184d81b758fd5ddd9258780bc7956d90e55b9aec78e21eafa1b5d29d",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s5a",
+      "number": "Section 5A",
+      "pdf_pages": [12],
+      "content_sha256": "3b1b72044a650dcaa00ba4c53cc52873308f968a9dfb4cf80c3676c11d497582",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s5b",
+      "number": "Section 5B",
+      "pdf_pages": [13],
+      "content_sha256": "bb03ee342298c0e295d41a0dab8d1d4f3923543748eaa97ea4b6777c00304363",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s5c",
+      "number": "Section 5C",
+      "pdf_pages": [13],
+      "content_sha256": "9cc1e1aac4e3714d43b4a16f402a3b613ee3ab053c56e54fda165b5c15d07984",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s5d",
+      "number": "Section 5D",
+      "pdf_pages": [13],
+      "content_sha256": "b21a34ef082f99eda8663c161af022049c19d1041da45a01974cfda39a33bffd",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s5e",
+      "number": "Section 5E",
+      "pdf_pages": [13, 14],
+      "content_sha256": "2b8c36b97361bb6a80c146cc487cbadec2d71a64291c531594351a1398fd232c",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s6",
+      "number": "Section 6",
+      "pdf_pages": [14, 15],
+      "content_sha256": "3b0f04ecc9e60e55a2da0d4eba9f457bab02637c5fe060787a9ed24b6406f5e3",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s6a",
+      "number": "Section 6A",
+      "pdf_pages": [15],
+      "content_sha256": "a08da44779d34f32e2004f05d96455bfdd6c6c867e8e276c19be696fc4d0e969",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s7",
+      "number": "Section 7",
+      "pdf_pages": [15],
+      "content_sha256": "4dd34527e9219035a390c6b36d894681d99799253c556da249ce86a4775dae14",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s8",
+      "number": "Section 8",
+      "pdf_pages": [15],
+      "content_sha256": "ccbbbad91dbbcca461a6a9b30cb0901b46c99969d73d7717a6d27fccb5ae93cc",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s9",
+      "number": "Section 9",
+      "pdf_pages": [15, 16],
+      "content_sha256": "398eebe490ff708842caf633d1535c9719397546b89629471a8d084d053bd277",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s10",
+      "number": "Section 10",
+      "pdf_pages": [16],
+      "content_sha256": "c3f6383d0947a30ec9b30814064f20fb3911986fb5adc56bc759c121061de480",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s11",
+      "number": "Section 11",
+      "pdf_pages": [16],
+      "content_sha256": "b9b6eb4193deb0c73ff2110b262a69b18a91725ed0c4b090dd7825675f1d9636",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s12",
+      "number": "Section 12",
+      "pdf_pages": [16, 17],
+      "content_sha256": "cd94b2a741177990c431aa1b4e26ab61cdba63a0cef48803da5cf07b8e7e6878",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s13",
+      "number": "Section 13",
+      "pdf_pages": [17],
+      "content_sha256": "62f0d5b4ee06006814e0759fde3faa59843b626acdf37489c06107de260ab63c",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s14",
+      "number": "Section 14",
+      "pdf_pages": [17],
+      "content_sha256": "fb9d847eeef13b0f22486ec4ec12c04b2359b384f262e40e8c5a1cd062845653",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s15",
+      "number": "Section 15",
+      "pdf_pages": [17],
+      "content_sha256": "27225cfbbf0523e24076723932900b0faa6e8e36cba5dfbbbee1b8aeed5d13b2",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s16",
+      "number": "Section 16",
+      "pdf_pages": [17],
+      "content_sha256": "3d37f2b70637a767a1bb83c30ae0647a9f9e986c63e02ca6f9ed72aa01aab418",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s17",
+      "number": "Section 17",
+      "pdf_pages": [18],
+      "content_sha256": "8b8b26d4f3f6ead9fdd69a6757ac5c3850e1c54b79b6ba55a8e970a75658556e",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s17a",
+      "number": "Section 17A",
+      "pdf_pages": [18],
+      "content_sha256": "ab09d20d386ee6112e2fc44d450104ba6f4f9e5f2c72fbe24c9c4206332307d4",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s18",
+      "number": "Section 18",
+      "pdf_pages": [19],
+      "content_sha256": "c1701648397b55693c27a8ac80d30716ed4baf506d86b90056c4b93014dd3e84",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s19",
+      "number": "Section 19",
+      "pdf_pages": [19],
+      "content_sha256": "bdf4aadd8722f0d95bb397d5b02653b639a445c6c2c978e4953d94c4b75b7690",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s20",
+      "number": "Section 20",
+      "pdf_pages": [19],
+      "content_sha256": "93116ad9b879e8b98e9f0f9553ca877a51ad9bd2c8b8c7f9e7f1ece091c1937b",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s20a",
+      "number": "Section 20A",
+      "pdf_pages": [19],
+      "content_sha256": "73b17643c7e588aa3f5692b41103fd25507d14ca9dd17b9e4d164fe0dd2aa6ba",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s21",
+      "number": "Section 21",
+      "pdf_pages": [19],
+      "content_sha256": "71fb84df12ed0520132e033c5e149920f5ebfae073ea88b8dec41d3625aa4d06",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s22",
+      "number": "Section 22",
+      "pdf_pages": [19, 20],
+      "content_sha256": "80a01bf785d5a8280c2bad2290c4cf4cef8a30416060ff3705db7ce4ebf97f34",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s23",
+      "number": "Section 23",
+      "pdf_pages": [20],
+      "content_sha256": "285a299bf84cd308419842d5815234d49e21a9ee122049390b07947d33dde9a5",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s24",
+      "number": "Section 24",
+      "pdf_pages": [20, 21],
+      "content_sha256": "f36cce311719234c747c63ea71718719bec1d158598b308c437235f7301b70e1",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s25",
+      "number": "Section 25",
+      "pdf_pages": [21],
+      "content_sha256": "75d6ef45c196e0f5f41e928dfe682d421e42da9dd4231e2bbad30ff430b0262d",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s26",
+      "number": "Section 26",
+      "pdf_pages": [21, 22],
+      "content_sha256": "cd211d12410ca1dabcc83af93916d3e139f4d6a5c89d6367c4b6ae1fbf1d59ef",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s27",
+      "number": "Section 27",
+      "pdf_pages": [22],
+      "content_sha256": "3b25c680fa481921ddefc751d79e153c41cc409346b37c07607046e774303ef1",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s28",
+      "number": "Section 28",
+      "pdf_pages": [22],
+      "content_sha256": "dd099c7ca845f7befc609988e7a59aa91ad770b84552ef45a0985ca419ba2194",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s29",
+      "number": "Section 29",
+      "pdf_pages": [22],
+      "content_sha256": "3be6a0117935f1e5b73347afdd3c14532916f91ea12e8c0f1cde35ef21e7a7c0",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s30",
+      "number": "Section 30",
+      "pdf_pages": [22, 23],
+      "content_sha256": "282473402d1810fbf7236de7e3a6b1ebe0b185c2a8d9771b935fcd7c2167deb3",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s31",
+      "number": "Section 31",
+      "pdf_pages": [23],
+      "content_sha256": "4b0b57e8fa3c84115f432aedcd1d25f999157b622816fc0fe8b00a50edd08f06",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s32",
+      "number": "Section 32",
+      "pdf_pages": [23, 24],
+      "content_sha256": "1d8b282e97dbf94f04bdfd30d9bf03e7bb9cd00adb0e6fda246c3e530db4982f",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s33",
+      "number": "Section 33",
+      "pdf_pages": [24],
+      "content_sha256": "31883c9f0d681a9d80abb6c508ce722b0c48f277a04554bf8b5c9e253dfe7fe7",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s34",
+      "number": "Section 34",
+      "pdf_pages": [24],
+      "content_sha256": "99bb5cd98b956c6d0a1a5c1c8ac0b94d21931474717fd3c93248ebf60f8eb79b",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s35",
+      "number": "Section 35",
+      "pdf_pages": [24],
+      "content_sha256": "3631b6b3a6e0a44df836bb35c518b1424e76e18b6f8c3724271208bb28a01b75",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s36",
+      "number": "Section 36",
+      "pdf_pages": [25],
+      "content_sha256": "0241d30ce980a1f268bf426f9e6d71de48747363b316b28a10fd690917c4ab76",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s37",
+      "number": "Section 37",
+      "pdf_pages": [25],
+      "content_sha256": "6ab09562843c1087e2f3566af146dcc9928a40c64a954892e56ca157dfb725b9",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s38",
+      "number": "Section 38",
+      "pdf_pages": [25],
+      "content_sha256": "d6d4aac1e63dc4c9c9629ddae881d135d008015c64ef130f43297665fb56b94f",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s39",
+      "number": "Section 39",
+      "pdf_pages": [25, 26],
+      "content_sha256": "0d576b205bf033ed1b5210b56c48a277b62706fa91510f03b566f530a73e19e8",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s40",
+      "number": "Section 40",
+      "pdf_pages": [26],
+      "content_sha256": "59c5fd036f695043a9c21aaad30bed64236f93c768c18574cae55e364d575b34",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s41",
+      "number": "Section 41",
+      "pdf_pages": [26],
+      "content_sha256": "9f03e7b7f7673ae22e1722c0902ec6c1b9aa69f025c485a740db3def904f8296",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s42",
+      "number": "Section 42",
+      "pdf_pages": [26, 27, 28],
+      "content_sha256": "863324dc2a2776305d35d65529196a373153b82d7f6ebc9abdd6520abacb8960",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s43",
+      "number": "Section 43",
+      "pdf_pages": [28],
+      "content_sha256": "091b6aeea068ca7587f56fcc36a63ea4fd4a08635b3e8ba979c862d1b989ef6c",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s44",
+      "number": "Section 44",
+      "pdf_pages": [29],
+      "content_sha256": "4a94eeab57e56bcaa1c2840c19abf4076600d7ad5843580458b28a4edf452ade",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s45",
+      "number": "Section 45",
+      "pdf_pages": [29],
+      "content_sha256": "19e2d1a7e944f14d12e92707abe847b9ff3f2594dc9d9702cc0b620f1f1cc378",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s45a",
+      "number": "Section 45A",
+      "pdf_pages": [29],
+      "content_sha256": "a1439ceb394c5172fdcbfe4f3130bbec8555ed33939a4ebd77004ebed6b3b94c",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s46",
+      "number": "Section 46",
+      "pdf_pages": [29],
+      "content_sha256": "d4b8cfffb7fdab6d3bb6d88e554453651454d5b898a7df6c8ebf1357546d6bc8",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s47",
+      "number": "Section 47",
+      "pdf_pages": [29, 30],
+      "content_sha256": "0594a508f9abb6bc5af7c6dbc300a869a240b50e33e7a4ffb8e1560ca1566a40",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s48",
+      "number": "Section 48",
+      "pdf_pages": [30],
+      "content_sha256": "1b4fe785f4833795727b01303a9867156884bf3112599ce85a9827a867a1f509",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s49",
+      "number": "Section 49",
+      "pdf_pages": [30],
+      "content_sha256": "000970e7e896814c1f9cb146912bce9e397d99a4304030e316620be2b151c045",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s50",
+      "number": "Section 50",
+      "pdf_pages": [31],
+      "content_sha256": "403cb70122788a1d5f728235f231e5897e6b40e4ed22a574ea5d1a6973dc3c5a",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s51",
+      "number": "Section 51",
+      "pdf_pages": [31],
+      "content_sha256": "829bd6b10c269d8b542bdf7892b64876d02d4046f2ffa1121cf96b166f6ab83e",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s52",
+      "number": "Section 52",
+      "pdf_pages": [31, 32],
+      "content_sha256": "b8a7ba679a8015a4585a3d7eac088ca01b283c79eb6ddd8726e5aced1054f640",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s52a",
+      "number": "Section 52A",
+      "pdf_pages": [32],
+      "content_sha256": "1576f00033b571ffd226c91245b30353dec5721adaae4cde53ecc7aebee0dba3",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s52b",
+      "number": "Section 52B",
+      "pdf_pages": [33],
+      "content_sha256": "24b5c6be0aa89d104a1d73f37fb669f42808ab871a4c110526a0dda21487f143",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s53",
+      "number": "Section 53",
+      "pdf_pages": [33, 34],
+      "content_sha256": "f5a945a50b4037b8bf7e5a46790cbab897de961c1bc625bf6d7b5145f8cd6652",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s54",
+      "number": "Section 54",
+      "pdf_pages": [34],
+      "content_sha256": "b4fef28388df2f9215d6049efca0dc6759c0597b4ed5f2644d4ab58efa17f457",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s55",
+      "number": "Section 55",
+      "pdf_pages": [34],
+      "content_sha256": "097ccb43f40cff81d26d04d4b4b30475b9c2eddfcd32b28f9f192f9f45db793d",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s56",
+      "number": "Section 56",
+      "pdf_pages": [34],
+      "content_sha256": "110a8955aecaf2c35c2c59bf24fcc9a0a0d62245cfcce1a359281946d7e69cbe",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s57",
+      "number": "Section 57",
+      "pdf_pages": [34, 35],
+      "content_sha256": "6b0076a0b63e24c661dcd30ea52cf70a8a118b46c050b43f57092746304c9eb2",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s58",
+      "number": "Section 58",
+      "pdf_pages": [35],
+      "content_sha256": "5e9218cf962dd6846ade3d9e1ca948efa7581e967d716cedc5c8cd09d9c4bccb",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s59",
+      "number": "Section 59",
+      "pdf_pages": [35],
+      "content_sha256": "ade2368b12eee2866d83cd800951c69c1f142e4caf967b93938a32872537644e",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s60",
+      "number": "Section 60",
+      "pdf_pages": [36],
+      "content_sha256": "5ca1bcebb904d0a602ae15e87eb44ef99ee99cb400042d1e6922cddf28b4fd0e",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s61",
+      "number": "Section 61",
+      "pdf_pages": [36],
+      "content_sha256": "87a60e0ecf628f13769a9be81beff77eb8d45b151ea039c504748767f9737b7d",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s62",
+      "number": "Section 62",
+      "pdf_pages": [36],
+      "content_sha256": "c74264f13b82c29e40e249ba59ccaa7fa0367841b5fc5a52185c8588c7920e98",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s63",
+      "number": "Section 63",
+      "pdf_pages": [36],
+      "content_sha256": "89e497c8a8af4db34dd9f99bbab8efe1a65a0a824027f4d11f80259d649a8005",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s64",
+      "number": "Section 64",
+      "pdf_pages": [36],
+      "content_sha256": "0c3e571a8ca28fe204ca559d4812c71c21ed66658b60b123f6aa761bd48be5fd",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s65",
+      "number": "Section 65",
+      "pdf_pages": [36, 37],
+      "content_sha256": "fe85910bdf48fe836f4e2f61dec93e0e91049ca7808bf92ba296865375ce74a9",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s66",
+      "number": "Section 66",
+      "pdf_pages": [37],
+      "content_sha256": "c6ef5d95ae5ce3dbb714611bc5abd0b4ae8119c28325faac8c473338c2ba0364",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s66a",
+      "number": "Section 66A",
+      "pdf_pages": [37],
+      "content_sha256": "f2a567d63d35c51a359687e701867943db84ba37b3133ffbb83d2a4184f8ebfd",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s66b",
+      "number": "Section 66B",
+      "pdf_pages": [37],
+      "content_sha256": "112e1ff157daf1016ac21ab57286038ea2a0d0703df6d106d4a1181db5862d51",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s67",
+      "number": "Section 67",
+      "pdf_pages": [38],
+      "content_sha256": "056fcc291dfc7de70617099dfb801ce12e42a4523509114cfd7bbaf719e56c3c",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s68",
+      "number": "Section 68",
+      "pdf_pages": [38],
+      "content_sha256": "fddbd10c30467f66cac7952a35d0e295e583bb6fe182ff8ae95b61f627e48a5a",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s69",
+      "number": "Section 69",
+      "pdf_pages": [38],
+      "content_sha256": "6dd816efc6f6559e06b14bd18e4c318aed3532e448ac4c66a0f0dd1b7d2b5234",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s69a",
+      "number": "Section 69A",
+      "pdf_pages": [38, 39],
+      "content_sha256": "be36ae5e6eb5227f6e0003f31f7f0de63acde2cbcb6d4f9a3824c578e9591c8f",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s70",
+      "number": "Section 70",
+      "pdf_pages": [39],
+      "content_sha256": "e6b2e65947f757b630e7c0d74f9fc35aeba2a98eb869ebcf63d69efabad0f9f2",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s71",
+      "number": "Section 71",
+      "pdf_pages": [39, 40],
+      "content_sha256": "d169c556e23da7a255cec2271a24db7c5692104fdd01fb8795d24ef796681139",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s72",
+      "number": "Section 72",
+      "pdf_pages": [40],
+      "content_sha256": "05d43aeaf7fc4f1fd35bd92272bca05476d969160b204c446cf45e98560136df",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s72a",
+      "number": "Section 72A",
+      "pdf_pages": [40, 41],
+      "content_sha256": "db7dd5a7d955d2a1f53855d2925da4c81af9bc9310e4a3f6ae262abab2ab8786",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s72b",
+      "number": "Section 72B",
+      "pdf_pages": [41, 42],
+      "content_sha256": "7c57d1361c1832aa162063e1fb8bb274440878e631add1f1cf539b396208a07a",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s72c",
+      "number": "Section 72C",
+      "pdf_pages": [42],
+      "content_sha256": "b22974ca7cd9f45cc98c199da240bcf9ec20a782079c2f8e9ac11de80b847b67",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s72d",
+      "number": "Section 72D",
+      "pdf_pages": [42],
+      "content_sha256": "2a07c0bdcc78e121d08e9e03520d008e6d79ca92814ef9aac1473a7fbc010c1f",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s72e",
+      "number": "Section 72E",
+      "pdf_pages": [43],
+      "content_sha256": "6d3a99f42662629af2e223665659e94706c54a16f45c1e7f6cd1288ea065c523",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s72f",
+      "number": "Section 72F",
+      "pdf_pages": [43],
+      "content_sha256": "eb8b517c613a38d399a3d989b111d7497b1529ca9ea5625e22cfacb406fb1a3f",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s72g",
+      "number": "Section 72G",
+      "pdf_pages": [43, 44],
+      "content_sha256": "7c42a5009456fdcba3361e7815fe4a9ce4a907300f24703e4186e189779df73f",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s72h",
+      "number": "Section 72H",
+      "pdf_pages": [45],
+      "content_sha256": "3adafd46199410b98e09740bf60898f5a137d0cd212521a6721f7f9c7031f2a0",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s72i",
+      "number": "Section 72I",
+      "pdf_pages": [45],
+      "content_sha256": "d16df907d01952fdf0b3d340454863f36df8de92f13f6fc077a0ea3fae5c0bb8",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s72j",
+      "number": "Section 72J",
+      "pdf_pages": [45],
+      "content_sha256": "27de430eba83fc18ceea8a87a6f1798e24fd07b2fb72bb6fde4d389b1e818795",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s73",
+      "number": "Section 73",
+      "pdf_pages": [45, 46],
+      "content_sha256": "508ace033df673b04a208cd4e79060ea94209b288983053df179a66c72e8d6b5",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s74",
+      "number": "Section 74",
+      "pdf_pages": [46],
+      "content_sha256": "701a313d879845c1b3eeb06a53c913dfdf5663de4af05976f1955dc205dad4d5",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s75",
+      "number": "Section 75",
+      "pdf_pages": [46],
+      "content_sha256": "533e8f8b9f370d88a2b1e0c96769bf694b101fc6a6fad8d332b02768886c8f09",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s76",
+      "number": "Section 76",
+      "pdf_pages": [46, 47],
+      "content_sha256": "2c7f3dc19a91d25c2f739bf0e9ed18d57adab459ae8270aed87210f3cb565b99",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s77",
+      "number": "Section 77",
+      "pdf_pages": [47],
+      "content_sha256": "99f359dfaf2ab8c6071cb96c857c8945e57a122a02235081dc1be326d20db049",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s78",
+      "number": "Section 78",
+      "pdf_pages": [47],
+      "content_sha256": "449389da24ece67185955dd9a9a06632c80c6a649ab5298cdaffccad758db7ae",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s79",
+      "number": "Section 79",
+      "pdf_pages": [47],
+      "content_sha256": "2d9466773376533c6942efa4c31845d7f1f788dda056be3e0456d365757b35e5",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s80",
+      "number": "Section 80",
+      "pdf_pages": [47, 48],
+      "content_sha256": "2d227242746a8b87ac7c39792374778ccb503ae2be5e72cd87753ffbb55b0cce",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s81",
+      "number": "Section 81",
+      "pdf_pages": [48],
+      "content_sha256": "5854e64f24f84c5f40b4548283e93f68a30bfde37ed7895bbe20ae3da1a40594",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s82",
+      "number": "Section 82",
+      "pdf_pages": [48],
+      "content_sha256": "cc264bff7f9bf5a7696ba0e351705aac28bea6de7ffff909571844ae479ebf2e",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s83",
+      "number": "Section 83",
+      "pdf_pages": [48],
+      "content_sha256": "59fa19594d40401f34798bb99dfb7e29e7efdc290e29e72636469982cfc4e60b",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s84",
+      "number": "Section 84",
+      "pdf_pages": [48],
+      "content_sha256": "9f22348d3501af5b0b033e5cf477023f1f4d5eca6734ba894b75da017fc42ccf",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s85",
+      "number": "Section 85",
+      "pdf_pages": [49],
+      "content_sha256": "7786b32e75159099c6b7e1be3f6f065459a42cb8000b5a965a40f17af52d7a05",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s86",
+      "number": "Section 86",
+      "pdf_pages": [49],
+      "content_sha256": "06d90abc37827fe43e35be800edbb2b1cb781d8be0a24beabd1a0bd39f7b7e51",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s87",
+      "number": "Section 87",
+      "pdf_pages": [49],
+      "content_sha256": "b0c3787e8312e77b57c57b139c9da028f2e092af4043c861548cac078b254f18",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s88",
+      "number": "Section 88",
+      "pdf_pages": [49],
+      "content_sha256": "63e016b2f0ccef1a009a6b36b8226b00e38cbd42078b4972729bff065abf6a8a",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s89",
+      "number": "Section 89",
+      "pdf_pages": [49],
+      "content_sha256": "8fb2cd432a966fec6c1fcefc4e0d1460c4f3469d152c04daa95dce1ece83fd1a",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s90",
+      "number": "Section 90",
+      "pdf_pages": [50],
+      "content_sha256": "f900c57e62c02ae9b0512e78e3abd1d1c4a97b6e931afcd5e4b0bb924ccf9b63",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s91",
+      "number": "Section 91",
+      "pdf_pages": [50, 51],
+      "content_sha256": "ccf6c50f4cade7d0d9214f46ede18c886cf1ace7de422d31ba2f80e292055640",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s92",
+      "number": "Section 92",
+      "pdf_pages": [51],
+      "content_sha256": "7354abe54278d13572eb5fa6428beaa23397a959ee937ebfb7f05667a2d174a8",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s93",
+      "number": "Section 93",
+      "pdf_pages": [51],
+      "content_sha256": "9ec256af905e59fae0d680c0edc0bc6171e79372014a3dd1ea04fc456f2f4287",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s94",
+      "number": "Section 94",
+      "pdf_pages": [51],
+      "content_sha256": "d04f838e5e135c92c6446eeb3388eaca0ef7be3d32d409ecd66582204c7884d3",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s95",
+      "number": "Section 95",
+      "pdf_pages": [51],
+      "content_sha256": "9ceefc58e500037d2f378b0bd42d6fe3dca1d3cd7e44c2d07bbbc61f077f3bce",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s96",
+      "number": "Section 96",
+      "pdf_pages": [51, 52],
+      "content_sha256": "8b766dc76334fefd353df5192a9cdf2c89caa62be5aef7c6a9ea57c1320b3128",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s97",
+      "number": "Section 97",
+      "pdf_pages": [52],
+      "content_sha256": "e1ab9be8f6939cef7bdb6c44524d22904710cfad8d55f84652b5993c029bc3d4",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s98",
+      "number": "Section 98",
+      "pdf_pages": [53],
+      "content_sha256": "6ea6daf9044fe330bdd03b2ebc995b2a49b811aad280ea56392b8bbd99138886",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s99",
+      "number": "Section 99",
+      "pdf_pages": [53, 54],
+      "content_sha256": "1de9c1cae0ae4715fdf6256daa1465db893078486bfea39250219c8ae877760f",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s100",
+      "number": "Section 100",
+      "pdf_pages": [54, 55],
+      "content_sha256": "0560e6fb74839944ccc13b7801d0b0293e9f56ce17d403758626483d03e484bf",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s101",
+      "number": "Section 101",
+      "pdf_pages": [55],
+      "content_sha256": "308fe34e94aeb3fd0b1182e7dfc8c4c0887ee92ebde97aa920d40c6fa40f9e58",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s102",
+      "number": "Section 102",
+      "pdf_pages": [55, 56],
+      "content_sha256": "edb5ac6dc320535e2844d210e3f25a389147db39d70267af04829d640c6d3605",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s103",
+      "number": "Section 103",
+      "pdf_pages": [56],
+      "content_sha256": "572efa4828cbcd23385f83421ee716f0f95aa813b048d4c36d573872e5851c78",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s103a",
+      "number": "Section 103A",
+      "pdf_pages": [56],
+      "content_sha256": "25c59b422c0118c7a7ea6a125076845850aa2e9fbc00ed5017b99c72237c1957",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s103b",
+      "number": "Section 103B",
+      "pdf_pages": [56, 57],
+      "content_sha256": "dbd4599d1cb0757b789e76c94526a77235964201700d6c4a7728fb12c5233510",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s103c",
+      "number": "Section 103C",
+      "pdf_pages": [57],
+      "content_sha256": "612b2b248fad8d15ba897d49780ea48e5d6872e9bd9c71a37ec7b6f56beeb6c7",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s104",
+      "number": "Section 104",
+      "pdf_pages": [57],
+      "content_sha256": "ec6088d57a603e954fb53387b97a8982bfe277009e1289432a0a5c9083eb816a",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s105",
+      "number": "Section 105",
+      "pdf_pages": [57, 58],
+      "content_sha256": "4e4d5f239eb0915f7880af193e2498f3f1c1bfbefca5b7f6b0e9f0f96845ac68",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s105a",
+      "number": "Section 105A",
+      "pdf_pages": [58],
+      "content_sha256": "6f0ac0faa68919b44797f4bd9322fd4f5036ae0770d1abf51a5aa773a1c131d6",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s105b",
+      "number": "Section 105B",
+      "pdf_pages": [58],
+      "content_sha256": "6bc5b76ca2cfd1a4fa27d79f05175f95f1a782c507f96c9dbc3d8b47496ef777",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s106",
+      "number": "Section 106",
+      "pdf_pages": [59],
+      "content_sha256": "647637bf3a4598b1578e7c7a537f6bccf360ef87d8e510d6cc2e138b436fa596",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s107",
+      "number": "Section 107",
+      "pdf_pages": [60],
+      "content_sha256": "411bee22044ce00c11512c7c38277457f9f02200af72bd49e45f2911e1b88530",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s108",
+      "number": "Section 108",
+      "pdf_pages": [60],
+      "content_sha256": "2888b8777d3d45e6b6347aff99ac922be203d3d7d13851fa2840cf2dcbc0295c",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s109",
+      "number": "Section 109",
+      "pdf_pages": [60],
+      "content_sha256": "80e40b9a548296b969eb4b8ac1e6c9c281da96762a4b5273c2a1b9cbce6cca98",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s110",
+      "number": "Section 110",
+      "pdf_pages": [60],
+      "content_sha256": "a7848fd0ea3bfbd342825e05bdb7737c59c712a5cfb5e28ed674c6141a9ac94e",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s111",
+      "number": "Section 111",
+      "pdf_pages": [60],
+      "content_sha256": "f60f8c458d97b99b0c7a860a8561b64f452711a02c81c2defa44bcccb7ea2b2a",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s112",
+      "number": "Section 112",
+      "pdf_pages": [60],
+      "content_sha256": "f89090778baa4c501ff8b19b060591a1ba81c77954f7ab8fe77931bd12e203ae",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s113",
+      "number": "Section 113",
+      "pdf_pages": [60],
+      "content_sha256": "a8aa5862a5873af5128b716c1e2eaec4e7c8f78338e3ebf54869446c24070077",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s114",
+      "number": "Section 114",
+      "pdf_pages": [61],
+      "content_sha256": "27ba812fc3c6554d63acc9099e81fe3a638486327aa06f48472dc87830a121ac",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s115",
+      "number": "Section 115",
+      "pdf_pages": [61],
+      "content_sha256": "a4a2ed52b00658341432ff5ce0e111966012a708d085e13be0b0c7e19d038f63",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s116",
+      "number": "Section 116",
+      "pdf_pages": [61],
+      "content_sha256": "72d033441a11ce62e7bc2f2698047c39417e7e9e040cf7e2bcaec1ef08cb2313",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s117",
+      "number": "Section 117",
+      "pdf_pages": [61, 62, 63],
+      "content_sha256": "55b0a29d90fa0d7ba45f5007fef17bd1ffc9a6c55e918551175a861d66aa4d01",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s117a",
+      "number": "Section 117A",
+      "pdf_pages": [63, 64],
+      "content_sha256": "feaed835a1f5f03b4f560428c484399d78acef2c6986e646b4b0dd3ae556f2fd",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s117b",
+      "number": "Section 117B",
+      "pdf_pages": [64],
+      "content_sha256": "5c2ad95cd22d8a55600699eabe2f636dea53669d99df98ab0d7c771eee5095e9",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s117c",
+      "number": "Section 117C",
+      "pdf_pages": [64],
+      "content_sha256": "937cd490fadea44a2f920201ff580e0e297252796b7f8bfaba09807b8f19db99",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s118",
+      "number": "Section 118",
+      "pdf_pages": [64],
+      "content_sha256": "8e941ac101ab92aab53f312352fd863d90904b3da41186578067c89633be680c",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s118a",
+      "number": "Section 118A",
+      "pdf_pages": [64, 65],
+      "content_sha256": "b3a6a070ded3bfe45efb0de8773a74a7e3fe4a1993df18cec06dd5ed08d2cc85",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s119",
+      "number": "Section 119",
+      "pdf_pages": [65, 66],
+      "content_sha256": "2f36e98d4db21a9386c6af720158e41aad2a7929bd31487dc892c688de21e517",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    },
+    {
+      "id": "traffic-act-2024-04-26-s120",
+      "number": "Section 120",
+      "pdf_pages": [66, 67],
+      "content_sha256": "32bf7e5191fc5251885222000efce973e2303bd6467eb118a3e8e7bc4d64458c",
+      "layout_raw_alignment": true,
+      "draft_alignment": true
+    }
+  ]
+}
