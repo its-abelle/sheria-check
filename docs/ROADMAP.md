@@ -10,6 +10,13 @@
 - Production server/web images, SPA direct links, proxy configuration, CI validation/exports and EAS build profiles.
 - Regression tests for the public/admin contract, publication/privacy boundaries and client request lifecycle.
 
+## Legal source review progress (22 November 2026)
+
+- Corrected section 48's wrapped heading and restored source amendment references dropped from sections 11 and 118A.
+- Added a reproducible, hash-bound mechanical audit: 153 sections align across layout/raw extraction of the supplied 2024 PDF. All records remain unverified drafts.
+- Added permission-referenced source fetching with provenance and challenge rejection. No new corpus downloads or publication took place.
+- Publication remains pending: authorized acquisition/reuse route, handling of source annotations, and current-law/amendment/judgment review. See LEGAL_SOURCE_REVIEW.md and SOURCE_ACCESS_REQUEST.md.
+
 ## Content and release work still required
 
 - Compare and approve the 153 Traffic Act draft sections/five draft offense links, including extraction layout and later amendments.

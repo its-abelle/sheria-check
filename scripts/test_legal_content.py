@@ -1,11 +1,17 @@
 """Data-tool regression tests; fixtures are synthetic and never production content."""
 import tempfile
+from io import BytesIO
+import json
+import fetch_legal_source
+from audit_traffic_snapshot import content_digest
+from verify_data import verify_review
 import unittest
 from pathlib import Path
 from unittest.mock import patch
 from types import SimpleNamespace
 import import_akn
 import prepare_legal_content
+from traffic_snapshot import parse_snapshot, normalise_space
 
 class SourceToolsTest(unittest.TestCase):
     def test_xml_retains_conditions_and_stays_unverified(self):
@@ -43,6 +49,95 @@ class SourceToolsTest(unittest.TestCase):
             self.assertEqual(bundle['provisions'][-1]['number'], 'Section 120')
             self.assertEqual([p['position'] for p in bundle['provisions']], list(range(1, 9)))
             self.assertTrue(all(p['verified_at'] is None for p in bundle['provisions']))
+
+
+    def test_wrapped_heading_uses_toc_and_does_not_enter_body(self):
+        raw = """Legislation as at 26 April 2024
+Contents
+1. Short title ........ 2
+48. A wrapped heading continued title ........ 7
+120. End ........ 8
+1. Short title
+TEST source.
+48. A wrapped heading
+    continued title
+(1) TEST body.
+120. End
+TEST ending.
+"""
+        sections = parse_snapshot(raw)
+        self.assertEqual(sections[1].heading, 'A wrapped heading continued title')
+        self.assertEqual(sections[1].text, '(1) TEST body.')
+
+    def test_body_numbers_and_uppercase_survive_page_cleanup(self):
+        raw = """Legislation as at 26 April 2024
+1. Short title
+TEST source.
+48. TEST heading
+(1) Value follows:
+123
+                RETAIN THIS BODY TEXT
+              8Traffic Act (Cap. 403) Kenya
+Continued body.
+120. End
+TEST ending.
+              9"""
+        section = parse_snapshot(raw)[1]
+        self.assertIn('123', section.text)
+        self.assertIn('RETAIN THIS BODY TEXT', section.text)
+        self.assertNotIn('Traffic Act (Cap.', section.text)
+        self.assertEqual(section.first_page, 1)
+        self.assertEqual(section.last_page, 2)
+        self.assertNotIn('8', section.text)
+
+    def test_toc_disagreement_fails_instead_of_inventing_heading(self):
+        raw = """Legislation as at 26 April 2024
+Contents
+1. Short title ........ 2
+48. Different title ........ 7
+120. End ........ 8
+1. Short title
+TEST source.
+48. Actual heading
+TEST body.
+120. End
+TEST ending.
+"""
+        with self.assertRaisesRegex(ValueError, 'differs from the TOC'):
+            parse_snapshot(raw)
+
+
+    def test_fetch_requires_permission_before_network_access(self):
+        with tempfile.TemporaryDirectory() as directory, patch.object(fetch_legal_source, 'urlopen') as request:
+            with self.assertRaisesRegex(ValueError, 'permission reference'):
+                fetch_legal_source.download('https://new.kenyalaw.org/source.pdf', Path(directory) / 'source.pdf', '')
+            request.assert_not_called()
+
+    def test_source_provenance_is_saved_and_challenges_are_rejected(self):
+        class Response(BytesIO):
+            headers = {'Content-Type': 'application/pdf'}
+            def geturl(self):
+                return 'https://new.kenyalaw.org/source.pdf'
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / 'source.pdf'
+            with patch.object(fetch_legal_source, 'urlopen', return_value=Response(b'%PDF-synthetic-fixture')):
+                fetch_legal_source.download('https://new.kenyalaw.org/source.pdf', output, 'TEST ONLY permission reference')
+            evidence = json.loads(output.with_suffix('.pdf.provenance.json').read_text())
+            self.assertEqual(evidence['legal_verification'], 'not_performed')
+            self.assertEqual(evidence['permission_reference'], 'TEST ONLY permission reference')
+            challenge = Response(b'<html>Verification required</html>')
+            challenge.headers = {'Content-Type': 'text/html'}
+            with patch.object(fetch_legal_source, 'urlopen', return_value=challenge):
+                with self.assertRaisesRegex(ValueError, 'challenge'):
+                    fetch_legal_source.download('https://new.kenyalaw.org/source.pdf', Path(directory) / 'challenge.pdf', 'TEST ONLY')
+            self.assertFalse((Path(directory) / 'challenge.pdf').exists())
+
+    def test_audit_binding_detects_changed_legal_text(self):
+        data = {'provisions': [{'id': 'test-section', 'instrument_id': 'test-law', 'heading': 'TEST ONLY heading', 'text': 'TEST original conditional wording'}]}
+        evidence = {'scope': 'local_snapshot_text_alignment_only', 'publication_ready': False, 'instrument_id': 'test-law', 'provisions': [{'id': 'test-section', 'content_sha256': content_digest('TEST ONLY heading', 'TEST original conditional wording'), 'layout_raw_alignment': True, 'draft_alignment': True}]}
+        self.assertEqual(verify_review(data, evidence), [])
+        data['provisions'][0]['text'] = 'TEST altered penalty'
+        self.assertTrue(any('stale' in error for error in verify_review(data, evidence)))
 
 if __name__ == '__main__':
     unittest.main()

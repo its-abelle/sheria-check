@@ -7,11 +7,11 @@ This is extraction, not legal verification. Never marks records verified or publ
 import argparse
 import hashlib
 import json
-import re
 import subprocess
 import unicodedata
 from datetime import datetime, timezone
 from pathlib import Path
+from traffic_snapshot import parse_snapshot
 
 ROOT = Path(__file__).resolve().parent.parent
 VERSION = '2024-04-26'
@@ -23,37 +23,14 @@ def prepare(pdf: Path) -> dict:
     raw = unicodedata.normalize('NFKC', raw)
     if f'Legislation as at 26 April 2024' not in raw or 'There is no copyright on the legislative content' not in raw:
         raise ValueError('Unexpected PDF/version/rights notice; review before adapting this importer')
-    start = list(re.finditer(r'^\s{0,2}1\. Short title\s*$', raw, re.M))
-    if len(start) != 1:
-        raise ValueError('Could not identify the legislative body unambiguously')
-    body = raw[start[0].start():]
-    body = re.split(r'^\s*SCHEDULE(?:\s+\[.*\])?\s*$', body, maxsplit=1, flags=re.M)[0]
-    lines = []
-    for line in body.splitlines():
-        clean = line.strip()
-        if re.fullmatch(r'\d+', clean) or re.match(r'^Traffic Act \(Cap\. 403\)', clean) or clean == 'Kenya':
-            continue
-        if re.match(r'^Part [IVX]+[AB]?\s*[–—-]', clean):
-            continue
-        if clean and clean.isupper() and len(line) - len(line.lstrip()) > 10:
-            continue
-        lines.append(line)
-    body = '\n'.join(lines)
-    headings = list(re.finditer(r'^\s{0,2}(\d+[A-Z]?)\. ([^\n]+)', body, re.M))
-    provisions = []
-    for index, match in enumerate(headings):
-        number, heading = match.groups()
-        text = body[match.end():headings[index + 1].start() if index + 1 < len(headings) else len(body)].strip()
-        text = '\n'.join(line.strip() for line in text.splitlines())
-        text = re.sub(r'\n{3,}', '\n\n', text)
-        if not text and heading.strip().lstrip('[').lower().startswith(('deleted', 'repealed')):
-            text = heading.strip()
-        if not text:
-            raise ValueError(f'Empty section {number}')
-        provisions.append({'id': f'{LAW_ID}-s{number.lower()}', 'instrument_id': LAW_ID, 'number': f'Section {number}', 'position': index + 1, 'heading': heading.strip(), 'text': text, 'topics': [], 'source_url': f'{SOURCE}#sec_{number}', 'verified_at': None})
-    numbers = {p['number'] for p in provisions}
-    if len(numbers) != len(provisions) or 'Section 120' not in numbers:
-        raise ValueError('Incomplete or duplicate section extraction')
+    sections = parse_snapshot(raw)
+    provisions = [
+        {'id': f'{LAW_ID}-s{section.number.lower()}', 'instrument_id': LAW_ID,
+         'number': f'Section {section.number}', 'position': index + 1,
+         'heading': section.heading, 'text': section.text, 'topics': [],
+         'source_url': f'{SOURCE}#sec_{section.number}', 'verified_at': None}
+        for index, section in enumerate(sections)
+    ]
     # These records point to full sections, including exceptions and conditional penalties.
     selected = [
         ('speed-of-motor-vehicles', 'Speed of motor vehicles', 'speeding-reckless', '42', '43', ['speeding', 'speed limit']),
@@ -64,7 +41,7 @@ def prepare(pdf: Path) -> dict:
     ]
     offenses = [{'id': oid, 'name': name, 'aliases': aliases, 'category': category, 'defining_provision_id': f'{LAW_ID}-s{definition}', 'penalty_provision_id': f'{LAW_ID}-s{penalty}', 'verified_at': None} for oid, name, category, definition, penalty, aliases in selected]
     retrieved = datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z')
-    result = {'instruments': [{'id': LAW_ID, 'title': 'Traffic Act (Cap. 403)', 'source_url': SOURCE, 'version': VERSION, 'retrieved_at': retrieved, 'verified_at': None, 'rights_basis': 'Legislative text only. Official PDF states no copyright on legislative content; PDF layout/cover and publisher commentary are excluded. Source: Kenya Law and Laws.Africa. See docs/CONTENT.md.'}], 'provisions': provisions, 'offenses': offenses, 'judgments': [], 'links': []}
+    result = {'instruments': [{'id': LAW_ID, 'title': 'Traffic Act (Cap. 403)', 'source_url': SOURCE, 'version': VERSION, 'retrieved_at': retrieved, 'verified_at': None, 'rights_basis': 'Private draft transcription of the supplied 2024 PDF, including bracketed source amendment references. Source: Kenya Law and Laws.Africa. The PDF states legislative content has no copyright and separately licenses the PDF copy CC BY-NC-SA 4.0. Acquisition, annotation reuse and app republication basis remain unconfirmed; no permission is asserted. See docs/CONTENT.md and docs/LEGAL_SOURCE_REVIEW.md.'}], 'provisions': provisions, 'offenses': offenses, 'judgments': [], 'links': []}
     manifest = {'source_file': pdf.name, 'sha256': hashlib.sha256(pdf.read_bytes()).hexdigest(), 'version': VERSION, 'prepared_at': retrieved, 'status': 'unverified draft', 'provisions': len(provisions), 'note': 'Section text must be compared to the official source before publication. Schedules are not imported.'}
     (ROOT / 'server/data').mkdir(parents=True, exist_ok=True)
     (ROOT / 'server/data/traffic-source.json').write_text(json.dumps(manifest, indent=2) + '\n')
