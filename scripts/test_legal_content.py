@@ -6,6 +6,7 @@ from unittest.mock import patch
 from types import SimpleNamespace
 import import_akn
 import prepare_legal_content
+from traffic_snapshot import parse_snapshot, normalise_space
 
 class SourceToolsTest(unittest.TestCase):
     def test_xml_retains_conditions_and_stays_unverified(self):
@@ -43,6 +44,64 @@ class SourceToolsTest(unittest.TestCase):
             self.assertEqual(bundle['provisions'][-1]['number'], 'Section 120')
             self.assertEqual([p['position'] for p in bundle['provisions']], list(range(1, 9)))
             self.assertTrue(all(p['verified_at'] is None for p in bundle['provisions']))
+
+
+    def test_wrapped_heading_uses_toc_and_does_not_enter_body(self):
+        raw = """Legislation as at 26 April 2024
+Contents
+1. Short title ........ 2
+48. A wrapped heading continued title ........ 7
+120. End ........ 8
+1. Short title
+TEST source.
+48. A wrapped heading
+    continued title
+(1) TEST body.
+120. End
+TEST ending.
+"""
+        sections = parse_snapshot(raw)
+        self.assertEqual(sections[1].heading, 'A wrapped heading continued title')
+        self.assertEqual(sections[1].text, '(1) TEST body.')
+
+    def test_body_numbers_and_uppercase_survive_page_cleanup(self):
+        raw = """Legislation as at 26 April 2024
+1. Short title
+TEST source.
+48. TEST heading
+(1) Value follows:
+123
+                RETAIN THIS BODY TEXT
+              8Traffic Act (Cap. 403) Kenya
+Continued body.
+120. End
+TEST ending.
+              9"""
+        section = parse_snapshot(raw)[1]
+        self.assertIn('123', section.text)
+        self.assertIn('RETAIN THIS BODY TEXT', section.text)
+        self.assertNotIn('Traffic Act (Cap.', section.text)
+        self.assertEqual(section.first_page, 1)
+        self.assertEqual(section.last_page, 2)
+        self.assertNotIn('8', section.text)
+
+    def test_toc_disagreement_fails_instead_of_inventing_heading(self):
+        raw = """Legislation as at 26 April 2024
+Contents
+1. Short title ........ 2
+48. Different title ........ 7
+120. End ........ 8
+1. Short title
+TEST source.
+48. Actual heading
+TEST body.
+120. End
+TEST ending.
+"""
+        with self.assertRaisesRegex(ValueError, 'differs from the TOC'):
+            parse_snapshot(raw)
+
+
 
 if __name__ == '__main__':
     unittest.main()
