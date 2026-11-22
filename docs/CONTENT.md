@@ -4,24 +4,35 @@
 
 The target reference library is the Constitution, Traffic Act and verified relevant regulations, Penal Code, Criminal Procedure Code, Evidence Act and Legal Aid Act. Structured lookup starts with traffic plus theft, common assault, malicious damage to property, trespass, affray and handling stolen property. These are **coverage targets**, not a claim that all records have been verified or imported.
 
-Current source bundle: 153 unverified Traffic Act sections, version 26 April 2024, and five draft offense links. It excludes the demerit schedule and subsidiary legislation. No general criminal penalties, rights provisions or judgment records have been fabricated to fill coverage gaps. The broader official reference directory remains available in the app.
+Current source bundle: 153 unverified Traffic Act sections, version 26 April 2024, and five draft offense links. Their local PDF text alignment is recorded in `server/data/traffic-review.json`; this is not a current-law or publication approval. It excludes the demerit schedule and subsidiary legislation. No general criminal penalties, rights provisions or judgment records have been fabricated to fill coverage gaps. The broader official reference directory remains available in the app.
 
 ## Obtain sources lawfully
 
 Use original official legislation/judgments. Check publisher terms and download/access conditions before collecting. Public availability does not by itself authorize copying publisher headnotes, commentary, compilations, formatting or personal data. Never bypass blocked sources, sealed decisions or anonymization. Prefer permitted original machine-readable material; retain original public anonymization in case citations. Do not ingest party documents, private records or identifying user histories.
 
-The local Traffic Act PDF identifies its version and states there is no copyright in its legislative content. Its PDF copy carries separate CC BY-NC-SA 4.0 terms. The prepared bundle extracts original legislative wording, with source attribution; it does not redistribute the PDF layout, cover or publisher commentary. Reassess terms before any commercial use or redistribution of publisher material. Starting points: [Kenya Law terms](https://kenyalaw.org/terms-of-use/), [ODPC data-protection laws](https://www.odpc.go.ke/data-protection-laws-kenya/).
+The local Traffic Act PDF identifies its version and states there is no copyright in its legislative content. Its PDF copy carries separate CC BY-NC-SA 4.0 terms. The private prepared bundle retains the supplied section wording and bracketed amendment references, with source attribution. It excludes the PDF cover/layout. Amendment references are source annotations, not operative statutory provisions; their reuse and presentation must be resolved before publication. Reassess terms before any commercial use or redistribution of publisher material. Starting points: [Kenya Law terms](https://kenyalaw.org/terms-of-use/), [ODPC data-protection laws](https://www.odpc.go.ke/data-protection-laws-kenya/).
+
+The current [Kenya Law terms](https://kenyalaw.org/terms-of-use/) (notice dated 12 October 2026; checked 22 November 2026) require an authorized route for automated/bulk data access. No agreement is recorded for this project. Do not bypass challenges or begin corpus downloads; arrange permission/API access or another authorized source collection first. A supplied PDF's reuse notice does not establish current website/API collection permission. See [review findings](LEGAL_SOURCE_REVIEW.md) and the [unsent access-request draft](SOURCE_ACCESS_REQUEST.md).
 
 The source manifest records the local PDF's SHA-256. The local PDF is ignored by Git. `scripts/prepare_legal_content.py` uses `pdftotext` and produces drafts, never a verification claim. PDF extraction can have wrapping/heading defects: compare every section before publishing it.
 
 For authorized official XML downloads:
 
 ```sh
-python3 scripts/fetch_legal_source.py --url OFFICIAL_HTTPS_URL --output /tmp/source.xml
+python3 scripts/fetch_legal_source.py --url OFFICIAL_HTTPS_URL --output /tmp/source.xml --permission-reference NON_SECRET_APPROVAL_REFERENCE
 python3 scripts/import_akn.py --input /tmp/source.xml --id penal-code-YYYY-MM-DD --title 'Penal Code' --version YYYY-MM-DD --source OFFICIAL_VERSION_URL --rights-basis 'Document the exact permission/basis and attribution' --output /tmp/bundle.json
 ```
 
-The downloader stops on access restrictions or empty files. The XML importer rejects missing bodies/headings and leaves all verification dates null. Check extracted paragraph order, tables, schedules, repealed provisions and amendment notes. Do not treat extraction as legal interpretation or currency verification.
+Only run the downloader after the applicable access permission is actually granted. It requires a non-secret permission reference, writes a SHA-256/provenance sidecar and stops on access restrictions, empty files or HTML challenge responses. Never put API credentials in the permission reference, URL, sidecar or Git. The XML importer rejects missing bodies/headings and leaves all verification dates null. Check extracted paragraph order, tables, schedules, repealed provisions and amendment notes. Do not treat extraction as legal interpretation or currency verification.
+
+## Local snapshot audit
+
+```sh
+python3 scripts/audit_traffic_snapshot.py --pdf 'Traffic Act.pdf'
+python3 scripts/verify_data.py
+```
+
+The audit compares two extraction modes, cross-checks the supplied PDF table of contents, records physical PDF pages and binds each draft heading/body by hash. The validator rejects stale audit bindings when text changes. Matching extractions is a mechanical check; `verified_at` stays null, and the audit always records publication readiness as false. Do not use that result as proof of legal currency, licensing or correctness of offense/penalty interpretation.
 
 ## Review and publish
 
